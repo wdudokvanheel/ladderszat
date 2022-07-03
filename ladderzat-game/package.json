@@ -1,0 +1,19 @@
+{
+  "name": "ladderzat",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "parcel src/index.html -p 8000",
+    "build": "parcel build src/index.html --dist-dir dist"
+  },
+  "devDependencies": {
+    "@parcel/resolver-glob": "2.6.2",
+    "@parcel/transformer-sass": "^2.6.2",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^12.0.0",
+    "parcel-reporter-clean-dist": "^1.0.4"
+  },
+  "dependencies": {
+    "phaser": "^3.55.2",
+    "typescript": "3.9.5"
+  }
+}
