@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import images from '../assets/images/**/*.png'
+import images from '../assets/images/*/*.png'
 import Image = Phaser.GameObjects.Image;
 import Vector2 = Phaser.Math.Vector2;
 
