@@ -12,7 +12,13 @@ var config = {
 		height: 286,
 		zoom: 2,
 		pixelArt: true
-
+	},
+	physics: {
+		default: 'arcade',
+		arcade: {
+			gravity: { y: 500 },
+			debug: false
+		}
 	},
 	scene: [TestScene]
 };
