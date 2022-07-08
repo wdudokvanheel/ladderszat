@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import {GameplayScene} from './scenes/GameplayScene';
 import {InitScene} from './scenes/InitScene';
-import {UIScene} from './scenes/UIScene';
+import {UIOverlayScene} from './scenes/UIOverlayScene';
 
 var config = {
 	type: Phaser.AUTO,
@@ -26,7 +26,7 @@ var config = {
 			debug: false
 		}
 	},
-	scene: [InitScene, GameplayScene, UIScene]
+	scene: [InitScene, GameplayScene, UIOverlayScene]
 };
 
 export default new Phaser.Game(config)

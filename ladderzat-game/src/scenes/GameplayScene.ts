@@ -3,7 +3,7 @@ import Constants from '../assets/data/constants.yml'
 import {ObjectFactory} from '../factory/ObjectFactory';
 import {LadderLoader} from '../loader/LadderLoader';
 import {PlatformLoader} from '../loader/PlatformLoader';
-import {UIScene} from './UIScene';
+import {UIOverlayScene} from './UIOverlayScene';
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
 export class GameplayScene extends Phaser.Scene {
@@ -12,7 +12,7 @@ export class GameplayScene extends Phaser.Scene {
 	private objectFactory: ObjectFactory;
 
 	private player: SpriteWithDynamicBody;
-	private ui: UIScene;
+	private ui: UIOverlayScene;
 
 	private onLadder = false;
 	private isJumping = true;
@@ -35,7 +35,7 @@ export class GameplayScene extends Phaser.Scene {
 		const ladders = this.ladderLoader.getLadders(this.physics);
 
 		this.player = this.objectFactory.createPlayer(this.physics);
-		this.ui = this.scene.get('ui') as UIScene;
+		this.ui = this.scene.get('ui') as UIOverlayScene;
 
 		//Setup collision with player
 		const game = this;

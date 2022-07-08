@@ -4,7 +4,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 import Key = Phaser.Input.Keyboard.Key;
 import Vector2 = Phaser.Math.Vector2;
 
-export class UIScene extends Scene {
+export class UIOverlayScene extends Scene {
 	private jumpKeyCodes = [Phaser.Input.Keyboard.KeyCodes.ENTER, Phaser.Input.Keyboard.KeyCodes.SPACE, Phaser.Input.Keyboard.KeyCodes.E, Phaser.Input.Keyboard.KeyCodes.O];
 	private directions = ["up", "right", "down", "left"];
 	private buttonPos = [
