@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Constants from '../assets/data/constants.yml'
 import {ObjectFactory} from '../factory/ObjectFactory';
 import {LadderLoader} from '../loader/LadderLoader';
 import {PlatformLoader} from '../loader/PlatformLoader';
@@ -37,8 +38,17 @@ export class GameplayScene extends Phaser.Scene {
 		this.ui = this.scene.get('ui') as UIScene;
 
 		//Setup collision with player
-		this.physics.add.collider(this.player, platforms);
+		const game = this;
 		this.physics.add.overlap(this.player, ladders, this.onLadderOverlap, null, this);
+		this.physics.add.collider(this.player, platforms, undefined, function () {
+			return game.check();
+		});
+	}
+
+	private check(): boolean {
+		if (this.onLadder || this.player.body.velocity.y < 0)
+			return false
+		return true;
 	}
 
 	private onLadderOverlap() {
@@ -79,7 +89,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	private performJump() {
 		this.isJumping = true;
-		this.player.setVelocityY(-150);
+		this.player.setVelocityY(-Constants.player.jump.power);
 	}
 
 	private updatePlayerVelocity() {
@@ -88,9 +98,9 @@ export class GameplayScene extends Phaser.Scene {
 
 		if (horiz != undefined) {
 			if (horiz === 'left')
-				this.player.setVelocityX(-75);
+				this.player.setVelocityX(-Constants.player.speed.walk);
 			else
-				this.player.setVelocityX(75);
+				this.player.setVelocityX(Constants.player.speed.walk);
 		} else
 			this.player.setVelocityX(0);
 
@@ -98,9 +108,9 @@ export class GameplayScene extends Phaser.Scene {
 			if (vert == undefined) {
 				this.player.setVelocityY(0);
 			} else if (vert == 'up')
-				this.player.setVelocityY(-50);
+				this.player.setVelocityY(-Constants.player.speed.ladder.up);
 			else if (vert == 'down')
-				this.player.setVelocityY(50);
+				this.player.setVelocityY(Constants.player.speed.ladder.down);
 		}
 	}
 }

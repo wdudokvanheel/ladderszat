@@ -1,4 +1,3 @@
-// @ts-ignore
 import images from "../assets/images/*/*.png";
 import LoaderPlugin = Phaser.Loader.LoaderPlugin;
 

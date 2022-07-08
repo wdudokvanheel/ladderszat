@@ -23,7 +23,7 @@ var config = {
 		arcade: {
 			fps: 144	,
 			gravity: { y: 500 },
-			debug: true
+			debug: false
 		}
 	},
 	scene: [InitScene, GameplayScene, UIScene]

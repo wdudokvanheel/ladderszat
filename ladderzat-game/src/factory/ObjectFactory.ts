@@ -6,9 +6,9 @@ export class ObjectFactory {
 		// var kris = this.addImage('kris-stand', 120, 100)
 		const player = physics.add.sprite(86, -50, 'kris-stand');
 		player.setBounce(0);
-		player.setMaxVelocity(150);
+		// player.setMaxVelocity(150);
 		player.setDataEnabled();
-		// player.setCollideWorldBounds(true);
+		player.setCollideWorldBounds(true);
 		return player;
 	}
 }

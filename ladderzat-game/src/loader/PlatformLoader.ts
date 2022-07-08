@@ -1,7 +1,7 @@
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
 import platformsdata from '../assets/data/platforms.json'
-import constants from '../assets/data/constants.json'
+import Constants from '../assets/data/constants.yml'
 
 export class PlatformLoader {
 	public getPlatforms(physics: ArcadePhysics): StaticGroup {
@@ -19,7 +19,7 @@ export class PlatformLoader {
 			}
 
 			for (let i = 0; i < (platform.segments ?? 1); i++) {
-				platforms.create(platform.x + (i * constants.PLATFORM_WIDTH), -(platform.y + (i * delta)) + constants.GAMEPLAY_HEIGHT, 'rail').setOrigin(0, 0).refreshBody();
+				platforms.create(platform.x + (i * Constants.object.platform.width), -(platform.y + (i * delta)) + Constants.layout.gameplay.height, 'rail').setOrigin(0, 0).refreshBody();
 			}
 		});
 		return platforms;

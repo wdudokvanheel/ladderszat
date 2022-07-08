@@ -1,12 +1,8 @@
 import {Scene} from 'phaser';
-import Constants from '../assets/data/constants.json';
-import {ImageLoader} from '../loader/ImageLoader';
-import {PlatformLoader} from '../loader/PlatformLoader';
-import {GameplayScene} from './GameplayScene';
-import Vector2 = Phaser.Math.Vector2;
+import Constants from '../assets/data/constants.yml';
 import Sprite = Phaser.GameObjects.Sprite;
 import Key = Phaser.Input.Keyboard.Key;
-import P = Phaser.Input.Keyboard.KeyCodes.P;
+import Vector2 = Phaser.Math.Vector2;
 
 export class UIScene extends Scene {
 	private jumpKeyCodes = [Phaser.Input.Keyboard.KeyCodes.ENTER, Phaser.Input.Keyboard.KeyCodes.SPACE, Phaser.Input.Keyboard.KeyCodes.E, Phaser.Input.Keyboard.KeyCodes.O];
@@ -17,7 +13,6 @@ export class UIScene extends Scene {
 		new Vector2(29, 45),
 		new Vector2(12, 27)
 	];
-
 
 	private dpadButtons: Sprite[] = [];
 	private jumpButton: Sprite;
@@ -57,18 +52,18 @@ export class UIScene extends Scene {
 	}
 
 	public isJumpingKey(): boolean {
-		if (this.isAnyJumpKeyDown()) {
-			//If key was already down (jumped earlier) ignore jump request
-			if (this.isJumpKeyDown)
-				return false;
-			else {
-				this.isJumpKeyDown = true;
-				return true;
-			}
+		if (!this.isAnyJumpKeyDown()) {
+			this.isJumpKeyDown = false;
+			return false;
 		}
 
-		this.isJumpKeyDown = false;
-		return false;
+		//If key was already down (jumped earlier) ignore jump request
+		if (this.isJumpKeyDown)
+			return false;
+		else {
+			this.isJumpKeyDown = true;
+			return true;
+		}
 	}
 
 	private isAnyJumpKeyDown(): boolean {
@@ -79,8 +74,8 @@ export class UIScene extends Scene {
 		return false;
 	}
 
-	private isJumpingTouch() : boolean{
-		if(this.isJumpTouchDown){
+	private isJumpingTouch(): boolean {
+		if (this.isJumpTouchDown) {
 			this.isJumpTouchDown = false;
 			return true;
 		}
@@ -107,7 +102,7 @@ export class UIScene extends Scene {
 
 	private createDPad() {
 		for (let i = 0; i < this.directions.length; i++) {
-			const button = this.add.sprite(this.buttonPos[i].x, this.buttonPos[i].y + Constants.SCREEN_HEIGHT - Constants.INPUT_HEIGHT, 'button-dpad-' + this.directions[i]);
+			const button = this.add.sprite(this.buttonPos[i].x, this.buttonPos[i].y + Constants.screen.height - Constants.layout.input.height, 'button-dpad-' + this.directions[i]);
 			button.setOrigin(0, 0);
 			button.setScrollFactor(0, 0);
 			button.setInteractive();
@@ -120,7 +115,7 @@ export class UIScene extends Scene {
 	private createJumpButton() {
 		const ui = this;
 
-		this.jumpButton = this.add.sprite(Constants.SCREEN_WIDTH - 12, Constants.SCREEN_HEIGHT - Constants.INPUT_HEIGHT + 14, 'button-jump')
+		this.jumpButton = this.add.sprite(Constants.screen.width - 12, Constants.screen.height - Constants.layout.input.height + 14, 'button-jump')
 			.setOrigin(1, 0)
 			.setInteractive()
 			.setScrollFactor(0, 0)
@@ -166,16 +161,9 @@ export class UIScene extends Scene {
 
 	private createKeyboardListeners() {
 		const ui = this;
-		const gameplay = (this.scene.get('gameplay') as GameplayScene);
 
 		//Add jump keys
 		this.jumpKeyCodes.forEach(key => this.jumpInputKeys.push(this.input.keyboard.addKey(key, true, false)));
-
-		// this.input.keyboard.on('keydown-SPACE', function (event) {
-		// 	event.stopPropagation();
-		// 	console.debug(gameplay);
-		// 	gameplay.onJump();
-		// });
 
 		this.input.keyboard.on('keydown', function (event) {
 			switch (event.keyCode) {
@@ -203,12 +191,6 @@ export class UIScene extends Scene {
 				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO:
 					ui.verticalKeyboardDirection = 'down';
 					break;
-				// // case Phaser.Input.Keyboard.KeyCodes.SPACE:
-				// case Phaser.Input.Keyboard.KeyCodes.ENTER:
-				// case Phaser.Input.Keyboard.KeyCodes.E:
-				// case Phaser.Input.Keyboard.KeyCodes.O:
-				// 	gameplay.onJump();
-				// 	break;
 			}
 		});
 

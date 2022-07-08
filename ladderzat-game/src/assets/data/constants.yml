@@ -1,0 +1,22 @@
+screen:
+  width: 192
+  height: 286
+
+layout:
+  input:
+    height: 70
+  gameplay:
+    height: 216
+
+player:
+  jump:
+    power: 150
+  speed:
+    walk: 100
+    ladder:
+      up: 80
+      down: 100
+
+object:
+  platform:
+      width: 50
