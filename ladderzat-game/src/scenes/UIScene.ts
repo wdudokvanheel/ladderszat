@@ -21,8 +21,10 @@ export class UIScene extends Scene {
 
 	private dpadButtons: Sprite[] = [];
 	private jumpButton: Sprite;
+
 	private jumpInputKeys: Key[] = new Array();
-	private isKeyDown = false;
+	private isJumpKeyDown = false;
+	private isJumpTouchDown = false;
 
 	private horizontalTouchDirection: string = undefined;
 	private verticalTouchDirection: string = undefined;
@@ -47,17 +49,25 @@ export class UIScene extends Scene {
 	}
 
 	public isJumping(): boolean {
+		//Extract the values to a variable, as doing an OR check will not guarantee the isJumpingTouch will be called
+		const key = this.isJumpingKey();
+		const touch = this.isJumpingTouch();
+
+		return key || touch;
+	}
+
+	public isJumpingKey(): boolean {
 		if (this.isAnyJumpKeyDown()) {
 			//If key was already down (jumped earlier) ignore jump request
-			if (this.isKeyDown)
+			if (this.isJumpKeyDown)
 				return false;
 			else {
-				this.isKeyDown = true;
+				this.isJumpKeyDown = true;
 				return true;
 			}
 		}
 
-		this.isKeyDown = false;
+		this.isJumpKeyDown = false;
 		return false;
 	}
 
@@ -65,6 +75,14 @@ export class UIScene extends Scene {
 		for (const key of this.jumpInputKeys) {
 			if (key.isDown)
 				return true;
+		}
+		return false;
+	}
+
+	private isJumpingTouch() : boolean{
+		if(this.isJumpTouchDown){
+			this.isJumpTouchDown = false;
+			return true;
 		}
 		return false;
 	}
@@ -100,7 +118,7 @@ export class UIScene extends Scene {
 	}
 
 	private createJumpButton() {
-		const gameplay = (this.scene.get('gameplay') as GameplayScene);
+		const ui = this;
 
 		this.jumpButton = this.add.sprite(Constants.SCREEN_WIDTH - 12, Constants.SCREEN_HEIGHT - Constants.INPUT_HEIGHT + 14, 'button-jump')
 			.setOrigin(1, 0)
@@ -109,7 +127,7 @@ export class UIScene extends Scene {
 			.setName('button-jump');
 
 		this.jumpButton.on('pointerdown', function () {
-			gameplay.onJump();
+			ui.isJumpTouchDown = true;
 			this.setFrame(1);
 		});
 

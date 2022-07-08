@@ -1,5 +1,7 @@
 import Phaser from 'phaser'
-import images from '../assets/images/*/*.png'
+import {ImageLoader} from '../loader/ImageLoader';
+import {PlatformLoader} from '../loader/PlatformLoader';
+
 import Image = Phaser.GameObjects.Image;
 import Vector2 = Phaser.Math.Vector2;
 
@@ -10,54 +12,63 @@ export default class TestScene extends Phaser.Scene {
 	private BUTTON_AREA = 60;
 
 	private player;
-	touchDirection = undefined;
-	keyDirection = undefined;
+	private ladders = undefined;
+	horizontalDirectionTouch = undefined;
+	verticalDirectionTouch = undefined;
+	horizontalDirectionKeyboard = undefined;
+	verticalDirectionKeyboard = undefined;
+	onLadder = false;
+	platformLoader = new PlatformLoader();
 
 	constructor() {
 		super('ladder-zat')
 	}
 
 	preload() {
-		this.load.spritesheet('button-dpad-up', images['ui']['button-dpad-up'], {frameWidth: 17, frameHeight: 16});
-		this.load.spritesheet('button-dpad-right', images['ui']['button-dpad-right'], {frameWidth: 15, frameHeight: 18});
-		this.load.spritesheet('button-dpad-down', images['ui']['button-dpad-down'], {frameWidth: 17, frameHeight: 16});
-		this.load.spritesheet('button-dpad-left', images['ui']['button-dpad-left'], {frameWidth: 15, frameHeight: 18});
-		this.load.image('background', images['ui']['background'])
-		this.load.image('rail', images['objects']['rail'])
-		this.load.image('ladder', images['objects']['ladder'])
-		this.load.image('kris-stand', images['kris']['stand'])
-		this.load.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
+		new ImageLoader(this.load).loadImages();
 	}
 
 	create() {
 		this.addBackground();
-		this.input.addPointer(4);
+		this.input.addPointer(2);
 
-		var rails = this.createRails();
+		// var rails = this.createRails();
+		var rails = this.platformLoader.loadPlatforms(this.physics);
+
+		this.createLadder(130, this.HEIGHT - this.BUTTON_AREA - 27, 5);
+
 		this.player = this.createPlayer();
+
+		this.physics.add.overlap(this.player, this.ladders, this.isOnLadder, null, this);
 
 		this.physics.add.collider(this.player, rails);
 		this.addUi();
 	}
 
 	update(time: number, delta: number) {
-		super.update(time, delta);
-
-		if (this.touchDirection === 'left') {
+		if (this.horizontalDirectionTouch === 'left' || this.horizontalDirectionKeyboard === 'left')
 			this.player.setVelocityX(-75);
-		} else if (this.touchDirection === 'right') {
+		else if (this.horizontalDirectionTouch === 'right' || this.horizontalDirectionKeyboard === 'right')
 			this.player.setVelocityX(75);
-		}
 
-		if (this.keyDirection === 'left') {
-			this.player.setVelocityX(-75);
-		} else if (this.keyDirection === 'right') {
-			this.player.setVelocityX(75);
-		}
 
-		if (this.keyDirection == undefined && this.touchDirection == undefined) {
+		if (this.horizontalDirectionTouch == undefined && this.horizontalDirectionKeyboard == undefined) {
 			this.player.setVelocityX(0);
 		}
+
+		if (this.onLadder)
+			this.player.setVelocityY(0);
+
+		if (this.onLadder) {
+			if (this.verticalDirectionTouch === 'up' || this.verticalDirectionKeyboard === 'up')
+				this.player.setVelocityY(-75);
+			else if (this.verticalDirectionTouch === 'down' || this.verticalDirectionKeyboard === 'down')
+				this.player.setVelocityY(75);
+		}
+
+		if (!this.onLadder)
+			this.player.body.setAllowGravity(true);
+		this.onLadder = false;
 	}
 
 	createPlayer() {
@@ -69,24 +80,33 @@ export default class TestScene extends Phaser.Scene {
 		return player;
 	}
 
+	createLadder(x: number, y: number, segments: number = 1) {
+		if (this.ladders == undefined) {
+			this.ladders = this.physics.add.staticGroup();
+		}
+		for (let i = 0; i < segments; i++) {
+			const ladder = this.ladders.create(x, y - (i * 10), 'ladder').setOrigin(0, 0);
+			ladder.body.immovable = true;
+			ladder.refreshBody();
+		}
+	}
+
+	isOnLadder() {
+		this.onLadder = true;
+		this.player.body.setAllowGravity(false);
+	}
+
 	createRails() {
 		const platforms = this.physics.add.staticGroup();
 
 		for (let i = 0; i < 5; i++) {
-			platforms.create((i * 50), this.HEIGHT - this.BUTTON_AREA - i, 'rail');
+			platforms.create((i * 50), (this.HEIGHT - this.BUTTON_AREA) - i, 'rail');
 		}
 		platforms.create(46, 105, 'rail');
 		platforms.create(-4, 104, 'rail');
 
 		platforms.create(130, 150, 'rail');
 		platforms.create(180, 151, 'rail');
-
-		this.add.image(130, this.HEIGHT - this.BUTTON_AREA - 7, 'ladder').setOrigin(0, 1);
-		this.add.image(130, this.HEIGHT - this.BUTTON_AREA - 17, 'ladder').setOrigin(0, 1);
-		this.add.image(130, this.HEIGHT - this.BUTTON_AREA - 27, 'ladder').setOrigin(0, 1);
-		this.add.image(130, this.HEIGHT - this.BUTTON_AREA - 37, 'ladder').setOrigin(0, 1);
-		this.add.image(130, this.HEIGHT - this.BUTTON_AREA - 42, 'ladder').setOrigin(0, 1);
-
 
 		platforms.create(this.WIDTH - 45, 40, 'rail');
 		this.add.image(46, 105 - 4, 'ladder').setOrigin(0, 1);
@@ -95,6 +115,7 @@ export default class TestScene extends Phaser.Scene {
 
 		this.add.image(8, this.HEIGHT - this.BUTTON_AREA - 4, 'ladder').setOrigin(0, 1);
 		this.add.image(8, this.HEIGHT - this.BUTTON_AREA - 14, 'ladder').setOrigin(0, 1);
+
 
 		return platforms;
 	}
@@ -123,7 +144,7 @@ export default class TestScene extends Phaser.Scene {
 		for (let i = 0; i < directions.length; i++) {
 			var btn = this.addImage('button-dpad-' + directions[i], buttonPos[i].x, this.HEIGHT + this.TOP_OFFSET - this.BUTTON_AREA + buttonPos[i].y).setOrigin(0, 1);
 			btn.setInteractive()
-			btn.setName('button-dpad-' + directions[i]);
+			btn.setName('button-dpad-' + (i % 2 == 0 ? '-vertical-' : 'horizontal') + directions[i]);
 			btn['dirName'] = directions[i];
 			btn.on('gameobjectover', function (pointer, gameObject) {
 				console.log(btn.name)
@@ -132,17 +153,23 @@ export default class TestScene extends Phaser.Scene {
 
 		var game = this;
 		this.input.on('gameobjectover', function (pointer, gameObject) {
-			if (gameObject && gameObject.name && gameObject.name.startsWith("button-dpad")) {
+			if (gameObject && gameObject.name && gameObject.name.startsWith("button-dpad-")) {
 				gameObject.setFrame(1);
-				game.touchDirection = gameObject.dirName;
+				if (gameObject.name.startsWith("button-dpad-horizontal")) {
+					game.horizontalDirectionTouch = gameObject.dirName;
+				} else
+					game.verticalDirectionTouch = gameObject.dirName
 			}
 		});
 
 		this.input.on('gameobjectout', function (pointer, gameObject) {
-			if (gameObject && gameObject.name && gameObject.name.startsWith("button-dpad")) {
-				if (game.touchDirection === gameObject.dirName)
-					game.touchDirection = undefined;
+			if (gameObject && gameObject.name && gameObject.name.startsWith("button-dpad-")) {
 				gameObject.setFrame(0);
+
+				if (game.horizontalDirectionTouch === gameObject.dirName)
+					game.horizontalDirectionTouch = undefined;
+				if (game.verticalDirectionTouch === gameObject.dirName)
+					game.verticalDirectionTouch = undefined;
 			}
 		});
 
@@ -171,20 +198,70 @@ export default class TestScene extends Phaser.Scene {
 		});
 
 		this.input.keyboard.on('keydown', function (event) {
-			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.A) {
-				game.keyDirection = 'left';
-			}
-			else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.D) {
-				game.keyDirection = 'right';
+			switch (event.keyCode) {
+				case Phaser.Input.Keyboard.KeyCodes.A:
+				case Phaser.Input.Keyboard.KeyCodes.J:
+				case Phaser.Input.Keyboard.KeyCodes.LEFT:
+				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR:
+					game.horizontalDirectionKeyboard = 'left';
+					break;
+				case Phaser.Input.Keyboard.KeyCodes.D:
+				case Phaser.Input.Keyboard.KeyCodes.L:
+				case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX:
+					game.horizontalDirectionKeyboard = 'right'
+					break;
+				case Phaser.Input.Keyboard.KeyCodes.W:
+				case Phaser.Input.Keyboard.KeyCodes.I:
+				case Phaser.Input.Keyboard.KeyCodes.UP:
+				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT:
+					game.verticalDirectionKeyboard = 'up';
+					break;
+				case Phaser.Input.Keyboard.KeyCodes.S:
+				case Phaser.Input.Keyboard.KeyCodes.K:
+				case Phaser.Input.Keyboard.KeyCodes.DOWN:
+				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO:
+					game.verticalDirectionKeyboard = 'down';
+					break;
 			}
 		});
 
 		this.input.keyboard.on('keyup', function (event) {
-			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.A && game.keyDirection === 'left') {
-				game.keyDirection = undefined;
+			switch (event.keyCode) {
+				case Phaser.Input.Keyboard.KeyCodes.A:
+				case Phaser.Input.Keyboard.KeyCodes.J:
+				case Phaser.Input.Keyboard.KeyCodes.LEFT:
+				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR:
+					if (game.horizontalDirectionKeyboard === 'left')
+						game.horizontalDirectionKeyboard = undefined;
+					break;
+				case Phaser.Input.Keyboard.KeyCodes.D:
+				case Phaser.Input.Keyboard.KeyCodes.L:
+				case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX:
+					if (game.horizontalDirectionKeyboard === 'right')
+						game.horizontalDirectionKeyboard = undefined;
+					break;
+				case Phaser.Input.Keyboard.KeyCodes.W:
+				case Phaser.Input.Keyboard.KeyCodes.I:
+				case Phaser.Input.Keyboard.KeyCodes.UP:
+				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT:
+					if (game.verticalDirectionKeyboard === 'up')
+						game.verticalDirectionKeyboard = undefined;
+					break;
+				case Phaser.Input.Keyboard.KeyCodes.S:
+				case Phaser.Input.Keyboard.KeyCodes.K:
+				case Phaser.Input.Keyboard.KeyCodes.DOWN:
+				case Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO:
+					if (game.verticalDirectionKeyboard === 'down')
+						game.verticalDirectionKeyboard = undefined;
+					break;
 			}
-			else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.D && game.keyDirection === 'right') {
-				game.keyDirection = undefined;
+
+			if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.A && game.horizontalDirectionKeyboard === 'left') {
+				game.horizontalDirectionKeyboard = undefined;
+			} else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.D && game.horizontalDirectionKeyboard === 'right') {
+				game.horizontalDirectionKeyboard = undefined;
 			}
 		});
 	}

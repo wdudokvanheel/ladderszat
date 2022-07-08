@@ -46,12 +46,6 @@ export class GameplayScene extends Phaser.Scene {
 		this.onLadder = true;
 	}
 
-	public onJump() {
-		console.debug('NONONONONONO');
-		if (this.player.body.touching.down && !this.onLadder)
-			this.player.setVelocityY(-150);
-	}
-
 	update(time: number, delta: number) {
 		this.count++;
 		this.updatePlayerVelocity();
