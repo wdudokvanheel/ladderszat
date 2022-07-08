@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
-    "esModuleInterop":  true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "typeRoots": [
+      "src/types",
+      "node_modules/@types"
+    ]
   }
 }
+
