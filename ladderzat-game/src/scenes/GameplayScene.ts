@@ -14,6 +14,7 @@ export class GameplayScene extends Phaser.Scene {
 	private ui: UIScene;
 
 	private onLadder = false;
+	private isJumping = true;
 
 	private count = 0;
 
@@ -36,33 +37,55 @@ export class GameplayScene extends Phaser.Scene {
 		this.ui = this.scene.get('ui') as UIScene;
 
 		//Setup collision with player
-		// this.physics.add.overlap(this.player, this.ladders, this.isOnLadder, null, this);
 		this.physics.add.collider(this.player, platforms);
 		this.physics.add.overlap(this.player, ladders, this.onLadderOverlap, null, this);
 	}
 
 	private onLadderOverlap() {
-		console.debug('OVERLAP TRUE');
 		this.onLadder = true;
+		if (!this.isJumping)
+			this.player.body.setAllowGravity(false);
 	}
 
 	update(time: number, delta: number) {
 		this.count++;
 		this.updatePlayerVelocity();
 		this.updatePlayerJumping();
-		// console.debug('UPDATE' + this.onLadder);
-		// this.cameras.main.y++
-		// console.debug((this.scene.get('ui') as UIScene).getHorizontalDirection() + ' ' + (this.scene.get('ui') as UIScene).getVerticalDirection() );
+
+		if (!this.onLadder && !this.player.body.allowGravity)
+			this.player.body.setAllowGravity(true);
+		else if (this.onLadder && this.isJumping)
+			this.player.body.setAllowGravity(true);
+
 		this.onLadder = false;
 	}
 
 	private updatePlayerJumping() {
-		if (this.ui.isJumping() && this.player.body.touching.down && !this.onLadder)
-			this.player.setVelocityY(-150);
+		if (this.player.body.touching.down && this.isJumping) {
+			this.isJumping = false;
+		}
+
+		if (this.isJumping)
+			return;
+
+		if (this.ui.isJumping()) {
+			if (!this.onLadder && this.player.body.touching.down)
+				this.performJump();
+			if (this.onLadder && !this.isJumping) {
+				this.performJump();
+			}
+		}
+	}
+
+	private performJump() {
+		this.isJumping = true;
+		this.player.setVelocityY(-150);
 	}
 
 	private updatePlayerVelocity() {
 		const horiz = this.ui.getHorizontalDirection();
+		const vert = this.ui.getVerticalDirection();
+
 		if (horiz != undefined) {
 			if (horiz === 'left')
 				this.player.setVelocityX(-75);
@@ -70,5 +93,14 @@ export class GameplayScene extends Phaser.Scene {
 				this.player.setVelocityX(75);
 		} else
 			this.player.setVelocityX(0);
+
+		if (this.onLadder && !this.isJumping) {
+			if (vert == undefined) {
+				this.player.setVelocityY(0);
+			} else if (vert == 'up')
+				this.player.setVelocityY(-50);
+			else if (vert == 'down')
+				this.player.setVelocityY(50);
+		}
 	}
 }
