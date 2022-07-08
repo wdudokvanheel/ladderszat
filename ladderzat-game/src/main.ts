@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
-
-import TestScene from './scenes/TestScene'
+import {GameplayScene} from './scenes/GameplayScene';
+import {InitScene} from './scenes/InitScene';
+import {UIScene} from './scenes/UIScene';
 
 var config = {
 	type: Phaser.AUTO,
@@ -13,14 +14,19 @@ var config = {
 		zoom: 2,
 		pixelArt: true
 	},
+	fps: {
+		// target: 60,
+		forceSetTimeOut: true
+	},
 	physics: {
 		default: 'arcade',
 		arcade: {
+			fps: 144	,
 			gravity: { y: 500 },
-			debug: false
+			debug: true
 		}
 	},
-	scene: [TestScene]
+	scene: [InitScene, GameplayScene, UIScene]
 };
 
 export default new Phaser.Game(config)
