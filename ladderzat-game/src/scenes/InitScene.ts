@@ -1,6 +1,6 @@
 import {Scene} from 'phaser';
+import Constants from '../assets/data/constants.yml'
 import {ImageLoader} from '../loader/ImageLoader';
-import {PlatformLoader} from '../loader/PlatformLoader';
 
 export class InitScene extends Scene {
 	private images: ImageLoader;
@@ -12,7 +12,7 @@ export class InitScene extends Scene {
 	preload() {
 		this.images = new ImageLoader(this.load);
 		this.images.loadImages();
-		this.cameras.main.setBounds(0, 0, 192, 1024);
+		this.cameras.main.setBounds(0, 0, Constants.screen.width, 1024);
 	}
 
 	update(time: number, delta: number) {

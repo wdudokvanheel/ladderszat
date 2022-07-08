@@ -1,12 +1,19 @@
 screen:
-  width: 192
+  width: 160
   height: 286
+
+world:
+  height: 1024
 
 layout:
   input:
     height: 70
   gameplay:
     height: 216
+
+camera:
+  offset:
+    y: 32
 
 player:
   jump:

@@ -5,6 +5,7 @@ import {LadderLoader} from '../loader/LadderLoader';
 import {PlatformLoader} from '../loader/PlatformLoader';
 import {UIOverlayScene} from './UIOverlayScene';
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+import Sprite = Phaser.GameObjects.Sprite;
 
 export class GameplayScene extends Phaser.Scene {
 	private platformLoader: PlatformLoader;
@@ -40,14 +41,19 @@ export class GameplayScene extends Phaser.Scene {
 		//Setup collision with player
 		const game = this;
 		this.physics.add.overlap(this.player, ladders, this.onLadderOverlap, null, this);
-		this.physics.add.collider(this.player, platforms, undefined, function () {
-			return game.check();
+		this.physics.add.collider(this.player, platforms, undefined, function (player, platform) {
+			return game.doesPlatformCollide(player as Sprite, platform as Sprite);
 		});
+
+		this.physics.world.setBounds(0, -Constants.world.height, Constants.screen.width, Constants.world.height + Constants.layout.gameplay.height, true, true, true, true);
 	}
 
-	private check(): boolean {
-		if (this.onLadder || this.player.body.velocity.y < 0)
-			return false
+	private doesPlatformCollide(player: Sprite, platform: Sprite): boolean {
+		if (player.y + player.height < platform.y) {
+			return false;
+		}
+		if (this.onLadder || this.player.body.velocity.y <= 0)
+			return false;
 		return true;
 	}
 
@@ -55,12 +61,19 @@ export class GameplayScene extends Phaser.Scene {
 		this.onLadder = true;
 		if (!this.isJumping)
 			this.player.body.setAllowGravity(false);
+		else {
+			if (this.isJumping && this.player.body.velocity.y > 0)
+				this.player.setVelocityY(0);
+		}
 	}
 
 	update(time: number, delta: number) {
 		this.count++;
 		this.updatePlayerVelocity();
 		this.updatePlayerJumping();
+
+		//Update camera to follow player
+		this.cameras.main.y = this.getCameraY();
 
 		if (!this.onLadder && !this.player.body.allowGravity)
 			this.player.body.setAllowGravity(true);
@@ -112,5 +125,12 @@ export class GameplayScene extends Phaser.Scene {
 			else if (vert == 'down')
 				this.player.setVelocityY(Constants.player.speed.ladder.down);
 		}
+	}
+
+	private getCameraY(): number {
+		if ((this.player.y - this.player.height - Constants.camera.offset.y) >= Constants.layout.gameplay.height / 2)
+			return 0;
+
+		return 0 - (this.player.y - this.player.height - Constants.camera.offset.y) + (Constants.layout.gameplay.height / 2);
 	}
 }

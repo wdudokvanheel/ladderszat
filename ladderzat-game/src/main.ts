@@ -9,7 +9,7 @@ var config = {
 	scale: {
 		mode: Phaser.Scale.FIT,
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
-		width: 192,
+		width: 160,
 		height: 286,
 		zoom: 2,
 		pixelArt: true
