@@ -8,6 +8,7 @@ export class ObjectFactory {
 		player.setBounce(0);
 		player.setDataEnabled();
 		player.setCollideWorldBounds(true);
+		player.body.setMaxVelocityY(400);
 		return player;
 	}
 }

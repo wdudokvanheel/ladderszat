@@ -12,7 +12,7 @@ export class InitScene extends Scene {
 	preload() {
 		this.images = new ImageLoader(this.load);
 		this.images.loadImages();
-		this.cameras.main.setBounds(0, 0, Constants.screen.width, 1024);
+		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.screen.height);
 	}
 
 	update(time: number, delta: number) {

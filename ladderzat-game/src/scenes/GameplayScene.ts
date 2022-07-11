@@ -6,6 +6,7 @@ import {PlatformLoader} from '../loader/PlatformLoader';
 import {UIOverlayScene} from './UIOverlayScene';
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import Sprite = Phaser.GameObjects.Sprite;
+import Camera = Phaser.Cameras.Scene2D.Camera;
 
 export class GameplayScene extends Phaser.Scene {
 	private platformLoader: PlatformLoader;
@@ -45,7 +46,11 @@ export class GameplayScene extends Phaser.Scene {
 			return game.doesPlatformCollide(player as Sprite, platform as Sprite);
 		});
 
-		this.physics.world.setBounds(0, -Constants.world.height, Constants.screen.width, Constants.world.height + Constants.layout.gameplay.height, true, true, true, true);
+		//Setup camera
+		this.cameras.main.setSize(Constants.screen.width, Constants.layout.gameplay.height);
+		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.world.height + Constants.layout.gameplay.height);
+
+		this.physics.world.setBounds(0, 0, Constants.screen.width, Constants.world.height + Constants.layout.gameplay.height, true, true, true, true);
 	}
 
 	private doesPlatformCollide(player: Sprite, platform: Sprite): boolean {
@@ -73,7 +78,8 @@ export class GameplayScene extends Phaser.Scene {
 		this.updatePlayerJumping();
 
 		//Update camera to follow player
-		this.cameras.main.y = this.getCameraY();
+		this.cameras.main.setBounds(0, this.getCameraY(), Constants.screen.width, Constants.screen.height);
+		// console.debug(this.getCameraY(), this.player.y);
 
 		if (!this.onLadder && !this.player.body.allowGravity)
 			this.player.body.setAllowGravity(true);
@@ -128,9 +134,11 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	private getCameraY(): number {
-		if ((this.player.y - this.player.height - Constants.camera.offset.y) >= Constants.layout.gameplay.height / 2)
-			return 0;
+		// if ((this.player.y - this.player.height - Constants.camera.offset.y) >= Constants.layout.gameplay.height / 2)
+		// 	return 0;
 
-		return 0 - (this.player.y - this.player.height - Constants.camera.offset.y) + (Constants.layout.gameplay.height / 2);
+		// return 0 - (this.player.y - this.player.height - Constants.camera.offset.y) + (Constants.layout.gameplay.height / 2);
+		return Math.round(Math.min(Constants.world.height, this.player.y - ((this.player.height + Constants.layout.gameplay.height) / 2)));
+		// return this.player.y - ((this.player.height + Constants.layout.gameplay.height) / 2);
 	}
 }

@@ -19,7 +19,7 @@ export class PlatformLoader {
 			}
 
 			for (let i = 0; i < (platform.segments ?? 1); i++) {
-				platforms.create(platform.x + (i * Constants.object.platform.width), -(platform.y + (i * delta)) + Constants.layout.gameplay.height, 'rail').setOrigin(0, 0).refreshBody();
+				platforms.create(platform.x + (i * Constants.object.platform.width), (-(platform.y + (i * delta)) + Constants.layout.gameplay.height) + Constants.world.height, 'rail').setOrigin(0, 0).refreshBody();
 			}
 		});
 		return platforms;

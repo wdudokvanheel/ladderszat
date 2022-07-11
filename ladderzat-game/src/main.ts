@@ -12,7 +12,8 @@ var config = {
 		width: 160,
 		height: 286,
 		zoom: 2,
-		pixelArt: true
+		pixelArt: true,
+		antialias: false
 	},
 	fps: {
 		// target: 60,

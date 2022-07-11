@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "parcel src/index.html -p 8000",
-    "build": "parcel build src/index.html --dist-dir dist"
+    "build": "parcel build src/index.html"
   },
   "devDependencies": {
     "@parcel/resolver-glob": "2.6.2",

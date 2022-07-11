@@ -12,7 +12,7 @@ export class LadderLoader {
 
 		data.forEach(ladder => {
 			for (let i = 0; i < (ladder.segments ?? 1); i++) {
-				ladders.create(ladder.x, -(ladder.y + (i * 20)) + Constants.layout.gameplay.height, 'ladder').setOrigin(0, 1).refreshBody();
+				ladders.create(ladder.x, -(ladder.y + (i * 20)) + Constants.layout.gameplay.height  + Constants.world.height, 'ladder').setOrigin(0, 1).refreshBody();
 			}
 		});
 		return ladders;

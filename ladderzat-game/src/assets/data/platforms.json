@@ -3,16 +3,32 @@
     "x": 0,
     "y": 8,
     "segments": 4,
-//    "angled": "up"
+    "angled": "up"
   },
   {
-    "x": 0,
-    "y": 200,
+    "x": 128,
+    "y": 51,
+    "segments": 1
+  },
+  {
+    "x": 10,
+    "y": 108,
+    "segments": 2,
+    "angled": "down"
+  },
+  {
+    "x": 11,
+    "y": 190,
     "segments": 1
   },
   {
     "x": 0,
-    "y": 100,
+    "y": 1000,
+    "segments": 1
+  },
+  {
+    "x": 100,
+    "y": 960,
     "segments": 2
   }
 ]
