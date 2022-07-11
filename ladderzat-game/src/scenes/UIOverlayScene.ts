@@ -36,11 +36,78 @@ export class UIOverlayScene extends Scene {
 
 		this.createDPad();
 		this.createJumpButton();
-		this.addMouseOverListener();
 		this.createKeyboardListeners();
 	}
 
 	update(time: number, delta: number) {
+		const inputs = [this.input.pointer1, this.input.pointer2, this.input.mousePointer];
+
+		this.verticalTouchDirection = undefined;
+		this.horizontalTouchDirection = undefined;
+
+		for (let i = 0; i < inputs.length; i++) {
+			if (this.isPointerInDpad(inputs[i])) {
+				this.horizontalTouchDirection = this.getPointerHorizontalDirection(inputs[i]);
+				this.verticalTouchDirection = this.getPointerVerticalDirection(inputs[i]);
+				break;
+			}
+		}
+
+		this.updateDPadButtonStates();
+	}
+
+	private updateDPadButtonStates() {
+		this.dpadButtons.forEach(btn => btn.setFrame(0));
+		if (this.getHorizontalDirection() == 'right')
+			this.dpadButtons[1].setFrame(1);
+		else if (this.getHorizontalDirection() == 'left')
+			this.dpadButtons[3].setFrame(1);
+
+		if (this.getVerticalDirection() == 'up')
+			this.dpadButtons[0].setFrame(1);
+		else if (this.getVerticalDirection() == 'down')
+			this.dpadButtons[2].setFrame(1);
+	}
+
+
+	public getHorizontalDirection(): string {
+		if (this.horizontalTouchDirection === 'left' || this.horizontalKeyboardDirection === 'left')
+			return "left";
+		else if (this.horizontalTouchDirection === 'right' || this.horizontalKeyboardDirection === 'right')
+			return "right";
+
+		return undefined;
+	}
+
+	public getVerticalDirection(): string {
+		if (this.verticalTouchDirection === 'up' || this.verticalKeyboardDirection === 'up')
+			return 'up';
+		else if (this.verticalTouchDirection === 'down' || this.verticalKeyboardDirection === 'down')
+			return 'down';
+
+		return undefined;
+	}
+
+	private getPointerVerticalDirection(pointer: Phaser.Input.Pointer): string {
+		if (pointer.y < Constants.controls.dpad.center.y - Constants.controls.dpad.deadzone.y)
+			return "up";
+		if (pointer.y > Constants.controls.dpad.center.y + Constants.controls.dpad.deadzone.y)
+			return "down";
+
+		return undefined;
+	}
+
+	private getPointerHorizontalDirection(pointer: Phaser.Input.Pointer): string {
+		if (pointer.x > Constants.controls.dpad.center.x + Constants.controls.dpad.deadzone.x)
+			return "right";
+		if (pointer.x < Constants.controls.dpad.center.x - Constants.controls.dpad.deadzone.x)
+			return "left";
+
+		return undefined;
+	}
+
+	private isPointerInDpad(pointer: Phaser.Input.Pointer): boolean {
+		return pointer.isDown && pointer.x < 73 && pointer.y > 218;
 	}
 
 	public isJumping(): boolean {
@@ -82,30 +149,11 @@ export class UIOverlayScene extends Scene {
 		return false;
 	}
 
-	public getHorizontalDirection(): string {
-		if (this.horizontalTouchDirection === 'left' || this.horizontalKeyboardDirection === 'left')
-			return "left";
-		else if (this.horizontalTouchDirection === 'right' || this.horizontalKeyboardDirection === 'right')
-			return "right";
-
-		return undefined;
-	}
-
-	public getVerticalDirection(): string {
-		if (this.verticalTouchDirection === 'up' || this.verticalKeyboardDirection === 'up')
-			return 'up';
-		else if (this.verticalTouchDirection === 'down' || this.verticalKeyboardDirection === 'down')
-			return 'down';
-
-		return undefined;
-	}
-
 	private createDPad() {
 		for (let i = 0; i < this.directions.length; i++) {
 			const button = this.add.sprite(this.buttonPos[i].x, this.buttonPos[i].y + Constants.screen.height - Constants.layout.input.height, 'button-dpad-' + this.directions[i]);
 			button.setOrigin(0, 0);
 			button.setScrollFactor(0, 0);
-			button.setInteractive();
 			button.setName('button-dpad-' + (i % 2 == 0 ? '-vertical-' : 'horizontal') + this.directions[i]);
 			button['dirName'] = this.directions[i];
 			this.dpadButtons[i] = button;
@@ -132,30 +180,6 @@ export class UIOverlayScene extends Scene {
 
 		this.jumpButton.on('pointerout', function () {
 			this.setFrame(0);
-		});
-	}
-
-	private addMouseOverListener() {
-		const controller = this;
-		this.input.on('gameobjectover', function (pointer, gameObject) {
-			if (gameObject && gameObject.name && gameObject.name.startsWith("button-dpad-")) {
-				gameObject.setFrame(1);
-				if (gameObject.name.startsWith("button-dpad-horizontal")) {
-					controller.horizontalTouchDirection = gameObject.dirName;
-				} else
-					controller.verticalTouchDirection = gameObject.dirName
-			}
-		});
-
-		this.input.on('gameobjectout', function (pointer, gameObject) {
-			if (gameObject && gameObject.name && gameObject.name.startsWith("button-dpad-")) {
-				gameObject.setFrame(0);
-
-				if (controller.horizontalTouchDirection === gameObject.dirName)
-					controller.horizontalTouchDirection = undefined;
-				if (controller.verticalTouchDirection === gameObject.dirName)
-					controller.verticalTouchDirection = undefined;
-			}
 		});
 	}
 

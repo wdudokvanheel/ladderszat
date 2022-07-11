@@ -11,6 +11,16 @@ layout:
   gameplay:
     height: 216
 
+controls:
+  dpad:
+    center:
+      x: 37
+      y: 251
+    deadzone:
+      x: 7
+      y: 7
+
+
 camera:
   offset:
     y: 32
@@ -24,6 +34,9 @@ player:
       up: 80
       down: 100
 
+jump:
+  inairpass: 125
+
 object:
   platform:
-      width: 50
+    width: 50

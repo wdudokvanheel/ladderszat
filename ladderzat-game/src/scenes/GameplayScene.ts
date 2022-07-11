@@ -4,9 +4,8 @@ import {ObjectFactory} from '../factory/ObjectFactory';
 import {LadderLoader} from '../loader/LadderLoader';
 import {PlatformLoader} from '../loader/PlatformLoader';
 import {UIOverlayScene} from './UIOverlayScene';
-import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import Sprite = Phaser.GameObjects.Sprite;
-import Camera = Phaser.Cameras.Scene2D.Camera;
+import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
 export class GameplayScene extends Phaser.Scene {
 	private platformLoader: PlatformLoader;
@@ -18,6 +17,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	private onLadder = false;
 	private isJumping = true;
+	private timeInAir = 0;
 
 	private count = 0;
 
@@ -79,8 +79,12 @@ export class GameplayScene extends Phaser.Scene {
 
 		//Update camera to follow player
 		this.cameras.main.setBounds(0, this.getCameraY(), Constants.screen.width, Constants.screen.height);
-		// console.debug(this.getCameraY(), this.player.y);
 
+		this.updateInAirTimer(delta);
+		this.updatePlayerGravityOnLadder();
+	}
+
+	private updatePlayerGravityOnLadder() {
 		if (!this.onLadder && !this.player.body.allowGravity)
 			this.player.body.setAllowGravity(true);
 		else if (this.onLadder && this.isJumping)
@@ -98,7 +102,7 @@ export class GameplayScene extends Phaser.Scene {
 			return;
 
 		if (this.ui.isJumping()) {
-			if (!this.onLadder && this.player.body.touching.down)
+			if (!this.onLadder && (this.player.body.touching.down || this.timeInAir <= Constants.jump.inairpass))
 				this.performJump();
 			if (this.onLadder && !this.isJumping) {
 				this.performJump();
@@ -134,11 +138,15 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	private getCameraY(): number {
-		// if ((this.player.y - this.player.height - Constants.camera.offset.y) >= Constants.layout.gameplay.height / 2)
-		// 	return 0;
+		return Math.min(Constants.world.height, this.player.y - ((this.player.height + Constants.layout.gameplay.height) / 2));
+	}
 
-		// return 0 - (this.player.y - this.player.height - Constants.camera.offset.y) + (Constants.layout.gameplay.height / 2);
-		return Math.round(Math.min(Constants.world.height, this.player.y - ((this.player.height + Constants.layout.gameplay.height) / 2)));
-		// return this.player.y - ((this.player.height + Constants.layout.gameplay.height) / 2);
+	private updateInAirTimer(delta: number) {
+		if (this.player.body.touching.down) {
+			this.timeInAir = 0;
+			return;
+		}
+
+		this.timeInAir += delta;
 	}
 }
