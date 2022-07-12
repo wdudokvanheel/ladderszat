@@ -3,25 +3,27 @@ import Group = Phaser.Physics.Arcade.Group;
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import Constants from '../assets/data/constants.yml';
+import {GameplayScene} from '../scenes/GameplayScene';
 import {UIOverlayScene} from '../scenes/UIOverlayScene';
 
 export class PhysicsController {
+	private gameplay: GameplayScene;
 	private physics: ArcadePhysics;
 	private ui: UIOverlayScene;
 
-	private player: SpriteWithDynamicBody;
-	private platforms: StaticGroup;
-	private ladders: StaticGroup;
-	private buckets: Group;
+	private readonly player: SpriteWithDynamicBody;
+	private readonly platforms: StaticGroup;
+	private readonly ladders: StaticGroup;
+	private readonly buckets: Group;
 
 	private onLadder = false;
 	private touchingLadder = undefined;
 	private isJumping = true;
 	private timeInAir = 0;
 
-
-	constructor(physics: Phaser.Physics.Arcade.ArcadePhysics, ui: UIOverlayScene, player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, platforms: Phaser.Physics.Arcade.StaticGroup, ladders: Phaser.Physics.Arcade.StaticGroup, buckets: Phaser.Physics.Arcade.Group) {
-		this.physics = physics;
+	constructor(gameplay: GameplayScene, ui: UIOverlayScene, player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, platforms: Phaser.Physics.Arcade.StaticGroup, ladders: Phaser.Physics.Arcade.StaticGroup, buckets: Phaser.Physics.Arcade.Group) {
+		this.gameplay = gameplay;
+		this.physics = gameplay.physics;
 		this.ui = ui;
 		this.player = player;
 		this.platforms = platforms;
@@ -55,6 +57,12 @@ export class PhysicsController {
 			if (bucket.body.y > Constants.world.height - 24)
 				bucket.body.setCollideWorldBounds(false);
 		});
+
+		this.physics.add.collider(this.buckets, this.buckets);
+
+		this.physics.add.collider(this.player, this.buckets, function (player: SpriteWithDynamicBody, bucket: SpriteWithDynamicBody) {
+			this.gameplay.onHit(bucket);
+		}, null, this);
 	}
 
 	private isLadderBlocking(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody): boolean {
@@ -64,9 +72,8 @@ export class PhysicsController {
 
 		if (player.y + player.height <= ladder.y - ladder.height && this.ui.getVerticalDirection() != 'down')
 			return true;
-		if (playerY > ladderY && segment == 0) {
+		if (playerY > ladderY && segment == 0)
 			return true;
-		}
 
 		return false;
 	}
@@ -124,20 +131,18 @@ export class PhysicsController {
 			this.player.setVelocityX(0);
 
 		if (this.onLadder && !this.isJumping) {
-			if (vert == undefined) {
+			if (vert == undefined)
 				this.player.setVelocityY(0);
-			} else if (vert == 'up') {
-				if (this.player.y + this.player.height > this.touchingLadder.y - this.touchingLadder.height)
-					this.player.setVelocityY(-Constants.player.speed.ladder.up);
+			else if (vert == 'up' && this.player.y + this.player.height > this.touchingLadder.y - this.touchingLadder.height) {
+				this.player.setVelocityY(-Constants.player.speed.ladder.up);
 			} else if (vert == 'down')
 				this.player.setVelocityY(Constants.player.speed.ladder.down);
 		}
 	}
 
 	private updatePlayerJumping() {
-		if (this.player.body.touching.down && this.isJumping) {
+		if (this.player.body.touching.down && this.isJumping)
 			this.isJumping = false;
-		}
 
 		if (this.isJumping)
 			return;

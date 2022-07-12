@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import {GameOverScene} from './scenes/GameOverScene';
 import {GameplayScene} from './scenes/GameplayScene';
 import {InitScene} from './scenes/InitScene';
 import {UIOverlayScene} from './scenes/UIOverlayScene';
@@ -27,5 +28,5 @@ export default {
 			debug: false
 		}
 	},
-	scene: [InitScene, GameplayScene, UIOverlayScene]
+	scene: [InitScene, GameplayScene, UIOverlayScene, GameOverScene]
 };

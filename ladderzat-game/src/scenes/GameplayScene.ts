@@ -19,11 +19,12 @@ export class GameplayScene extends Phaser.Scene {
 	private ladders: StaticGroup;
 	private buckets: Group;
 	private ui: UIOverlayScene;
-	private physicsController : PhysicsController;
+
+	private physicsController: PhysicsController;
 
 	private nextBucket = 2000;
 
-	private count = 0;
+	private running = true;
 
 	constructor() {
 		super('gameplay')
@@ -50,17 +51,26 @@ export class GameplayScene extends Phaser.Scene {
 		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.world.height);
 		this.physics.world.setBounds(0, 0, Constants.screen.width, Constants.world.height, true, true, true, true);
 
-		this.physicsController = new PhysicsController(this.physics, this.ui, this.player, this.platforms, this.ladders, this.buckets);
+		this.physicsController = new PhysicsController(this, this.ui, this.player, this.platforms, this.ladders, this.buckets);
 		this.physicsController.setupCollisionDetection();
 	}
 
 	update(time: number, delta: number) {
-		this.count++;
+		if (!this.running) {
+			this.physics.disableUpdate();
+			return;
+		}
+
 		this.generateBuckets(delta);
 
 		//Update camera to follow player
 		this.cameras.main.setBounds(0, this.getCameraY(), Constants.screen.width, Constants.screen.height);
 		this.physicsController.update(delta);
+	}
+
+	public onHit(enemy: SpriteWithDynamicBody) {
+		this.running = false;
+		this.scene.launch('gameover');
 	}
 
 	private generateBuckets(delta: number) {
@@ -72,6 +82,6 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	private getCameraY(): number {
-		return Math.min(Constants.world.height - Constants.layout.gameplay.height, this.player.y - ((this.player.height + Constants.layout.gameplay.height) / 2));
+		return Math.min(Constants.world.height - Constants.layout.gameplay.height, this.player.y - ((Constants.layout.gameplay.height) / 2) - this.player.height);
 	}
 }

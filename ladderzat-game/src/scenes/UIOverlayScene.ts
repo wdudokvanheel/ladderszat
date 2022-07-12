@@ -33,6 +33,7 @@ export class UIOverlayScene extends Scene {
 	preload() {
 		//Add extra pointer to control with two thumbs
 		this.input.addPointer(2);
+		this.add.sprite(0, 0, 'window').setOrigin(0, 0);
 
 		this.createDPad();
 		this.createJumpButton();
