@@ -10,13 +10,14 @@ export class InitScene extends Scene {
 	}
 
 	preload() {
-		this.images = new ImageLoader(this.load);
+		this.images = new ImageLoader(this.load, this.anims);
 		this.images.loadImages();
 		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.screen.height);
 	}
 
 	update(time: number, delta: number) {
 		if(this.load.progress == 1){
+			this.images.generateAnimations();
 			this.scene.start('gameplay')
 			this.scene.launch('ui');
 		}

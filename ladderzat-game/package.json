@@ -14,6 +14,8 @@
     "parcel-reporter-clean-dist": "^1.0.4"
   },
   "dependencies": {
+    "@types/node": "^18.0.3",
+    "@types/webpack-env": "^1.17.0",
     "phaser": "^3.55.2",
     "typescript": "3.9.5"
   }

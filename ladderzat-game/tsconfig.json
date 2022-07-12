@@ -5,6 +5,9 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "importHelpers": true,
+    "types": [
+      "webpack-env"
+    ],
     "typeRoots": [
       "src/types",
       "node_modules/@types"

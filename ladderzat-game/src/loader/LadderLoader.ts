@@ -1,7 +1,7 @@
-import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
-import ladderdata from '../assets/data/ladders.json'
+import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import Constants from '../assets/data/constants.yml'
+import ladderdata from '../assets/data/ladders.json'
 import {Ladder} from '../model/Ladder';
 
 export class LadderLoader {
@@ -12,7 +12,11 @@ export class LadderLoader {
 
 		data.forEach(ladder => {
 			for (let i = 0; i < (ladder.segments ?? 1); i++) {
-				ladders.create(ladder.x, -(ladder.y + (i * 20)) + Constants.layout.gameplay.height  + Constants.world.height, 'ladder').setOrigin(0, 1).refreshBody();
+				const sprite = ladders.create(ladder.x, -(ladder.y + (i * Constants.object.ladder.height)) + Constants.world.height, 'ladder')
+					.setOrigin(0, 1)
+					.refreshBody()
+					.setDataEnabled();
+				sprite.setData('segment', i);
 			}
 		});
 		return ladders;

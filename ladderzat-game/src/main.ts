@@ -1,36 +1,29 @@
 import Phaser from 'phaser'
-import {GameplayScene} from './scenes/GameplayScene';
-import {InitScene} from './scenes/InitScene';
-import {UIOverlayScene} from './scenes/UIOverlayScene';
+import gameConfig from './GameConfig';
 
-var config = {
-	type: Phaser.AUTO,
-	backgroundColor: '#221f1f',
-	scale: {
-		mode: Phaser.Scale.FIT,
-		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
-		width: 160,
-		height: 286,
-		zoom: 2,
-		pixelArt: true,
-		antialias: false
-	},
-	fps: {
-		// target: 60,
-		forceSetTimeOut: true
-	},
-	physics: {
-		default: 'arcade',
-		arcade: {
-			fps: 144	,
-			gravity: { y: 500 },
-			debug: false
-		}
-	},
-	scene: [InitScene, GameplayScene, UIOverlayScene]
-};
+let game;
 
-export default new Phaser.Game(config)
+if (module.hot) {
+	module.hot.dispose(destroyGame);
+	module.hot.accept(newGame);
+}
 
+if (!game)
+	newGame();
 
+function newGame() {
+	if (game)
+		return;
+	game = new Phaser.Game(gameConfig);
+}
+
+function destroyGame() {
+	if (!game)
+		return;
+	game.destroy(true);
+	game.runDestroy();
+	game = null;
+}
+
+export const sample = (arr: any[]) => arr.length ? arr[Math.floor(Math.random() * arr.length)] : undefined
 

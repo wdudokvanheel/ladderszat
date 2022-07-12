@@ -20,7 +20,6 @@ controls:
       x: 7
       y: 7
 
-
 camera:
   offset:
     y: 32
@@ -40,3 +39,15 @@ jump:
 object:
   platform:
     width: 50
+  ladder:
+    height: 40
+
+gfx:
+  bucket:
+    colors:
+      - pink
+      - blue
+      - red
+      - green-dark
+      - green-light
+
