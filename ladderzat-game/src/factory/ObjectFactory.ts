@@ -24,7 +24,8 @@ export class ObjectFactory {
 		bucket.setBounce(1, 1);
 		bucket.setMaxVelocity(125);
 		bucket.setCollideWorldBounds(true);
-		bucket.setVelocityX(50);
+		bucket.setVelocityX(40 + (Math.random() * 10));
+		bucket.setVelocityY(-Math.random() * 100);
 		bucket.anims.play('roll-' + color);
 		bucket.refreshBody();
 		return bucket;
