@@ -156,6 +156,13 @@ export class PhysicsController {
 		}
 	}
 
+	public reset(){
+		this.isJumping = false;
+		this.timeInAir = 0;
+		this.touchingLadder = false;
+		this.onLadder = false;
+	}
+
 	private performJump() {
 		this.isJumping = true;
 		this.player.setVelocityY(-Constants.player.jump.power);

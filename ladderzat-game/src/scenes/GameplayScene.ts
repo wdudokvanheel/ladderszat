@@ -83,6 +83,11 @@ export class GameplayScene extends Phaser.Scene {
 		}
 	}
 
+	public reset() {
+		this.running = true;
+		this.physicsController.reset();
+	}
+
 	private getCameraY(): number {
 		return Math.min(Constants.world.height - Constants.layout.gameplay.height, this.player.y - ((Constants.layout.gameplay.height) / 2) - this.player.height);
 	}
