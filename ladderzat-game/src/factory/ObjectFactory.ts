@@ -7,7 +7,7 @@ import {sample} from '../main';
 export class ObjectFactory {
 
 	createPlayer(physics: ArcadePhysics): SpriteWithDynamicBody {
-		const player = physics.add.sprite(Constants.screen.width / 2 - 12, Constants.world.height - 150, 'kris-stand');
+		const player = physics.add.sprite(Constants.screen.width / 2 - 12, Constants.world.height - 50, 'kris-stand');
 		player.setBounce(0);
 		player.setOrigin(0, 0);
 		player.setDataEnabled();

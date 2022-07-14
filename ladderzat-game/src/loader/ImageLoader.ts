@@ -25,9 +25,9 @@ export class ImageLoader {
 		this.loader.image('window', images['ui']['window'])
 		this.loader.image('rail', images['objects']['rail'])
 		this.loader.image('ladder', images['objects']['ladder'])
-		this.loader.image('kris-stand', images['kris']['stand'])
+		this.loader.image('kris-stand', images['kris']['small'])
+		this.loader.image('logo', images['ui']['logo'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
-
 	}
 
 	private loadBuckets() {

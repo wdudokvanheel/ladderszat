@@ -76,8 +76,10 @@ export class GameplayScene extends Phaser.Scene {
 	private generateBuckets(delta: number) {
 		this.nextBucket -= delta;
 		if (this.nextBucket <= 0) {
-			this.objectFactory.createBucket(this.buckets);
-			this.nextBucket += (Math.random() * 1000) + 2000;
+			var bucket = this.objectFactory.createBucket(this.buckets);
+			bucket.x = Math.random() * 190;
+			bucket.y = 400;
+			this.nextBucket += (Math.random() * 2000) + 1000;
 		}
 	}
 

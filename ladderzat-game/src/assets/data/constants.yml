@@ -38,7 +38,7 @@ jump:
 
 object:
   platform:
-    width: 50
+    width: 48
   ladder:
     height: 40
 
