@@ -1,10 +1,85 @@
 pipeline {
-    agent { docker { image 'node:16.13.1-alpine' } }
+    agent any
+
+    environment {
+        REPO_CREDS = credentials('bitechular-repo')
+    }
+    options {
+        disableConcurrentBuilds()
+    }
     stages {
-        stage('build') {
+        stage('Build Game') {
+            agent {
+                docker {
+                    image 'node:lts-bullseye-slim'
+                }
+            }
+
             steps {
-                sh 'npm run build'
+                dir("ladderzat-game") {
+                    sh 'npm install && npm run build'
+                    stash includes: 'dist/**/*', name: 'builtSources'
+                    script {
+                        def packageJSON = readJSON file: 'package.json'
+                        env.APP_VERSION = packageJSON.version
+                    }
+                }
             }
         }
+
+//        stage('Read JSON') {
+//            steps {
+//
+//            }
+//        }
+
+        stage('Build Image') {
+            steps {
+                dir("ladderzat-game") {
+                    script {
+                        unstash 'builtSources'
+                        app = docker.build("ladderzat-game")
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    docker.withRegistry('https://repo.bitechular.com', 'bitechular-repo') {
+                        app.push("${env.APP_VERSION}")
+                        app.push("latest")
+                    }
+                }
+            }
+        }
+
+//        stage('Login Repo') {
+//            agent any
+//            steps{
+//                sh 'echo $REPO_CREDS_PSW | docker login -u $REPO_CREDS_USR --password-stdin repo.bitechular.com'
+//            }
+//        }
+//
+//        stage('Build Image') {
+//            agent any
+//            steps {
+//                sh 'cd ladderzat-game/ && docker build -t bitechular/ladderzat-game:latest .'
+//            }
+//        }
+//
+//        stage('Push Image'){
+//            agent any
+//            steps {
+//                sh 'docker push bitechular/ladderzat-game:latest'
+//            }
+//        }
+//    }
+//
+//    post {
+//        always {
+//            sh 'docker logout'
+//        }
     }
 }
