@@ -61,7 +61,7 @@ export class UIOverlayScene extends Scene {
 		}
 
 		this.updateDPadButtonStates();
-		this.debugText.setText(DEBUG_CONTROLLER.getValues());
+		// this.debugText.setText(DEBUG_CONTROLLER.getValues());
 	}
 
 	private updateDPadButtonStates() {

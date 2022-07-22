@@ -26,12 +26,12 @@ camera:
 
 player:
   jump:
-    power: 250
+    power: 130
   speed:
     walk: 60
     ladder:
-      up: 80
-      down: 100
+      up: 60
+      down: 80
 
 jump:
   inairpass: 125

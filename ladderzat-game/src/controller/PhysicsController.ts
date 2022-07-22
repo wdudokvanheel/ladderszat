@@ -94,7 +94,7 @@ export class PhysicsController {
 			if (!this.isClimbing && this.isTouchingLadder) {
 				//Check if not standing on top of a ladder trying to go up further
 				if (!this.isOnTopOfLadder || this.ui.getVerticalDirection() === "down") {
-					if (this.ui.getVerticalDirection() === "down" || (this.ui.getVerticalDirection() === "up" && this.player.body.velocity.y > -120))
+					if (this.ui.getVerticalDirection() === "down" || (this.ui.getVerticalDirection() === "up" && this.player.body.velocity.y > -60))
 						this.startClimbing();
 				}
 			}
@@ -176,8 +176,7 @@ export class PhysicsController {
 				bucket.body.setCollideWorldBounds(false);
 		});
 
-		this.physics.add.collider(this.buckets, this.buckets);
-
+		// this.physics.add.collider(this.buckets, this.buckets);
 		this.physics.add.collider(this.player, this.buckets, function (player: SpriteWithDynamicBody, bucket: SpriteWithDynamicBody) {
 			this.gameplay.onHit(bucket);
 		}, null, this);
