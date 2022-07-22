@@ -167,9 +167,6 @@ export class PhysicsController {
 		//Collider for player -> platforms
 		this.physics.add.collider(this.player, this.platforms, undefined, this.isPlatformBlocking, this);
 
-		//Overlap collider for ladders to disable gravity when on ladder
-		this.physics.add.overlap(this.player, this.ladders, this.onLadderOverlap, null, this);
-
 		//Collider to be able to stand on the top of a ladder
 		this.physics.add.collider(this.player, this.ladders, null, this.isLadderBlocking, this);
 
@@ -186,42 +183,18 @@ export class PhysicsController {
 		}, null, this);
 	}
 
-	private onLadderOverlap() {
-		// if (!this.isJumping)
-		// 	this.player.body.setAllowGravity(false);
-		// else {
-		// 	if (this.isJumping && this.player.body.velocity.y > 0)
-		// 		this.player.setVelocityY(0);
-		// }
-		return true;
-	}
-
 	private updatePlayerGravityOnLadder() {
 		if (!this.isClimbing && !this.player.body.allowGravity)
 			this.player.body.setAllowGravity(true);
 
 		if (this.isClimbing)
 			this.player.body.setAllowGravity(false);
-		// else if (this.isTouchingLadder && this.isJumping)
-		// 	this.player.body.setAllowGravity(true);
-
-		// this.isTouchingLadder = false;
-		// this.touchingLadder = undefined;
 	}
 
 	private isLadderBlocking(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody): boolean {
-		// const segment = ladder.data.values['segment'];
-		// const playerY = Math.floor(player.y + player.height);
-		// const ladderY = ladder.y;
-		//
-		console.debug(this.isOnTopOfLadder, this.ui.getVerticalDirection());
-
 		if (this.isOnTopOfLadder && this.ui.getVerticalDirection() != 'down')
 			return true;
-		// if (playerY > ladderY && segment == 0)
-		// 	return true;
-		//
-		console.debug(this.isOnTopOfLadder);
+
 		return false;
 	}
 
@@ -240,12 +213,6 @@ export class PhysicsController {
 			if (player.body.velocity.y > 0)
 				return true;
 		}
-		// if (this.player.body.velocity.y <= 0)
-		// 	return false;
-		//
-		// //Only collide if on a ladder that doesn't go through the platform
-		// if (this.isTouchingLadder && (this.touchingLadder.data.get('segment') != 0 || (this.player.y + this.player.height < this.touchingLadder.y)))
-		// 	return false;
 
 		return false;
 	}
