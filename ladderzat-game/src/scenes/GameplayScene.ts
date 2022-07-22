@@ -41,7 +41,7 @@ export class GameplayScene extends Phaser.Scene {
 
 		//Create game objects
 		this.platforms = this.platformLoader.getPlatforms(this.physics);
-		this.ladders = this.ladderLoader.getLadders(this.physics);
+		this.ladders = this.ladderLoader.getLadders(this.physics, this.make, this.add);
 
 		this.player = this.objectFactory.createPlayer(this.physics);
 		this.ui = this.scene.get('ui') as UIOverlayScene;
@@ -61,7 +61,7 @@ export class GameplayScene extends Phaser.Scene {
 			return;
 		}
 
-		this.generateBuckets(delta);
+		// this.generateBuckets(delta);
 
 		//Update camera to follow player
 		this.cameras.main.setBounds(0, this.getCameraY(), Constants.screen.width, Constants.screen.height);

@@ -25,7 +25,7 @@ export default {
 		arcade: {
 			fps: 144,
 			gravity: {y: 500},
-			debug: false
+			debug: true
 		}
 	},
 	scene: [InitScene, GameplayScene, UIOverlayScene, GameOverScene]

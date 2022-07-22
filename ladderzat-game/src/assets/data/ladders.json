@@ -1,18 +1,28 @@
 [
   {
     "x": 20,
+    "y": 8,
+    "segments": 30
+  },
+  {
+    "x": 50,
     "y": 6,
-    "segments": 3
+    "segments": 15
+  },
+  {
+    "x": 110,
+    "y": 6,
+    "segments": 7
   },
   {
     "x": 150,
     "y": 9,
-    "segments": 1
+    "segments": 7
   },
   {
     "x": 67,
     "y": 109,
-    "segments": 2
+    "segments": 100
   },
   {
     "x": 20,

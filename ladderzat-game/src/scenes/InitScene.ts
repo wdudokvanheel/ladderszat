@@ -13,10 +13,12 @@ export class InitScene extends Scene {
 		this.images = new ImageLoader(this.load, this.anims);
 		this.images.loadImages();
 		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.screen.height);
+
+		this.load.bitmapFont('main', '../assets/fonts/atari-classic.png', '../assets/fonts/atari-classic.xml');
 	}
 
 	update(time: number, delta: number) {
-		if(this.load.progress == 1){
+		if (this.load.progress == 1) {
 			this.images.generateAnimations();
 			this.scene.start('gameplay')
 			this.scene.launch('ui');

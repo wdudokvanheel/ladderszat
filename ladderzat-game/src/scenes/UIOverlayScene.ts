@@ -1,5 +1,6 @@
 import {Scene} from 'phaser';
 import Constants from '../assets/data/constants.yml';
+import {DEBUG_CONTROLLER, DebugController} from '../controller/DebugController';
 import Sprite = Phaser.GameObjects.Sprite;
 import Key = Phaser.Input.Keyboard.Key;
 import Vector2 = Phaser.Math.Vector2;
@@ -26,6 +27,8 @@ export class UIOverlayScene extends Scene {
 	private horizontalKeyboardDirection: string = undefined;
 	private verticalKeyboardDirection: string = undefined;
 
+	private debugText;
+
 	constructor() {
 		super('ui');
 	}
@@ -39,6 +42,8 @@ export class UIOverlayScene extends Scene {
 		this.createDPad();
 		this.createJumpButton();
 		this.createKeyboardListeners();
+
+		this.debugText = this.add.bitmapText(0, 278, 'main', '', 8);
 	}
 
 	update(time: number, delta: number) {
@@ -56,6 +61,7 @@ export class UIOverlayScene extends Scene {
 		}
 
 		this.updateDPadButtonStates();
+		this.debugText.setText(DEBUG_CONTROLLER.getValues());
 	}
 
 	private updateDPadButtonStates() {

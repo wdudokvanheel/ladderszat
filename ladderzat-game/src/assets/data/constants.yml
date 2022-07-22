@@ -26,9 +26,9 @@ camera:
 
 player:
   jump:
-    power: 150
+    power: 250
   speed:
-    walk: 100
+    walk: 60
     ladder:
       up: 80
       down: 100
@@ -38,9 +38,10 @@ jump:
 
 object:
   platform:
-    width: 48
+    width: 24
   ladder:
-    height: 40
+    width: 10
+    height: 5
 
 gfx:
   bucket:

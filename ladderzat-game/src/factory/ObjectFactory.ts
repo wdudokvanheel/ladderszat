@@ -7,7 +7,7 @@ import {sample} from '../main';
 export class ObjectFactory {
 
 	createPlayer(physics: ArcadePhysics): SpriteWithDynamicBody {
-		const player = physics.add.sprite(Constants.screen.width / 2 - 12, Constants.world.height - 50, 'kris-stand');
+		const player = physics.add.sprite(Constants.screen.width / 2 - 12, Constants.world.height - 50, 'kris-idle');
 		player.setBounce(0);
 		player.setOrigin(0, 0);
 		player.setDataEnabled();
@@ -21,7 +21,7 @@ export class ObjectFactory {
 		const color = sample(Constants.gfx.bucket.colors);
 		const grp = group.create(10, Constants.world.height - 200, 'bucket-' + color);
 		const bucket = grp as SpriteWithDynamicBody;
-		bucket.setBounce(1, 1);
+		bucket.setBounce(1, .6);
 		bucket.setMaxVelocity(125);
 		bucket.setCollideWorldBounds(true);
 		bucket.setVelocityX(40 + (Math.random() * 10));

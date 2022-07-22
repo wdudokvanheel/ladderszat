@@ -2,18 +2,23 @@
   {
     "x": 0,
     "y": 6,
-    "segments": 4,
-    "angled": "up"
+    "segments": 8
   },
   {
     "x": 128,
-    "y": 45,
+    "y": 49,
     "segments": 1
+  },
+  {
+    "x": 8,
+    "y": 55,
+    "segments": 4,
+    "angled": "down"
   },
   {
     "x": 10,
     "y": 108,
-    "segments": 2,
+    "segments": 1,
     "angled": "up"
   },
   {

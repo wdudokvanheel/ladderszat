@@ -28,6 +28,11 @@ export class ImageLoader {
 		this.loader.image('kris-stand', images['kris']['small'])
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
+
+		this.loader.image('kris-idle', images['kris']['idle'])
+		this.loader.spritesheet('kris-walk', images['kris']['walk'], {frameWidth: 13, frameHeight: 22});
+		this.loader.spritesheet('kris-climb', images['kris']['climb'], {frameWidth: 11, frameHeight: 22});
+
 	}
 
 	private loadBuckets() {
@@ -38,6 +43,20 @@ export class ImageLoader {
 	}
 
 	public generateAnimations() {
+		this.anims.create({
+			key: 'kris-climb',
+			frames: this.anims.generateFrameNumbers('kris-climb', {start: 0, end: 1}),
+			frameRate: 8,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'kris-walk',
+			frames: this.anims.generateFrameNumbers('kris-walk', {start: 0, end: 3}),
+			frameRate: 10,
+			repeat: -1
+		});
+
 		for (let i = 0; i < Constants.gfx.bucket.colors.length; i++) {
 			const color = Constants.gfx.bucket.colors[i];
 

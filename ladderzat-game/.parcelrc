@@ -1,5 +1,14 @@
 {
-  "extends": ["@parcel/config-default"],
-  "reporters": ["...", "parcel-reporter-clean-dist"],
-  "resolvers": ["@parcel/resolver-glob", "..."]
+  "extends": [
+    "@parcel/config-default"
+  ],
+  "reporters": [
+    "...",
+    "parcel-reporter-clean-dist",
+    "parcel-reporter-static-files-copy"
+  ],
+  "resolvers": [
+    "@parcel/resolver-glob",
+    "..."
+  ]
 }

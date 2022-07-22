@@ -4,9 +4,11 @@ pipeline {
     environment {
         REPO_CREDS = credentials('bitechular-repo')
     }
+
     options {
         disableConcurrentBuilds()
     }
+
     stages {
         stage('Build Game') {
             agent {
@@ -26,12 +28,6 @@ pipeline {
                 }
             }
         }
-
-//        stage('Read JSON') {
-//            steps {
-//
-//            }
-//        }
 
         stage('Build Image') {
             steps {
@@ -54,32 +50,5 @@ pipeline {
                 }
             }
         }
-
-//        stage('Login Repo') {
-//            agent any
-//            steps{
-//                sh 'echo $REPO_CREDS_PSW | docker login -u $REPO_CREDS_USR --password-stdin repo.bitechular.com'
-//            }
-//        }
-//
-//        stage('Build Image') {
-//            agent any
-//            steps {
-//                sh 'cd ladderzat-game/ && docker build -t bitechular/ladderzat-game:latest .'
-//            }
-//        }
-//
-//        stage('Push Image'){
-//            agent any
-//            steps {
-//                sh 'docker push bitechular/ladderzat-game:latest'
-//            }
-//        }
-//    }
-//
-//    post {
-//        always {
-//            sh 'docker logout'
-//        }
     }
 }

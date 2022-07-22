@@ -5,6 +5,7 @@ import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
 import Constants from '../assets/data/constants.yml';
 import {GameplayScene} from '../scenes/GameplayScene';
 import {UIOverlayScene} from '../scenes/UIOverlayScene';
+import {DEBUG_CONTROLLER} from './DebugController';
 
 export class PhysicsController {
 	private gameplay: GameplayScene;
@@ -16,9 +17,14 @@ export class PhysicsController {
 	private readonly ladders: StaticGroup;
 	private readonly buckets: Group;
 
-	private onLadder = false;
+
+	private isGrounded = false;
+	private isJumping = false;
+	private isTouchingLadder = false;
+	private isOnTopOfLadder = false;
+	private isClimbing = false;
+
 	private touchingLadder = undefined;
-	private isJumping = true;
 	private timeInAir = 0;
 
 	constructor(gameplay: GameplayScene, ui: UIOverlayScene, player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, platforms: Phaser.Physics.Arcade.StaticGroup, ladders: Phaser.Physics.Arcade.StaticGroup, buckets: Phaser.Physics.Arcade.Group) {
@@ -32,11 +38,126 @@ export class PhysicsController {
 	}
 
 	public update(delta: number) {
+		this.isGrounded = this.player.body.blocked.down || this.player.y >= Constants.world.height - this.player.height;
+
 		this.updatePlayerVelocity();
 		this.updatePlayerJumping();
 
 		this.updateInAirTimer(delta);
 		this.updatePlayerGravityOnLadder();
+		this.updateAnims();
+
+		DEBUG_CONTROLLER.setValue('G', this.isGrounded)
+		DEBUG_CONTROLLER.setValue('J', this.isJumping)
+		DEBUG_CONTROLLER.setValue('T', this.isTouchingLadder)
+		DEBUG_CONTROLLER.setValue('C', this.isClimbing)
+		// DEBUG_CONTROLLER.setValue('F', this.player.body.allowGravity)
+		DEBUG_CONTROLLER.setValue('O', this.isOnTopOfLadder)
+
+		//reset values?
+		this.touchingLadder = undefined;
+		this.isTouchingLadder = false;
+		this.isOnTopOfLadder = false;
+	}
+
+	private onLadderCheck(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody) {
+		this.isTouchingLadder = true;
+		this.touchingLadder = ladder;
+
+		if (player.y + player.height <= ladder.y - ladder.height) {
+			this.isOnTopOfLadder = true;
+		}
+	}
+
+	private updatePlayerVelocity() {
+		const horiz = this.ui.getHorizontalDirection();
+		const vert = this.ui.getVerticalDirection();
+
+		if (horiz != undefined) {
+			if (!this.isClimbing || (this.player.body.velocity.y == 0)) {
+				if (horiz === 'left')
+					this.player.setVelocityX(-Constants.player.speed.walk);
+				else
+					this.player.setVelocityX(Constants.player.speed.walk);
+
+				if(this.isClimbing) {
+					this.player.body.velocity.y = -100;
+					this.isJumping = true;
+					this.isClimbing = false;
+				}
+			}
+		} else
+			this.player.setVelocityX(0);
+
+
+		if (this.ui.getVerticalDirection() != undefined) {
+			if (!this.isClimbing && this.isTouchingLadder) {
+				//Check if not standing on top of a ladder trying to go up further
+				if (!this.isOnTopOfLadder || this.ui.getVerticalDirection() === "down") {
+					if (this.ui.getVerticalDirection() === "down" || (this.ui.getVerticalDirection() === "up" && this.player.body.velocity.y > -120))
+						this.startClimbing();
+				}
+			}
+		}
+
+		if (this.isClimbing && (!this.isTouchingLadder || this.touchingLadder == undefined)) {
+			this.isClimbing = false;
+		}
+
+		if (this.isClimbing && !this.isJumping) {
+			if (vert == undefined)
+				this.player.setVelocityY(0);
+			else if (vert == 'up') {
+				if (this.isOnTopOfLadder)
+					this.player.setVelocityY(0);
+				else
+					this.player.setVelocityY(-Constants.player.speed.ladder.up);
+			} else if (vert == 'down') {
+				this.player.setVelocityY(Constants.player.speed.ladder.down);
+			}
+		}
+
+		if (this.player.body.velocity.x > 0)
+			this.player.setFlipX(false);
+		else if (this.player.body.velocity.x < 0)
+			this.player.setFlipX(true);
+	}
+
+	private startClimbing() {
+		this.isClimbing = true;
+		this.isJumping = false;
+		this.player.setVelocityY(0);
+		this.player.setVelocityX(0);
+	}
+
+	private updatePlayerJumping() {
+		if (this.isGrounded && this.isJumping)
+			this.isJumping = false;
+
+		if (this.isJumping)
+			return;
+
+		if (this.ui.isJumping()) {
+			//Allow jumping when grounded, but allow a little margin of error
+			if (this.isGrounded || this.timeInAir <= Constants.jump.inairpass) {
+				//Only allow jumping if climbing up
+				if (!this.isClimbing || this.player.body.velocity.y <= 0)
+					this.performJump();
+			}
+		}
+	}
+
+	private updateAnims() {
+		if (!this.isGrounded && !this.isClimbing) {
+			this.player.anims.play('kris-walk', true);
+			this.player.anims.setProgress(0)
+		} else if (this.isClimbing && !this.isGrounded) {
+			this.player.anims.play('kris-climb', this.player.body.velocity.y != 0);
+		} else if (this.player.body.velocity.x == 0) {
+			this.player.setTexture('kris-idle');
+		} else {
+			this.player.anims.play('kris-walk', true);
+		}
 	}
 
 	public setupCollisionDetection() {
@@ -44,12 +165,12 @@ export class PhysicsController {
 		this.physics.add.overlap(this.player, this.ladders, this.onLadderCheck, null, this);
 
 		//Collider for player -> platforms
-		this.physics.add.collider(this.player, this.platforms, undefined, this.doesPlatformCollide, this);
+		this.physics.add.collider(this.player, this.platforms, undefined, this.isPlatformBlocking, this);
 
 		//Overlap collider for ladders to disable gravity when on ladder
 		this.physics.add.overlap(this.player, this.ladders, this.onLadderOverlap, null, this);
 
-		//Collider to be able to stand on the top of a ldder
+		//Collider to be able to stand on the top of a ladder
 		this.physics.add.collider(this.player, this.ladders, null, this.isLadderBlocking, this);
 
 		//Collider for buckets and platform
@@ -65,111 +186,85 @@ export class PhysicsController {
 		}, null, this);
 	}
 
-	private isLadderBlocking(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody): boolean {
-		const segment = ladder.data.values['segment'];
-		const playerY = Math.floor(player.y + player.height);
-		const ladderY = ladder.y;
+	private onLadderOverlap() {
+		// if (!this.isJumping)
+		// 	this.player.body.setAllowGravity(false);
+		// else {
+		// 	if (this.isJumping && this.player.body.velocity.y > 0)
+		// 		this.player.setVelocityY(0);
+		// }
+		return true;
+	}
 
-		if (player.y + player.height <= ladder.y - ladder.height && this.ui.getVerticalDirection() != 'down')
+	private updatePlayerGravityOnLadder() {
+		if (!this.isClimbing && !this.player.body.allowGravity)
+			this.player.body.setAllowGravity(true);
+
+		if (this.isClimbing)
+			this.player.body.setAllowGravity(false);
+		// else if (this.isTouchingLadder && this.isJumping)
+		// 	this.player.body.setAllowGravity(true);
+
+		// this.isTouchingLadder = false;
+		// this.touchingLadder = undefined;
+	}
+
+	private isLadderBlocking(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody): boolean {
+		// const segment = ladder.data.values['segment'];
+		// const playerY = Math.floor(player.y + player.height);
+		// const ladderY = ladder.y;
+		//
+		console.debug(this.isOnTopOfLadder, this.ui.getVerticalDirection());
+
+		if (this.isOnTopOfLadder && this.ui.getVerticalDirection() != 'down')
 			return true;
-		if (playerY > ladderY && segment == 0)
+		// if (playerY > ladderY && segment == 0)
+		// 	return true;
+		//
+		console.debug(this.isOnTopOfLadder);
+		return false;
+	}
+
+	private isPlatformBlocking(player, platform): boolean {
+		//Block during climbing, but only if ladder is above platform to prevent the player from falling through ladders on going down
+		if (this.touchingLadder && this.touchingLadder.y <= platform.y) {
+			this.isClimbing = false;
 			return true;
+		}
+
+		if (this.isClimbing && this.touchingLadder && this.touchingLadder.y)
+			return false;
+
+		//Platform must be at be lower than the middle of the player
+		if (player.y + (player.height * .75) < platform.y) {
+			if (player.body.velocity.y > 0)
+				return true;
+		}
+		// if (this.player.body.velocity.y <= 0)
+		// 	return false;
+		//
+		// //Only collide if on a ladder that doesn't go through the platform
+		// if (this.isTouchingLadder && (this.touchingLadder.data.get('segment') != 0 || (this.player.y + this.player.height < this.touchingLadder.y)))
+		// 	return false;
 
 		return false;
 	}
 
-	private doesPlatformCollide(player, platform): boolean {
-		// if (player.y + player.height < platform.y)
-		// 	return false;
-
-		if (this.player.body.velocity.y <= 0)
-			return false;
-
-		//Only collide if on a ladder that doesn't go through the platform
-		if (this.onLadder && (this.touchingLadder.data.get('segment') != 0 || (this.player.y + this.player.height < this.touchingLadder.y)))
-			return false;
-
-		return true;
-	}
-
-	private onLadderCheck(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody) {
-		this.onLadder = true;
-		this.touchingLadder = ladder;
-	}
-
-	private onLadderOverlap() {
-		if (!this.isJumping)
-			this.player.body.setAllowGravity(false);
-		else {
-			if (this.isJumping && this.player.body.velocity.y > 0)
-				this.player.setVelocityY(0);
-		}
-		return true;
-	}
-
-
-	private updatePlayerGravityOnLadder() {
-		if (!this.onLadder && !this.player.body.allowGravity)
-			this.player.body.setAllowGravity(true);
-		else if (this.onLadder && this.isJumping)
-			this.player.body.setAllowGravity(true);
-
-		this.onLadder = false;
-		this.touchingLadder = undefined;
-	}
-
-	private updatePlayerVelocity() {
-		const horiz = this.ui.getHorizontalDirection();
-		const vert = this.ui.getVerticalDirection();
-
-		if (horiz != undefined) {
-			if (horiz === 'left')
-				this.player.setVelocityX(-Constants.player.speed.walk);
-			else
-				this.player.setVelocityX(Constants.player.speed.walk);
-		} else
-			this.player.setVelocityX(0);
-
-		if (this.onLadder && !this.isJumping) {
-			if (vert == undefined)
-				this.player.setVelocityY(0);
-			else if (vert == 'up' && this.player.y + this.player.height > this.touchingLadder.y - this.touchingLadder.height) {
-				this.player.setVelocityY(-Constants.player.speed.ladder.up);
-			} else if (vert == 'down')
-				this.player.setVelocityY(Constants.player.speed.ladder.down);
-		}
-	}
-
-	private updatePlayerJumping() {
-		if (this.player.body.touching.down && this.isJumping)
-			this.isJumping = false;
-
-		if (this.isJumping)
-			return;
-
-		if (this.ui.isJumping()) {
-			if (!this.onLadder && (this.player.body.touching.down || this.timeInAir <= Constants.jump.inairpass))
-				this.performJump();
-			if (this.onLadder && !this.isJumping) {
-				this.performJump();
-			}
-		}
-	}
-
-	public reset(){
+	public reset() {
 		this.isJumping = false;
 		this.timeInAir = 0;
 		this.touchingLadder = false;
-		this.onLadder = false;
+		this.isTouchingLadder = false;
 	}
 
 	private performJump() {
 		this.isJumping = true;
+		this.isClimbing = false;
 		this.player.setVelocityY(-Constants.player.jump.power);
 	}
 
 	private updateInAirTimer(delta: number) {
-		if (this.player.body.touching.down) {
+		if (this.player.body.touching.down || this.isClimbing) {
 			this.timeInAir = 0;
 			return;
 		}
