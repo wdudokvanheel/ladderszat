@@ -38,7 +38,6 @@ export class PhysicsController {
 		} else
 			this.context.player.setVelocityX(0);
 
-
 		if (this.context.input.getVerticalDirection() != undefined) {
 			if (!this.context.isClimbing && this.context.isTouchingLadder) {
 				//Check if not standing on top of a ladder trying to go up further
@@ -65,11 +64,6 @@ export class PhysicsController {
 				this.context.player.setVelocityY(Constants.player.speed.ladder.down);
 			}
 		}
-
-		if (this.context.player.body.velocity.x > 0)
-			this.context.player.setFlipX(false);
-		else if (this.context.player.body.velocity.x < 0)
-			this.context.player.setFlipX(true);
 	}
 
 	private startClimbing() {

@@ -1,5 +1,4 @@
 import GameContext from '../model/GameContext';
-import {PhysicsController} from './PhysicsController';
 
 export default class AnimationController {
 
@@ -14,5 +13,10 @@ export default class AnimationController {
 		} else {
 			context.player.anims.play('kris-walk', true);
 		}
+
+		if (context.player.body.velocity.x > 0)
+			context.player.setFlipX(false);
+		else if (context.player.body.velocity.x < 0)
+			context.player.setFlipX(true);
 	}
 }
