@@ -35,12 +35,15 @@ export default class CollisionController{
 	}
 
 	private touchingLadderTest(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody) {
+		//Don't allow climbing from below (with a little margin)
+		if(player.y > ladder.y - (player.height * .9))
+			return;
+
 		this.context.isTouchingLadder = true;
 		this.context.touchingLadder = ladder;
 
-		if (player.y + player.height <= ladder.y - ladder.height) {
+		if (player.y + player.height <= ladder.y - ladder.height)
 			this.context.isOnTopOfLadder = true;
-		}
 	}
 
 	private platformBlockTest(player, platform): boolean {

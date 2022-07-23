@@ -8,7 +8,7 @@
 - [ ] Leg bend anim on jump
 
 ### Bugs
-- [ ] Can't climb bottom of ladder
+- [X] Can't climb bottom of ladder
 - [ ] Camera
 - [ ] Bucket collision
 - [ ] Bucket gfx
