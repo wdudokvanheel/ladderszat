@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../assets/data/constants.yml'
 import AnimationController from '../controller/AnimationController';
+import CollisionController from '../controller/CollisionController';
 import {DEBUG_CONTROLLER} from '../controller/DebugController';
 import {PhysicsController} from '../controller/PhysicsController';
 import {ObjectFactory} from '../factory/ObjectFactory';
@@ -8,8 +9,6 @@ import {LadderLoader} from '../loader/LadderLoader';
 import {PlatformLoader} from '../loader/PlatformLoader';
 import GameContext from '../model/GameContext';
 import {UIOverlayScene} from './UIOverlayScene';
-import Group = Phaser.Physics.Arcade.Group;
-import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
 export class GameplayScene extends Phaser.Scene {
@@ -17,9 +16,8 @@ export class GameplayScene extends Phaser.Scene {
 	private ladderLoader: LadderLoader;
 	private objectFactory: ObjectFactory;
 
-	private ui: UIOverlayScene;
-
 	private physicsController: PhysicsController;
+	private collisionController: CollisionController;
 	private animationController: AnimationController;
 
 	private nextBucket = 2000;
@@ -36,7 +34,6 @@ export class GameplayScene extends Phaser.Scene {
 		this.platformLoader = new PlatformLoader();
 		this.ladderLoader = new LadderLoader();
 		this.objectFactory = new ObjectFactory();
-		this.animationController = new AnimationController();
 	}
 
 	create() {
@@ -47,15 +44,17 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.ladders = this.ladderLoader.getLadders(this.physics, this.make, this.add);
 
 		this.context.player = this.objectFactory.createPlayer(this.physics);
-		this.ui = this.scene.get('ui') as UIOverlayScene;
+		this.context.input = this.scene.get('ui') as UIOverlayScene;
 
 		//Setup camera
 		this.cameras.main.setSize(Constants.screen.width, Constants.layout.gameplay.height);
 		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.world.height);
 		this.physics.world.setBounds(0, 0, Constants.screen.width, Constants.world.height, true, true, true, true);
 
-		this.physicsController = new PhysicsController(this.physics, this.ui, this.context);
-		this.physicsController.setupCollisionDetection();
+		this.physicsController = new PhysicsController(this.context);
+		this.collisionController = new CollisionController(this.physics, this.context);
+		this.collisionController.setupCollisionDetection();
+		this.animationController = new AnimationController();
 	}
 
 	update(time: number, delta: number) {
@@ -98,7 +97,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	public reset() {
 		this.running = true;
-		this.physicsController.restart();
+		this.context.restartGame();
 	}
 
 	private getCameraY(): number {

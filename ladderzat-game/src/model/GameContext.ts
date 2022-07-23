@@ -1,10 +1,12 @@
+import Group = Phaser.Physics.Arcade.Group;
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
-import Group = Phaser.Physics.Arcade.Group;
 import {GameplayScene} from '../scenes/GameplayScene';
+import {UIOverlayScene} from '../scenes/UIOverlayScene';
 
 export default class GameContext {
 	public gameplay: GameplayScene;
+	public input: UIOverlayScene;
 
 	public player: SpriteWithDynamicBody;
 	public platforms: StaticGroup;
@@ -25,5 +27,15 @@ export default class GameContext {
 		this.touchingLadder = undefined;
 		this.isTouchingLadder = false;
 		this.isOnTopOfLadder = false;
+	}
+
+	public restartGame() {
+		this.isGrounded = false;
+		this.isJumping = false;
+		this.timeInAir = 0;
+		this.touchingLadder = false;
+		this.isOnTopOfLadder = false;
+		this.isTouchingLadder = false;
+		this.isClimbing = false;
 	}
 }

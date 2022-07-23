@@ -1,18 +1,10 @@
-import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
-import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import Constants from '../assets/data/constants.yml';
 import GameContext from '../model/GameContext';
-import {UIOverlayScene} from '../scenes/UIOverlayScene';
-import {DEBUG_CONTROLLER} from './DebugController';
 
 export class PhysicsController {
-	private physics: ArcadePhysics;
-	private input: UIOverlayScene;
 	private context: GameContext;
 
-	constructor(physics: ArcadePhysics, ui: UIOverlayScene, context: GameContext) {
-		this.physics = physics;
-		this.input = ui;
+	constructor(context: GameContext) {
 		this.context = context;
 	}
 
@@ -26,18 +18,9 @@ export class PhysicsController {
 		this.updatePlayerGravityOnLadder();
 	}
 
-	private onLadderCheck(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody) {
-		this.context.isTouchingLadder = true;
-		this.context.touchingLadder = ladder;
-
-		if (player.y + player.height <= ladder.y - ladder.height) {
-			this.context.isOnTopOfLadder = true;
-		}
-	}
-
 	private updatePlayerVelocity() {
-		const horiz = this.input.getHorizontalDirection();
-		const vert = this.input.getVerticalDirection();
+		const horiz = this.context.input.getHorizontalDirection();
+		const vert = this.context.input.getVerticalDirection();
 
 		if (horiz != undefined) {
 			if (!this.context.isClimbing || (this.context.player.body.velocity.y == 0)) {
@@ -56,11 +39,11 @@ export class PhysicsController {
 			this.context.player.setVelocityX(0);
 
 
-		if (this.input.getVerticalDirection() != undefined) {
+		if (this.context.input.getVerticalDirection() != undefined) {
 			if (!this.context.isClimbing && this.context.isTouchingLadder) {
 				//Check if not standing on top of a ladder trying to go up further
-				if (!this.context.isOnTopOfLadder || this.input.getVerticalDirection() === "down") {
-					if (this.input.getVerticalDirection() === "down" || (this.input.getVerticalDirection() === "up" && this.context.player.body.velocity.y > -60))
+				if (!this.context.isOnTopOfLadder || this.context.input.getVerticalDirection() === "down") {
+					if (this.context.input.getVerticalDirection() === "down" || (this.context.input.getVerticalDirection() === "up" && this.context.player.body.velocity.y > -60))
 						this.startClimbing();
 				}
 			}
@@ -103,7 +86,7 @@ export class PhysicsController {
 		if (this.context.isJumping)
 			return;
 
-		if (this.input.isJumping()) {
+		if (this.context.input.isJumping()) {
 			//Allow jumping when grounded, but allow a little margin of error
 			if (this.context.isGrounded || this.context.timeInAir <= Constants.jump.inairpass) {
 				//Only allow jumping if climbing up
@@ -113,67 +96,12 @@ export class PhysicsController {
 		}
 	}
 
-	public setupCollisionDetection() {
-		//Just a check if a player is on a ladder
-		this.physics.add.overlap(this.context.player, this.context.ladders, this.onLadderCheck, null, this);
-
-		//Collider for player -> platforms
-		this.physics.add.collider(this.context.player, this.context.platforms, undefined, this.isPlatformBlocking, this);
-
-		//Collider to be able to stand on the top of a ladder
-		this.physics.add.collider(this.context.player, this.context.ladders, null, this.isLadderBlocking, this);
-
-		//Collider for buckets and platform
-		this.physics.add.collider(this.context.buckets, this.context.platforms, function (bucket: SpriteWithDynamicBody) {
-			if (bucket.body.y > Constants.world.height - 24)
-				bucket.body.setCollideWorldBounds(false);
-		});
-
-		// this.physics.add.collider(this.buckets, this.buckets);
-		this.physics.add.collider(this.context.player, this.context.buckets, function (player: SpriteWithDynamicBody, bucket: SpriteWithDynamicBody) {
-			this.gameplay.onHit(bucket);
-		}, null, this);
-	}
-
 	private updatePlayerGravityOnLadder() {
 		if (!this.context.isClimbing && !this.context.player.body.allowGravity)
 			this.context.player.body.setAllowGravity(true);
 
 		if (this.context.isClimbing)
 			this.context.player.body.setAllowGravity(false);
-	}
-
-	private isLadderBlocking(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody): boolean {
-		if (this.context.isOnTopOfLadder && this.input.getVerticalDirection() != 'down')
-			return true;
-
-		return false;
-	}
-
-	private isPlatformBlocking(player, platform): boolean {
-		//Block during climbing, but only if ladder is above platform to prevent the player from falling through ladders on going down
-		if (this.context.touchingLadder && this.context.touchingLadder.y <= platform.y) {
-			this.context.isClimbing = false;
-			return true;
-		}
-
-		if (this.context.isClimbing && this.context.touchingLadder && this.context.touchingLadder.y)
-			return false;
-
-		//Platform must be at be lower than the middle of the player
-		if (player.y + (player.height * .75) < platform.y) {
-			if (player.body.velocity.y > 0)
-				return true;
-		}
-
-		return false;
-	}
-
-	public restart() {
-		this.context.isJumping = false;
-		this.context.timeInAir = 0;
-		this.context.touchingLadder = false;
-		this.context.isTouchingLadder = false;
 	}
 
 	private performJump() {
