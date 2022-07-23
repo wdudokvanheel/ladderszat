@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Constants from '../assets/data/constants.yml'
+import AnimationController from '../controller/AnimationController';
 import {PhysicsController} from '../controller/PhysicsController';
 import {ObjectFactory} from '../factory/ObjectFactory';
 import {LadderLoader} from '../loader/LadderLoader';
@@ -21,6 +22,7 @@ export class GameplayScene extends Phaser.Scene {
 	private ui: UIOverlayScene;
 
 	private physicsController: PhysicsController;
+	private animationController: AnimationController;
 
 	private nextBucket = 2000;
 
@@ -34,6 +36,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.platformLoader = new PlatformLoader();
 		this.ladderLoader = new LadderLoader();
 		this.objectFactory = new ObjectFactory();
+		this.animationController = new AnimationController();
 	}
 
 	create() {
@@ -66,6 +69,8 @@ export class GameplayScene extends Phaser.Scene {
 		//Update camera to follow player
 		this.cameras.main.setBounds(0, this.getCameraY(), Constants.screen.width, Constants.screen.height);
 		this.physicsController.update(delta);
+		this.animationController.updateAnimations(this.physicsController);
+		this.physicsController.reset();
 	}
 
 	public onHit(enemy: SpriteWithDynamicBody) {
@@ -85,7 +90,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	public reset() {
 		this.running = true;
-		this.physicsController.reset();
+		this.physicsController.restart();
 	}
 
 	private getCameraY(): number {

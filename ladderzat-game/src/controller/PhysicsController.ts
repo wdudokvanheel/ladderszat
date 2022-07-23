@@ -12,17 +12,16 @@ export class PhysicsController {
 	private physics: ArcadePhysics;
 	private ui: UIOverlayScene;
 
-	private readonly player: SpriteWithDynamicBody;
+	public  readonly player: SpriteWithDynamicBody;
 	private readonly platforms: StaticGroup;
 	private readonly ladders: StaticGroup;
 	private readonly buckets: Group;
 
-
-	private isGrounded = false;
-	private isJumping = false;
-	private isTouchingLadder = false;
-	private isOnTopOfLadder = false;
-	private isClimbing = false;
+	public isGrounded = false;
+	public isJumping = false;
+	public isTouchingLadder = false;
+	public isOnTopOfLadder = false;
+	public isClimbing = false;
 
 	private touchingLadder = undefined;
 	private timeInAir = 0;
@@ -45,7 +44,6 @@ export class PhysicsController {
 
 		this.updateInAirTimer(delta);
 		this.updatePlayerGravityOnLadder();
-		this.updateAnims();
 
 		DEBUG_CONTROLLER.setValue('G', this.isGrounded)
 		DEBUG_CONTROLLER.setValue('J', this.isJumping)
@@ -53,8 +51,10 @@ export class PhysicsController {
 		DEBUG_CONTROLLER.setValue('C', this.isClimbing)
 		// DEBUG_CONTROLLER.setValue('F', this.player.body.allowGravity)
 		DEBUG_CONTROLLER.setValue('O', this.isOnTopOfLadder)
+	}
 
-		//reset values?
+	//Call on end of update cycle to reset values (so the collision system can set them again)
+	public reset(){
 		this.touchingLadder = undefined;
 		this.isTouchingLadder = false;
 		this.isOnTopOfLadder = false;
@@ -80,7 +80,7 @@ export class PhysicsController {
 				else
 					this.player.setVelocityX(Constants.player.speed.walk);
 
-				if(this.isClimbing) {
+				if (this.isClimbing) {
 					this.player.body.velocity.y = -100;
 					this.isJumping = true;
 					this.isClimbing = false;
@@ -147,19 +147,6 @@ export class PhysicsController {
 		}
 	}
 
-	private updateAnims() {
-		if (!this.isGrounded && !this.isClimbing) {
-			this.player.anims.play('kris-walk', true);
-			this.player.anims.setProgress(0)
-		} else if (this.isClimbing && !this.isGrounded) {
-			this.player.anims.play('kris-climb', this.player.body.velocity.y != 0);
-		} else if (this.player.body.velocity.x == 0) {
-			this.player.setTexture('kris-idle');
-		} else {
-			this.player.anims.play('kris-walk', true);
-		}
-	}
-
 	public setupCollisionDetection() {
 		//Just a check if a player is on a ladder
 		this.physics.add.overlap(this.player, this.ladders, this.onLadderCheck, null, this);
@@ -216,7 +203,7 @@ export class PhysicsController {
 		return false;
 	}
 
-	public reset() {
+	public restart() {
 		this.isJumping = false;
 		this.timeInAir = 0;
 		this.touchingLadder = false;
