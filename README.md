@@ -12,6 +12,7 @@
 - [ ] Camera
 - [ ] Bucket collision
 - [ ] Bucket gfx
+- [ ] Ladder sprite to black on restart
 
 ### Improvements
 - [ ] Button to orange on press

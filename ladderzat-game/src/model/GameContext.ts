@@ -22,7 +22,11 @@ export default class GameContext {
 	public touchingLadder = undefined;
 	public timeInAir = 0;
 
-	//Call on end of update cycle to reset values (so the collision system can set them again)
+	constructor(gameplay: GameplayScene) {
+		this.gameplay = gameplay;
+	}
+
+//Call on end of update cycle to reset values (so the collision system can set them again)
 	public reset() {
 		this.touchingLadder = undefined;
 		this.isTouchingLadder = false;

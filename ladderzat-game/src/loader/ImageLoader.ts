@@ -36,6 +36,8 @@ export class ImageLoader {
 	}
 
 	private loadBuckets() {
+		this.loader.spritesheet('bucket-roll', images['objects']['bucket-roll-md'], {frameWidth: 7, frameHeight: 7});
+
 		for (let i = 0; i < Constants.gfx.bucket.colors.length; i++) {
 			const color = Constants.gfx.bucket.colors[i];
 			this.loader.spritesheet('bucket-' + color, images['objects']['bucket-' + color], {frameWidth: 9, frameHeight: 9});
@@ -54,6 +56,13 @@ export class ImageLoader {
 			key: 'kris-walk',
 			frames: this.anims.generateFrameNumbers('kris-walk', {start: 0, end: 3}),
 			frameRate: 10,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'roll',
+			frameRate: 20,
+			frames: this.anims.generateFrameNumbers('bucket-roll', {start: 0, end: 7}),
 			repeat: -1
 		});
 

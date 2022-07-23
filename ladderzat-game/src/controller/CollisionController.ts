@@ -30,7 +30,7 @@ export default class CollisionController{
 
 		// this.physics.add.collider(this.buckets, this.buckets);
 		this.physics.add.collider(this.context.player, this.context.buckets, function (player: SpriteWithDynamicBody, bucket: SpriteWithDynamicBody) {
-			this.gameplay.onHit(bucket);
+			this.context.gameplay.onHit(bucket);
 		}, null, this);
 	}
 

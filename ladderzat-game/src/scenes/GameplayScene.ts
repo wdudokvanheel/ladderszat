@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import Constants from '../assets/data/constants.yml'
-import AnimationController from '../controller/AnimationController';
+import GraphicsController from '../controller/GraphicsController';
 import CollisionController from '../controller/CollisionController';
 import {DEBUG_CONTROLLER} from '../controller/DebugController';
 import {PhysicsController} from '../controller/PhysicsController';
@@ -18,7 +18,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	private physicsController: PhysicsController;
 	private collisionController: CollisionController;
-	private animationController: AnimationController;
+	private graphicsController: GraphicsController;
 
 	private nextBucket = 2000;
 
@@ -27,7 +27,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	constructor() {
 		super('gameplay')
-		this.context = new GameContext();
+		this.context = new GameContext(this);
 	}
 
 	preload() {
@@ -54,7 +54,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.physicsController = new PhysicsController(this.context);
 		this.collisionController = new CollisionController(this.physics, this.context);
 		this.collisionController.setupCollisionDetection();
-		this.animationController = new AnimationController();
+		this.graphicsController = new GraphicsController(this.context);
 	}
 
 	update(time: number, delta: number) {
@@ -63,12 +63,12 @@ export class GameplayScene extends Phaser.Scene {
 			return;
 		}
 
-		// this.generateBuckets(delta);
+		this.generateBuckets(delta);
 
 		//Update camera to follow player
 		this.cameras.main.setBounds(0, this.getCameraY(), Constants.screen.width, Constants.screen.height);
 		this.physicsController.update(delta);
-		this.animationController.updateAnimations(this.context);
+		this.graphicsController.update();
 
 		DEBUG_CONTROLLER.setValue('G', this.context.isGrounded)
 		DEBUG_CONTROLLER.setValue('J', this.context.isJumping)
@@ -90,7 +90,7 @@ export class GameplayScene extends Phaser.Scene {
 		if (this.nextBucket <= 0) {
 			var bucket = this.objectFactory.createBucket(this.context.buckets);
 			bucket.x = Math.random() * 190;
-			bucket.y = 400;
+			bucket.y = 900;
 			this.nextBucket += (Math.random() * 2000) + 1000;
 		}
 	}
