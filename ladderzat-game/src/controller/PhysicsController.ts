@@ -25,9 +25,11 @@ export class PhysicsController {
 		if (horiz != undefined) {
 			if (!this.context.isClimbing || (this.context.player.body.velocity.y == 0)) {
 				if (horiz === 'left')
-					this.context.player.setVelocityX(-Constants.player.speed.walk);
+					this.setPlayerVelocity(-1);
+				else if (horiz === 'right')
+					this.setPlayerVelocity(1);
 				else
-					this.context.player.setVelocityX(Constants.player.speed.walk);
+					this.setPlayerVelocity(0);
 
 				if (this.context.isClimbing) {
 					this.context.player.body.velocity.y = -100;
@@ -36,7 +38,7 @@ export class PhysicsController {
 				}
 			}
 		} else
-			this.context.player.setVelocityX(0);
+			this.setPlayerVelocity(0);
 
 		if (this.context.input.getVerticalDirection() != undefined) {
 			if (!this.context.isClimbing && this.context.isTouchingLadder) {
@@ -59,11 +61,32 @@ export class PhysicsController {
 				if (this.context.isOnTopOfLadder)
 					this.context.player.setVelocityY(0);
 				else
-					this.context.player.setVelocityY(-Constants.player.speed.ladder.up);
+					this.context.player.setVelocityY(-Constants.player.climb.up);
 			} else if (vert == 'down') {
-				this.context.player.setVelocityY(Constants.player.speed.ladder.down);
+				this.context.player.setVelocityY(Constants.player.climb.down);
 			}
 		}
+	}
+
+	private apply(x, damp, delta) {
+		return x * Math.pow(1 - damp, delta * 10);
+	}
+
+	private setPlayerVelocity(input: number) {
+		let targetSpeed = input * Constants.player.walk.maxspeed;
+		let diff = targetSpeed - this.context.player.body.velocity.x;
+
+		let accelRate = (Math.abs(targetSpeed) > 0.01) ? Constants.player.walk.acceleration : Constants.player.walk.deceleration;
+		let movement = Math.pow(Math.abs(diff) * accelRate, Constants.player.walk.damping) * Math.sign(diff);
+
+		//Cutoff to stop movement
+		if (targetSpeed == 0 && Math.abs(this.context.player.body.velocity.x) < 5) {
+			this.context.player.body.velocity.x = 0;
+			return;
+		}
+
+		//Apply force
+		this.context.player.body.velocity.x += movement;
 	}
 
 	private startClimbing() {
@@ -82,7 +105,7 @@ export class PhysicsController {
 
 		if (this.context.input.isJumping()) {
 			//Allow jumping when grounded, but allow a little margin of error
-			if (this.context.isGrounded || this.context.timeInAir <= Constants.jump.inairpass) {
+			if (this.context.isGrounded || this.context.timeInAir <= Constants.jump.coyote) {
 				//Only allow jumping if climbing up
 				if (!this.context.isClimbing || this.context.player.body.velocity.y <= 0)
 					this.performJump();

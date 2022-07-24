@@ -27,14 +27,18 @@ camera:
 player:
   jump:
     power: 130
-  speed:
-    walk: 60
-    ladder:
-      up: 60
-      down: 80
+  walk:
+    maxspeed: 60
+    acceleration: 0.6
+    deceleration: 0.5
+    damping: 0.5
+  climb:
+    up: 60
+    down: 80
 
 jump:
-  inairpass: 125
+  buffer: 100
+  coyote: 125
 
 object:
   platform:

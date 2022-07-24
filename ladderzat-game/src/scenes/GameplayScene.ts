@@ -66,7 +66,6 @@ export class GameplayScene extends Phaser.Scene {
 			if (this.timerDeath <= 0)
 				this.scene.launch('gameover');
 
-
 			return;
 		}
 
@@ -77,7 +76,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.physicsController.update(delta);
 		this.graphicsController.update();
 
-		// DEBUG_CONTROLLER.setValue('A', this.context.alive)
+		// DEBUG_CONTROLLER.setValue('V', this.context.player.body.velocity.x, false)
 		// DEBUG_CONTROLLER.setValue('G', this.context.isGrounded)
 		// DEBUG_CONTROLLER.setValue('J', this.context.isJumping)
 		// DEBUG_CONTROLLER.setValue('T', this.context.isTouchingLadder)
