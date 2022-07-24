@@ -3,6 +3,7 @@ import Group = Phaser.Physics.Arcade.Group;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import Constants from '../assets/data/constants.yml'
 import {sample} from '../main';
+import GameContext from '../model/GameContext';
 
 export class ObjectFactory {
 
@@ -15,6 +16,20 @@ export class ObjectFactory {
 		player.body.setMaxVelocityY(400);
 		player.refreshBody();
 		return player;
+	}
+
+	createPlayerCorpse(physics: ArcadePhysics, context: GameContext): SpriteWithDynamicBody {
+		var sprite = physics.add.sprite(context.player.x, context.player.y, "kris-dead") as SpriteWithDynamicBody;
+		sprite.anims.playAfterDelay("kris-dead", 250);
+		context.buckets.add(sprite, false);
+
+		sprite.body.setSize(9, sprite.height - 1, false);
+		sprite.body.setAllowDrag(true);
+		sprite.body.setDragX(0.05);
+		sprite.body.setDamping(true);
+		sprite.setVelocityY(-50);
+		sprite.refreshBody();
+		return sprite;
 	}
 
 	createBucket(group: Group): SpriteWithDynamicBody {
@@ -30,4 +45,5 @@ export class ObjectFactory {
 		bucket.refreshBody();
 		return bucket;
 	}
+
 }

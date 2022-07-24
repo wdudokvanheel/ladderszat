@@ -19,7 +19,8 @@ export class GameplayScene extends Phaser.Scene {
 	private collisionController: CollisionController;
 	private graphicsController: GraphicsController;
 
-	private nextBucket = 0;
+	private timerNextBucket;
+	private timerDeath;
 
 	private running = true;
 	private readonly context: GameContext;
@@ -42,7 +43,6 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.platforms = this.platformLoader.getPlatforms(this.physics);
 		this.context.ladders = this.ladderLoader.getLadders(this.physics, this.make, this.add);
 
-		this.context.player = this.objectFactory.createPlayer(this.physics);
 		this.context.input = this.scene.get('ui') as UIOverlayScene;
 
 		//Setup camera
@@ -54,11 +54,19 @@ export class GameplayScene extends Phaser.Scene {
 		this.collisionController = new CollisionController(this.physics, this.context);
 		this.collisionController.setupCollisionDetection();
 		this.graphicsController = new GraphicsController(this.context);
+
+		this.setupNewGame();
 	}
 
 	update(time: number, delta: number) {
-		if (!this.running) {
+		if (!this.context.alive) {
 			this.graphicsController.update();
+			this.timerDeath -= delta;
+
+			if (this.timerDeath <= 0)
+				this.scene.launch('gameover');
+
+
 			return;
 		}
 
@@ -81,40 +89,34 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	public onHit(enemy: SpriteWithDynamicBody) {
-		this.running = false;
+		//Check if still alive
+		if (!this.context.alive)
+			return;
+
 		this.context.alive = false;
 
-		var sprite = this.physics.add.sprite(this.context.player.x, this.context.player.y, "kris-dead") as SpriteWithDynamicBody;
-		sprite.anims.playAfterDelay("kris-dead", 250);
-		this.context.buckets.add(sprite, false);
+		//Create a corpse of the player
+		const corpse = this.objectFactory.createPlayerCorpse(this.physics, this.context);
 
-		sprite.body.setSize(sprite.width, sprite.height - 1);
-		sprite.body.setAllowDrag(true);
-		sprite.body.setDragX(0.05);
-		sprite.body.setDamping(true);
-		sprite.refreshBody();
-
+		//Add some forces away from the collision to the body and the hitting bucket
 		enemy.setVelocityY(-100);
-		sprite.setVelocityY(-50);
-
-		//Enemy is on the right
 		if (enemy.body.x > this.context.player.body.x) {
-			sprite.setVelocityX(-65);
+			corpse.setVelocityX(-65);
 			enemy.setVelocityX(50);
-			sprite.setFlipX(true);
+			corpse.setFlipX(true);
 		} else {
-			sprite.setVelocityX(65);
+			corpse.setVelocityX(65);
 			enemy.setVelocityX(-50);
-			sprite.setFlipX(false);
+			corpse.setFlipX(false);
 		}
 
+		//Destroy player and game over
 		this.context.destroyPlayer();
-		this.scene.launch('gameover');
 	}
 
 	private generateBuckets(delta: number) {
-		this.nextBucket -= delta;
-		if (this.nextBucket <= 0) {
+		this.timerNextBucket -= delta;
+		if (this.timerNextBucket <= 0) {
 			var bucket = this.objectFactory.createBucket(this.context.buckets);
 			bucket.x = Math.random() * 190;
 			bucket.x = 50;
@@ -124,13 +126,15 @@ export class GameplayScene extends Phaser.Scene {
 			}
 
 			bucket.y = 800;
-			this.nextBucket += (Math.random() * 500) + 1000;
+			this.timerNextBucket += (Math.random() * 500) + 1000;
 		}
 	}
 
-	public reset() {
+	public setupNewGame() {
 		this.running = true;
 		this.context.reset();
+		this.timerDeath = 2000;
+		this.timerNextBucket = 2000;
 		this.context.player = this.objectFactory.createPlayer(this.physics);
 		this.collisionController.createPlayerColliders();
 	}

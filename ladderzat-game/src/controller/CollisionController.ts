@@ -18,10 +18,6 @@ export default class CollisionController {
 	}
 
 	public setupCollisionDetection() {
-
-		//Create player colldiers
-		this.createPlayerColliders();
-
 		//Collider for buckets and platform
 		this.physics.add.collider(this.context.buckets, this.context.platforms, function (bucket: SpriteWithDynamicBody) {
 			if (bucket.body.y > Constants.world.height - 24)
