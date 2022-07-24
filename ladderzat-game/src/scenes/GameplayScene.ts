@@ -59,15 +59,9 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	update(time: number, delta: number) {
-		if (!this.context.alive) {
-			this.graphicsController.update();
-			this.timerDeath -= delta;
-
-			if (this.timerDeath <= 0)
-				this.scene.launch('gameover');
-
+		//Check if player is dead and update should be skipped
+		if (this.isPlayerDead(delta))
 			return;
-		}
 
 		this.generateBuckets(delta);
 
@@ -87,29 +81,48 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.resetLadderValues();
 	}
 
+	private isPlayerDead(delta: number): boolean {
+		if (!this.context.alive) {
+			this.graphicsController.update();
+			this.timerDeath -= delta;
+
+			if (this.timerDeath < 250 && this.physics.world.timeScale != 1) {
+				this.physics.world.timeScale = 1;
+				this.anims.globalTimeScale = 1;
+			}
+
+			if (this.timerDeath <= 0)
+				this.scene.launch('gameover');
+
+			return true;
+		}
+		return false;
+	}
+
 	public onHit(enemy: SpriteWithDynamicBody) {
-		//Check if still alive
 		if (!this.context.alive)
 			return;
 
 		this.context.alive = false;
 
-		//Create a corpse of the player
+		//Slow down time
+		this.physics.world.timeScale = 8;
+		this.anims.globalTimeScale = 8;
+
 		const corpse = this.objectFactory.createPlayerCorpse(this.physics, this.context);
 
-		//Add some forces away from the collision to the body and the hitting bucket
+		//Add some forces away from the collision to the corpse and the colliding bucket
 		enemy.setVelocityY(-100);
 		if (enemy.body.x > this.context.player.body.x) {
-			corpse.setVelocityX(-65);
-			enemy.setVelocityX(50);
+			corpse.setVelocityX(-75);
+			enemy.setVelocityX(65);
 			corpse.setFlipX(true);
 		} else {
-			corpse.setVelocityX(65);
-			enemy.setVelocityX(-50);
+			corpse.setVelocityX(75);
+			enemy.setVelocityX(-65);
 			corpse.setFlipX(false);
 		}
 
-		//Destroy player and game over
 		this.context.destroyPlayer();
 	}
 
@@ -123,13 +136,12 @@ export class GameplayScene extends Phaser.Scene {
 				bucket.x = 150;
 				bucket.setVelocityX(-50);
 			}
-
 			bucket.y = 800;
 			this.timerNextBucket += (Math.random() * 500) + 1000;
 		}
 	}
 
-	public setupNewGame() {
+	private setupNewGame() {
 		this.running = true;
 		this.context.reset();
 		this.timerDeath = 2000;

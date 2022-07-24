@@ -20,14 +20,14 @@ export class ObjectFactory {
 
 	createPlayerCorpse(physics: ArcadePhysics, context: GameContext): SpriteWithDynamicBody {
 		var sprite = physics.add.sprite(context.player.x, context.player.y, "kris-dead") as SpriteWithDynamicBody;
-		sprite.anims.playAfterDelay("kris-dead", 250);
+		sprite.anims.playAfterDelay("kris-dead", 500);
 		context.buckets.add(sprite, false);
 
 		sprite.body.setSize(9, sprite.height - 1, false);
 		sprite.body.setAllowDrag(true);
 		sprite.body.setDragX(0.05);
 		sprite.body.setDamping(true);
-		sprite.setVelocityY(-50);
+		sprite.setVelocityY(-100);
 		sprite.refreshBody();
 		return sprite;
 	}

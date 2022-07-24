@@ -53,7 +53,7 @@ export class ImageLoader {
 		this.anims.create({
 			key: 'kris-dead',
 			frames: this.anims.generateFrameNumbers('kris-dead', {start: 0, end: 9}),
-			frameRate: 4,
+			frameRate: 3,
 			repeat: 0
 		});
 

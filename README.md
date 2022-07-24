@@ -1,18 +1,23 @@
 ## TODO
 
 ### Character feel
+- [x] Force based movement
+- [ ] Jump buffer
+- [ ] Jump power & downward force on release
 - [ ] OnLandEvent
 - [ ] OnLand Anim
 - [ ] Screenshake on land based on speed
-- [ ] Smoke on jump
+- [ ] Smoke on jump / walk
 - [ ] Leg bend anim on jump
 
 ### Bugs
 - [X] Can't climb bottom of ladder
 - [ ] Camera
-- [ ] Bucket collision
+- [x] Bucket collision
 - [ ] Bucket gfx
-- [ ] Ladder sprite to black on restart
+- [x] Ladder sprite to black on restart
+- [ ] iPhone safe area overlap
 
 ### Improvements
 - [ ] Button to orange on press
+- [ ] Make slowdown tween

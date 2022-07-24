@@ -8,7 +8,6 @@ export default class CollisionController {
 	private physics: ArcadePhysics;
 	private context: GameContext
 
-	private playerBucketCollider: Collider;
 	private playerColliders: Collider[];
 
 	constructor(physics: Phaser.Physics.Arcade.ArcadePhysics, context: GameContext) {
@@ -56,7 +55,7 @@ export default class CollisionController {
 	}
 
 	private platformBlockTest(player, platform): boolean {
-		//Block during climbing, but only if ladder is above platform to prevent the player from falling through ladders on going down
+		//Block during climbing, but only if ladder is above platform to prevent the player from falling through platforms on going down
 		if (this.context.touchingLadder && this.context.touchingLadder.y <= platform.y) {
 			this.context.isClimbing = false;
 			return true;
