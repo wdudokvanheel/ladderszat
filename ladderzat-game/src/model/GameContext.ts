@@ -13,6 +13,8 @@ export default class GameContext {
 	public ladders: StaticGroup;
 	public buckets: Group;
 
+	public alive = true;
+
 	public isGrounded = false;
 	public isJumping = false;
 	public isTouchingLadder = false;
@@ -24,16 +26,18 @@ export default class GameContext {
 
 	constructor(gameplay: GameplayScene) {
 		this.gameplay = gameplay;
+		this.reset();
 	}
 
-//Call on end of update cycle to reset values (so the collision system can set them again)
-	public reset() {
+	//Call on end of update cycle to reset values (so the collision system can set them again)
+	public resetLadderValues() {
 		this.touchingLadder = undefined;
 		this.isTouchingLadder = false;
 		this.isOnTopOfLadder = false;
 	}
 
-	public restartGame() {
+	public reset() {
+		this.alive = true;
 		this.isGrounded = false;
 		this.isJumping = false;
 		this.timeInAir = 0;
@@ -41,5 +45,17 @@ export default class GameContext {
 		this.isOnTopOfLadder = false;
 		this.isTouchingLadder = false;
 		this.isClimbing = false;
+
+		//Remove all buckets
+		if (this.buckets && this.buckets.children)
+			this.buckets.children.getArray().forEach(bucket => this.buckets.remove(bucket, true));
+	}
+
+	public destroyPlayer() {
+		if (!this.player)
+			return;
+
+		this.player.destroy();
+		this.player = undefined;
 	}
 }

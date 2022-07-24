@@ -14,20 +14,31 @@ export default class GraphicsController {
 	}
 
 	private updateAnimations() {
+		if (!this.context.alive)
+			return;
+
 		if (!this.context.isGrounded && !this.context.isClimbing) {
 			this.context.player.anims.play('kris-walk', true);
 			this.context.player.anims.setProgress(0)
-		} else if (this.context.isClimbing && !this.context.isGrounded) {
-			this.context.player.anims.play('kris-climb', this.context.player.body.velocity.y != 0);
-		} else if (this.context.player.body.velocity.x == 0) {
-			this.context.player.setTexture('kris-idle');
-		} else {
-			this.context.player.anims.play('kris-walk', true);
+			return;
 		}
+
+		if (this.context.isClimbing && !this.context.isGrounded) {
+			this.context.player.anims.play('kris-climb', this.context.player.body.velocity.y != 0);
+			return;
+		}
+
+		if (this.context.player.body.velocity.x == 0) {
+			this.context.player.setTexture('kris-idle');
+			return;
+		}
+
+		this.context.player.anims.play('kris-walk', true);
 	}
 
 	private updatePlayerFacing() {
-		this.setFacing(this.context.player);
+		if (this.context.player)
+			this.setFacing(this.context.player);
 	}
 
 	private updateBucketsFacing() {

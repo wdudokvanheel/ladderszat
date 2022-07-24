@@ -1,8 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../assets/data/constants.yml'
-import GraphicsController from '../controller/GraphicsController';
 import CollisionController from '../controller/CollisionController';
-import {DEBUG_CONTROLLER} from '../controller/DebugController';
+import GraphicsController from '../controller/GraphicsController';
 import {PhysicsController} from '../controller/PhysicsController';
 import {ObjectFactory} from '../factory/ObjectFactory';
 import {LadderLoader} from '../loader/LadderLoader';
@@ -20,10 +19,10 @@ export class GameplayScene extends Phaser.Scene {
 	private collisionController: CollisionController;
 	private graphicsController: GraphicsController;
 
-	private nextBucket = 2000;
+	private nextBucket = 0;
 
 	private running = true;
-	private context: GameContext;
+	private readonly context: GameContext;
 
 	constructor() {
 		super('gameplay')
@@ -59,7 +58,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	update(time: number, delta: number) {
 		if (!this.running) {
-			this.physics.disableUpdate();
+			this.graphicsController.update();
 			return;
 		}
 
@@ -70,18 +69,46 @@ export class GameplayScene extends Phaser.Scene {
 		this.physicsController.update(delta);
 		this.graphicsController.update();
 
-		DEBUG_CONTROLLER.setValue('G', this.context.isGrounded)
-		DEBUG_CONTROLLER.setValue('J', this.context.isJumping)
-		DEBUG_CONTROLLER.setValue('T', this.context.isTouchingLadder)
-		DEBUG_CONTROLLER.setValue('C', this.context.isClimbing)
-		// DEBUG_CONTROLLER.setValue('F', this.player.body.allowGravity)
-		DEBUG_CONTROLLER.setValue('O', this.context.isOnTopOfLadder)
+		// DEBUG_CONTROLLER.setValue('A', this.context.alive)
+		// DEBUG_CONTROLLER.setValue('G', this.context.isGrounded)
+		// DEBUG_CONTROLLER.setValue('J', this.context.isJumping)
+		// DEBUG_CONTROLLER.setValue('T', this.context.isTouchingLadder)
+		// DEBUG_CONTROLLER.setValue('C', this.context.isClimbing)
+		// // DEBUG_CONTROLLER.setValue('F', this.player.body.allowGravity)
+		// DEBUG_CONTROLLER.setValue('O', this.context.isOnTopOfLadder)
 
-		this.context.reset();
+		this.context.resetLadderValues();
 	}
 
 	public onHit(enemy: SpriteWithDynamicBody) {
 		this.running = false;
+		this.context.alive = false;
+
+		var sprite = this.physics.add.sprite(this.context.player.x, this.context.player.y, "kris-dead") as SpriteWithDynamicBody;
+		sprite.anims.playAfterDelay("kris-dead", 250);
+		this.context.buckets.add(sprite, false);
+
+		sprite.body.setSize(sprite.width, sprite.height - 1);
+		sprite.body.setAllowDrag(true);
+		sprite.body.setDragX(0.05);
+		sprite.body.setDamping(true);
+		sprite.refreshBody();
+
+		enemy.setVelocityY(-100);
+		sprite.setVelocityY(-50);
+
+		//Enemy is on the right
+		if (enemy.body.x > this.context.player.body.x) {
+			sprite.setVelocityX(-65);
+			enemy.setVelocityX(50);
+			sprite.setFlipX(true);
+		} else {
+			sprite.setVelocityX(65);
+			enemy.setVelocityX(-50);
+			sprite.setFlipX(false);
+		}
+
+		this.context.destroyPlayer();
 		this.scene.launch('gameover');
 	}
 
@@ -90,14 +117,22 @@ export class GameplayScene extends Phaser.Scene {
 		if (this.nextBucket <= 0) {
 			var bucket = this.objectFactory.createBucket(this.context.buckets);
 			bucket.x = Math.random() * 190;
-			bucket.y = 900;
-			this.nextBucket += (Math.random() * 2000) + 1000;
+			bucket.x = 50;
+			if (Math.random() > .5) {
+				bucket.x = 150;
+				bucket.setVelocityX(-50);
+			}
+
+			bucket.y = 800;
+			this.nextBucket += (Math.random() * 500) + 1000;
 		}
 	}
 
 	public reset() {
 		this.running = true;
-		this.context.restartGame();
+		this.context.reset();
+		this.context.player = this.objectFactory.createPlayer(this.physics);
+		this.collisionController.createPlayerColliders();
 	}
 
 	private getCameraY(): number {

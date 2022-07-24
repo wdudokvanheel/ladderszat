@@ -19,14 +19,14 @@ export class ObjectFactory {
 
 	createBucket(group: Group): SpriteWithDynamicBody {
 		const color = sample(Constants.gfx.bucket.colors);
-		const grp = group.create(10, Constants.world.height - 200, 'bucket-roll');
+		const grp = group.create(10, Constants.world.height - 200, 'bucket-' + color);
 		const bucket = grp as SpriteWithDynamicBody;
 		bucket.setBounce(1, .6);
 		bucket.setMaxVelocity(125);
 		bucket.setCollideWorldBounds(true);
 		bucket.setVelocityX(40 + (Math.random() * 10));
 		bucket.setVelocityY(-Math.random() * 100);
-		bucket.anims.play('roll');
+		bucket.anims.play('bucket-' + color);
 		bucket.refreshBody();
 		return bucket;
 	}

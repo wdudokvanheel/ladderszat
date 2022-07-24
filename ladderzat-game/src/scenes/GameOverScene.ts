@@ -2,7 +2,7 @@ import {Scene} from 'phaser';
 import {GameplayScene} from './GameplayScene';
 
 export class GameOverScene extends Scene {
-	private timer = 3000;
+	private timer = 5000;
 
 	constructor() {
 		super('gameover');
@@ -15,9 +15,7 @@ export class GameOverScene extends Scene {
 	update(time: number, delta: number) {
 		this.timer -= delta;
 		if(this.timer <= 0){
-			this.timer = 3000;
-			this.scene.stop('gameplay');
-			this.scene.start('gameplay');
+			this.timer = 5000;
 			(this.scene.get('gameplay') as GameplayScene).reset();
 			this.scene.stop();
 		}

@@ -18,29 +18,27 @@ export class ImageLoader {
 		this.loader.spritesheet('button-dpad-right', images['ui']['button-dpad-right'], {frameWidth: 15, frameHeight: 18});
 		this.loader.spritesheet('button-dpad-down', images['ui']['button-dpad-down'], {frameWidth: 17, frameHeight: 16});
 		this.loader.spritesheet('button-dpad-left', images['ui']['button-dpad-left'], {frameWidth: 15, frameHeight: 18});
-		this.loadBuckets();
 
 		this.loader.image('background', images['ui']['background'])
 		this.loader.image('gameover', images['ui']['gameover'])
 		this.loader.image('window', images['ui']['window'])
 		this.loader.image('rail', images['objects']['rail'])
 		this.loader.image('ladder', images['objects']['ladder'])
-		this.loader.image('kris-stand', images['kris']['small'])
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
 
 		this.loader.image('kris-idle', images['kris']['idle'])
+		this.loader.spritesheet('kris-dead', images['kris']['dead'], {frameWidth: 21, frameHeight: 10})
 		this.loader.spritesheet('kris-walk', images['kris']['walk'], {frameWidth: 13, frameHeight: 22});
 		this.loader.spritesheet('kris-climb', images['kris']['climb'], {frameWidth: 11, frameHeight: 22});
 
+		this.loadBuckets();
 	}
 
 	private loadBuckets() {
-		this.loader.spritesheet('bucket-roll', images['objects']['bucket-roll-md'], {frameWidth: 7, frameHeight: 7});
-
 		for (let i = 0; i < Constants.gfx.bucket.colors.length; i++) {
 			const color = Constants.gfx.bucket.colors[i];
-			this.loader.spritesheet('bucket-' + color, images['objects']['bucket-' + color], {frameWidth: 9, frameHeight: 9});
+			this.loader.spritesheet('bucket-' + color, images['objects']['bucket-' + color], {frameWidth: 7, frameHeight: 7});
 		}
 	}
 
@@ -53,16 +51,16 @@ export class ImageLoader {
 		});
 
 		this.anims.create({
-			key: 'kris-walk',
-			frames: this.anims.generateFrameNumbers('kris-walk', {start: 0, end: 3}),
-			frameRate: 10,
-			repeat: -1
+			key: 'kris-dead',
+			frames: this.anims.generateFrameNumbers('kris-dead', {start: 0, end: 9}),
+			frameRate: 4,
+			repeat: 0
 		});
 
 		this.anims.create({
-			key: 'roll',
-			frameRate: 20,
-			frames: this.anims.generateFrameNumbers('bucket-roll', {start: 0, end: 7}),
+			key: 'kris-walk',
+			frames: this.anims.generateFrameNumbers('kris-walk', {start: 0, end: 3}),
+			frameRate: 10,
 			repeat: -1
 		});
 
@@ -70,9 +68,9 @@ export class ImageLoader {
 			const color = Constants.gfx.bucket.colors[i];
 
 			this.anims.create({
-				key: 'roll-' + color,
+				key: 'bucket-' + color,
 				frameRate: 15,
-				frames: this.anims.generateFrameNumbers('bucket-' + color, {start: 0, end: 1}),
+				frames: this.anims.generateFrameNumbers('bucket-' + color, {start: 0, end: 7}),
 				repeat: -1
 			});
 		}

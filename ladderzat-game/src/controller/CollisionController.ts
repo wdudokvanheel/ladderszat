@@ -1,42 +1,55 @@
 import Constants from '../assets/data/constants.yml';
 import GameContext from '../model/GameContext';
 import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
+import Collider = Phaser.Physics.Arcade.Collider;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
-export default class CollisionController{
+export default class CollisionController {
 	private physics: ArcadePhysics;
 	private context: GameContext
+
+	private playerBucketCollider: Collider;
+	private playerColliders: Collider[];
 
 	constructor(physics: Phaser.Physics.Arcade.ArcadePhysics, context: GameContext) {
 		this.physics = physics;
 		this.context = context;
+		this.playerColliders = new Array();
 	}
 
 	public setupCollisionDetection() {
-		//Just a check if a player is on a ladder
-		this.physics.add.overlap(this.context.player, this.context.ladders, this.touchingLadderTest, null, this);
 
-		//Collider for player -> platforms
-		this.physics.add.collider(this.context.player, this.context.platforms, undefined, this.platformBlockTest, this);
-
-		//Collider to be able to stand on the top of a ladder
-		this.physics.add.collider(this.context.player, this.context.ladders, null, this.ladderBlockTest, this);
+		//Create player colldiers
+		this.createPlayerColliders();
 
 		//Collider for buckets and platform
 		this.physics.add.collider(this.context.buckets, this.context.platforms, function (bucket: SpriteWithDynamicBody) {
 			if (bucket.body.y > Constants.world.height - 24)
 				bucket.body.setCollideWorldBounds(false);
 		});
+	}
 
-		// this.physics.add.collider(this.buckets, this.buckets);
-		this.physics.add.collider(this.context.player, this.context.buckets, function (player: SpriteWithDynamicBody, bucket: SpriteWithDynamicBody) {
-			this.context.gameplay.onHit(bucket);
-		}, null, this);
+	public createPlayerColliders() {
+		//Remove current colliders
+		this.playerColliders.forEach(collider => this.physics.world.removeCollider(collider));
+
+		this.playerColliders.push(
+			//Test to see if player is touching a ladder
+			this.physics.add.overlap(this.context.player, this.context.ladders, this.touchingLadderTest, null, this),
+			//Collider for player -> platforms
+			this.physics.add.collider(this.context.player, this.context.platforms, undefined, this.platformBlockTest, this),
+			//Collider to be able to stand on the top of a ladder
+			this.physics.add.collider(this.context.player, this.context.ladders, null, this.ladderBlockTest, this),
+			//Collider for player -> buckets
+			this.physics.add.collider(this.context.player, this.context.buckets, function (player: SpriteWithDynamicBody, bucket: SpriteWithDynamicBody) {
+				this.context.gameplay.onHit(bucket);
+			}, null, this)
+		);
 	}
 
 	private touchingLadderTest(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody) {
 		//Don't allow climbing from below (with a little margin)
-		if(player.y > ladder.y - (player.height * .9))
+		if (player.y > ladder.y - (player.height * .9))
 			return;
 
 		this.context.isTouchingLadder = true;
