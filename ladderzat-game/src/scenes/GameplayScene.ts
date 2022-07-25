@@ -151,14 +151,9 @@ export class GameplayScene extends Phaser.Scene {
 		this.timerNextBucket -= delta;
 		if (this.timerNextBucket <= 0) {
 			var bucket = this.objectFactory.createBucket(this.context.buckets);
-			bucket.x = Math.random() * 190;
-			bucket.x = 50;
-			if (Math.random() > .5) {
-				bucket.x = 150;
-				bucket.setVelocityX(-50);
-			}
-			bucket.y = 800;
-			this.timerNextBucket += (Math.random() * 500) + 1000;
+			bucket.x = -5;
+			bucket.y = 820;
+			this.timerNextBucket += (Math.random() * 1000) + 1500;
 		}
 	}
 

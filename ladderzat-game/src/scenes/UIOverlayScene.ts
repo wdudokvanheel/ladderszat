@@ -1,6 +1,6 @@
 import {Scene} from 'phaser';
 import Constants from '../assets/data/constants.yml';
-import {DEBUG_CONTROLLER, DebugController} from '../controller/DebugController';
+import {DEBUG_CONTROLLER} from '../controller/DebugController';
 import Sprite = Phaser.GameObjects.Sprite;
 import Key = Phaser.Input.Keyboard.Key;
 import Vector2 = Phaser.Math.Vector2;
@@ -61,7 +61,7 @@ export class UIOverlayScene extends Scene {
 		}
 
 		this.updateDPadButtonStates();
-		// this.debugText.setText(DEBUG_CONTROLLER.getValues());
+		this.debugText.setText(DEBUG_CONTROLLER.getValues());
 	}
 
 	private updateDPadButtonStates() {
