@@ -20,4 +20,4 @@
 
 ### Improvements
 - [ ] Button to orange on press
-- [ ] Make slowdown tween
+- [X] Make slowdown tween

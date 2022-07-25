@@ -8,13 +8,17 @@ export default {
 	type: Phaser.AUTO,
 	backgroundColor: '#221f1f',
 	scale: {
-		mode: Phaser.Scale.FIT,
+		mode: Phaser.Scale.ScaleModes.FIT,
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
+		parent: 'game',
 		width: 160,
 		height: 286,
 		zoom: 2,
 		pixelArt: true,
 		antialias: false
+	},
+	dom: {
+		createContainer: true
 	},
 	fps: {
 		// target: 60,
