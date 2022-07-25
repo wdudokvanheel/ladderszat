@@ -43,6 +43,7 @@ export class GameplayScene extends Phaser.Scene {
 		//Create game objects
 		this.context.platforms = this.platformLoader.getPlatforms(this.physics);
 		this.context.ladders = this.ladderLoader.getLadders(this.physics, this.make, this.add);
+		this.context.exit = this.objectFactory.createExit(this.physics);
 
 		this.context.input = this.scene.get('ui') as UIOverlayScene;
 

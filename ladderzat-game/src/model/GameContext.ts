@@ -3,6 +3,7 @@ import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import {GameplayScene} from '../scenes/GameplayScene';
 import {UIOverlayScene} from '../scenes/UIOverlayScene';
+import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 
 export default class GameContext {
 	public gameplay: GameplayScene;
@@ -12,6 +13,7 @@ export default class GameContext {
 	public platforms: StaticGroup;
 	public ladders: StaticGroup;
 	public buckets: Group;
+	public exit: SpriteWithStaticBody;
 
 	public alive = true;
 

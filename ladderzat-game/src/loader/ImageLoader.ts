@@ -24,6 +24,7 @@ export class ImageLoader {
 		this.loader.image('window', images['ui']['window'])
 		this.loader.image('rail', images['objects']['rail'])
 		this.loader.image('ladder', images['objects']['ladder'])
+		this.loader.image('exit', images['objects']['exit'])
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
 

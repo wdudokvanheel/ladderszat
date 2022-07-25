@@ -20,6 +20,11 @@ controls:
       x: 7
       y: 7
 
+level1:
+  exit:
+    x: 10
+    y: 282
+
 camera:
   offset:
     y: 32
@@ -28,6 +33,7 @@ player:
   jump:
     power: 130
   walk:
+#    maxspeed: 50
     maxspeed: 60
     acceleration: 0.6
     deceleration: 0.5

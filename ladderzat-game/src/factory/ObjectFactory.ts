@@ -18,6 +18,13 @@ export class ObjectFactory {
 		return player;
 	}
 
+	createExit(physics: ArcadePhysics){
+		const exit = physics.add.staticSprite(Constants.level1.exit.x, Constants.world.height - Constants.level1.exit.y, 'exit');
+		exit.setOrigin(0, 1);
+		exit.setImmovable(true);
+		return exit;
+	}
+
 	createPlayerCorpse(physics: ArcadePhysics, context: GameContext): SpriteWithDynamicBody {
 		var sprite = physics.add.sprite(context.player.x, context.player.y, "kris-dead") as SpriteWithDynamicBody;
 		sprite.anims.playAfterDelay("kris-dead", 850);
