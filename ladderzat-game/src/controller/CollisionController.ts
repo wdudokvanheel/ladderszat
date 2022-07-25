@@ -36,9 +36,9 @@ export default class CollisionController {
 			//Collider to be able to stand on the top of a ladder
 			this.physics.add.collider(this.context.player, this.context.ladders, null, this.ladderBlockTest, this),
 			//Collider for player -> buckets
-			this.physics.add.collider(this.context.player, this.context.buckets, function (player: SpriteWithDynamicBody, bucket: SpriteWithDynamicBody) {
-				this.context.gameplay.onHit(bucket);
-			}, null, this)
+			this.physics.add.collider(this.context.player, this.context.buckets, this.context.gameplay.onHit, null, this.context.gameplay),
+			//Collider for the level exit
+			this.physics.add.collider(this.context.player, this.context.exit, this.context.gameplay.onExit, null, this.context.gameplay)
 		);
 	}
 

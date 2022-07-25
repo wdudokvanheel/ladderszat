@@ -174,4 +174,11 @@ export class GameplayScene extends Phaser.Scene {
 	private getCameraY(): number {
 		return Math.min(Constants.world.height - Constants.layout.gameplay.height, this.context.player.y - ((Constants.layout.gameplay.height) / 2) - this.context.player.height);
 	}
+
+	public onExit() {
+		this.context.destroyPlayer();
+		this.context.alive = false;
+		this.running = false;
+		this.scene.launch('gameover');
+	}
 }

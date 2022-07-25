@@ -23,7 +23,7 @@ controls:
 level1:
   exit:
     x: 10
-    y: 282
+    y: 283
 
 camera:
   offset:
