@@ -24,6 +24,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	private running = true;
 	private readonly context: GameContext;
+	private targetTimeScale = 1;
 
 	constructor() {
 		super('gameplay')
@@ -56,9 +57,15 @@ export class GameplayScene extends Phaser.Scene {
 		this.graphicsController = new GraphicsController(this.context);
 
 		this.setupNewGame();
+
+		console.debug("EHIGHT:", this.sys.game.canvas.height);
+		console.debug("EHIGHT:", getComputedStyle(document.documentElement).getPropertyValue("--sat"));
 	}
 
 	update(time: number, delta: number) {
+		if (this.targetTimeScale != this.physics.world.timeScale)
+			this.updateTimescale(delta);
+
 		//Check if player is dead and update should be skipped
 		if (this.isPlayerDead(delta))
 			return;
@@ -81,14 +88,28 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.resetLadderValues();
 	}
 
+	private updateTimescale(delta: number) {
+		let diff = this.targetTimeScale - this.physics.world.timeScale;
+
+		if (Math.abs(diff) < 0.3) {
+			this.physics.world.timeScale = this.targetTimeScale;
+			this.anims.globalTimeScale = this.targetTimeScale;
+			return;
+		}
+
+		let accelRate = 0.5;
+		let movement = Math.pow(Math.abs(diff) * accelRate, 0.5) * Math.sign(diff);
+		this.physics.world.timeScale += movement;
+		this.anims.globalTimeScale = this.physics.world.timeScale;
+	}
+
 	private isPlayerDead(delta: number): boolean {
 		if (!this.context.alive) {
 			this.graphicsController.update();
 			this.timerDeath -= delta;
 
 			if (this.timerDeath < 250 && this.physics.world.timeScale != 1) {
-				this.physics.world.timeScale = 1;
-				this.anims.globalTimeScale = 1;
+				this.targetTimeScale = 1;
 			}
 
 			if (this.timerDeath <= 0)
@@ -106,8 +127,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.alive = false;
 
 		//Slow down time
-		this.physics.world.timeScale = 8;
-		this.anims.globalTimeScale = 8;
+		this.targetTimeScale = 8;
 
 		const corpse = this.objectFactory.createPlayerCorpse(this.physics, this.context);
 
@@ -141,7 +161,7 @@ export class GameplayScene extends Phaser.Scene {
 		}
 	}
 
-	private setupNewGame() {
+	public setupNewGame() {
 		this.running = true;
 		this.context.reset();
 		this.timerDeath = 2000;
