@@ -16,8 +16,10 @@
 - [x] Bucket collision
 - [ ] Bucket gfx
 - [x] Ladder sprite to black on restart
-- [ ] iPhone safe area overlap
+- [x] iPhone safe area overlap
+- [ ] Destroy buckets on leaving
 
 ### Improvements
-- [ ] Button to orange on press
+- [x] Button to orange on press
+- [ ] Fix d-pad
 - [X] Make slowdown tween

@@ -9,7 +9,7 @@ export default {
 	backgroundColor: '#221f1f',
 	scale: {
 		mode: Phaser.Scale.ScaleModes.FIT,
-		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
+		autoCenter: Phaser.Scale.CENTER_BOTH,
 		parent: 'game',
 		width: 160,
 		height: 286,
