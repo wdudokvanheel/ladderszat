@@ -49,7 +49,7 @@ export class GameplayScene extends Phaser.Scene {
 		//Setup camera
 		this.cameras.main.setSize(Constants.screen.width, Constants.layout.gameplay.height);
 		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.world.height);
-		this.physics.world.setBounds(0, 0, Constants.screen.width, Constants.world.height, true, true, true, true);
+		this.physics.world.setBounds(1, 1, Constants.screen.width - 2, Constants.world.height - 2, true, true, true, true);
 
 		this.physicsController = new PhysicsController(this.context);
 		this.collisionController = new CollisionController(this.physics, this.context);
