@@ -58,12 +58,11 @@ export class GameplayScene extends Phaser.Scene {
 		this.graphicsController = new GraphicsController(this.context);
 
 		this.setupNewGame();
-
-		console.debug("EHIGHT:", this.sys.game.canvas.height);
-		console.debug("EHIGHT:", getComputedStyle(document.documentElement).getPropertyValue("--sat"));
 	}
 
 	update(time: number, delta: number) {
+		this.context.jumpInput = this.context.input.getJumpInput();
+
 		if (this.targetTimeScale != this.physics.world.timeScale)
 			this.updateTimescale(delta);
 
@@ -105,7 +104,7 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	private isPlayerDead(delta: number): boolean {
-		if (!this.context.alive) {
+		if (!this.context.isAlive) {
 			this.graphicsController.update();
 			this.timerDeath -= delta;
 
@@ -122,10 +121,10 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	public onHit(enemy: SpriteWithDynamicBody) {
-		if (!this.context.alive)
+		if (!this.context.isAlive)
 			return;
 
-		this.context.alive = false;
+		this.context.isAlive = false;
 
 		//Slow down time
 		this.targetTimeScale = 8;
@@ -172,7 +171,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	public onExit() {
 		this.context.destroyPlayer();
-		this.context.alive = false;
+		this.context.isAlive = false;
 		this.running = false;
 		this.scene.launch('gameover');
 	}

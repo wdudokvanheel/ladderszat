@@ -97,13 +97,22 @@ export class PhysicsController {
 	}
 
 	private updatePlayerJumping() {
-		if (this.context.isGrounded && this.context.isJumping)
+		if (!this.context.jumpInput.key && !this.context.jumpInput.touch)
+			this.context.isJumpReset = true;
+
+		if (this.context.isGrounded && this.context.isJumping) {
+			this.context.jumpInput.key = false;
+			this.context.jumpInput.touch = false;
 			this.context.isJumping = false;
+		}
 
 		if (this.context.isJumping)
 			return;
 
-		if (this.context.input.isJumping()) {
+		if (!this.context.isJumpReset)
+			return;
+
+		if (this.context.jumpInput.key || this.context.jumpInput.touch) {
 			//Allow jumping when grounded, but allow a little margin of error
 			if (this.context.isGrounded || this.context.timeInAir <= Constants.jump.coyote) {
 				//Only allow jumping if climbing up
@@ -122,6 +131,7 @@ export class PhysicsController {
 	}
 
 	private performJump() {
+		this.context.isJumpReset = false;
 		this.context.isJumping = true;
 		this.context.isClimbing = false;
 		this.context.player.setVelocityY(-Constants.player.jump.power);

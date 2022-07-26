@@ -1,6 +1,7 @@
 import {Scene} from 'phaser';
 import Constants from '../assets/data/constants.yml';
 import {DEBUG_CONTROLLER} from '../controller/DebugController';
+import JumpInputModel from '../model/JumpInput';
 import Sprite = Phaser.GameObjects.Sprite;
 import Key = Phaser.Input.Keyboard.Key;
 import Vector2 = Phaser.Math.Vector2;
@@ -19,8 +20,7 @@ export class UIOverlayScene extends Scene {
 	private jumpButton: Sprite;
 
 	private jumpInputKeys: Key[] = new Array();
-	private isJumpKeyDown = false;
-	private isJumpTouchDown = false;
+	private jumpTouchDown = false;
 
 	private horizontalTouchDirection: string = undefined;
 	private verticalTouchDirection: string = undefined;
@@ -118,43 +118,27 @@ export class UIOverlayScene extends Scene {
 		return pointer.isDown && pointer.x < 73 && pointer.y > 218;
 	}
 
-	public isJumping(): boolean {
-		//Extract the values to a variable, as doing an OR check will not guarantee the isJumpingTouch will be called
-		const key = this.isJumpingKey();
-		const touch = this.isJumpingTouch();
+	public getJumpInput(): JumpInputModel {
+		const key = this.isJumpKeyDown();
+		const touch = this.isJumpTouchDown();
 
-		return key || touch;
+		return new JumpInputModel(key, touch);
 	}
 
-	public isJumpingKey(): boolean {
-		if (!this.isAnyJumpKeyDown()) {
-			this.isJumpKeyDown = false;
-			return false;
-		}
-
-		//If key was already down (jumped earlier) ignore jump request
-		if (this.isJumpKeyDown)
-			return false;
-		else {
-			this.isJumpKeyDown = true;
-			return true;
-		}
+	public isJumpKeyDown(): boolean {
+		return this.isAnyJumpKeyDown();
 	}
 
 	private isAnyJumpKeyDown(): boolean {
-		for (const key of this.jumpInputKeys) {
-			if (key.isDown)
+		for (const button of this.jumpInputKeys) {
+			if (button.isDown)
 				return true;
 		}
 		return false;
 	}
 
-	private isJumpingTouch(): boolean {
-		if (this.isJumpTouchDown) {
-			this.isJumpTouchDown = false;
-			return true;
-		}
-		return false;
+	private isJumpTouchDown(): boolean {
+		return this.jumpTouchDown;
 	}
 
 	private createDPad() {
@@ -178,16 +162,18 @@ export class UIOverlayScene extends Scene {
 			.setName('button-jump');
 
 		this.jumpButton.on('pointerdown', function () {
-			ui.isJumpTouchDown = true;
+			ui.jumpTouchDown = true;
 			this.setFrame(1);
 		});
 
 		this.jumpButton.on('pointerup', function () {
 			this.setFrame(0);
+			ui.jumpTouchDown = false;
 		});
 
 		this.jumpButton.on('pointerout', function () {
 			this.setFrame(0);
+			ui.jumpTouchDown = false;
 		});
 	}
 

@@ -14,7 +14,7 @@ export default class GraphicsController {
 	}
 
 	private updateAnimations() {
-		if (!this.context.alive)
+		if (!this.context.isAlive)
 			return;
 
 		if (!this.context.isGrounded && !this.context.isClimbing) {

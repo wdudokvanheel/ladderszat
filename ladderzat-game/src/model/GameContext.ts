@@ -3,6 +3,7 @@ import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import {GameplayScene} from '../scenes/GameplayScene';
 import {UIOverlayScene} from '../scenes/UIOverlayScene';
+import JumpInputModel from './JumpInput';
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 
 export default class GameContext {
@@ -15,10 +16,13 @@ export default class GameContext {
 	public buckets: Group;
 	public exit: SpriteWithStaticBody;
 
-	public alive = true;
 
-	public isGrounded = false;
+	public jumpInput = new JumpInputModel();
 	public isJumping = false;
+	public isJumpReset = true;
+
+	public isAlive = true;
+	public isGrounded = false;
 	public isTouchingLadder = false;
 	public isOnTopOfLadder = false;
 	public isClimbing = false;
@@ -39,7 +43,7 @@ export default class GameContext {
 	}
 
 	public reset() {
-		this.alive = true;
+		this.isAlive = true;
 		this.isGrounded = false;
 		this.isJumping = false;
 		this.timeInAir = 0;
