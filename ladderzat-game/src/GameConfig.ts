@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import GameContext from './model/GameContext';
 import {GameOverScene} from './scenes/GameOverScene';
 import {GameplayScene} from './scenes/GameplayScene';
 import {InitScene} from './scenes/InitScene';
@@ -31,6 +32,11 @@ export default {
 			gravity: {y: 500},
 			debug: false
 		}
+	},
+	plugins: {
+		global: [
+			{key: 'context', plugin: GameContext, start: false, mapping: 'context'}
+		]
 	},
 	scene: [InitScene, GameplayScene, UIOverlayScene, GameOverScene]
 };

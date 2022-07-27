@@ -17,7 +17,7 @@
 - [ ] Bucket gfx
 - [x] Ladder sprite to black on restart
 - [x] iPhone safe area overlap
-- [ ] Destroy buckets on leaving
+- [x] Destroy buckets on leaving
 
 ### Improvements
 - [x] Button to orange on press

@@ -9,7 +9,7 @@ layout:
   input:
     height: 70
   gameplay:
-    height: 216
+    height: 217
 
 controls:
   dpad:
@@ -51,7 +51,7 @@ object:
   platform:
     width: 24
   ladder:
-    width: 10
+    width: 9
     height: 5
 
 gfx:

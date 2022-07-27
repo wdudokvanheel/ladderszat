@@ -8,7 +8,7 @@ import GameContext from '../model/GameContext';
 export class ObjectFactory {
 
 	createPlayer(physics: ArcadePhysics): SpriteWithDynamicBody {
-		const player = physics.add.sprite(Constants.screen.width / 2 - 12, Constants.world.height - 50, 'kris-idle');
+		const player = physics.add.sprite(0, 0, 'kris-idle');
 		player.setBounce(0);
 		player.setOrigin(0, 0);
 		player.setDataEnabled();
@@ -22,6 +22,7 @@ export class ObjectFactory {
 		const exit = physics.add.staticSprite(Constants.level1.exit.x, Constants.world.height - Constants.level1.exit.y, 'exit');
 		exit.setOrigin(0, 1);
 		exit.setImmovable(true);
+		exit.refreshBody();
 		return exit;
 	}
 
@@ -45,7 +46,7 @@ export class ObjectFactory {
 		const grp = group.create(10, Constants.world.height - 200, 'bucket-' + color);
 		const bucket = grp as SpriteWithDynamicBody;
 		bucket.setBounce(1, .6);
-		bucket.setMaxVelocity(125);
+		// bucket.setMaxVelocityX(50);
 		bucket.setCollideWorldBounds(true);
 		bucket.setVelocityX(40 + (Math.random() * 10));
 		bucket.setVelocityY(-Math.random() * 100);

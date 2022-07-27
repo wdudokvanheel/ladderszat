@@ -26,6 +26,8 @@ export class ImageLoader {
 		this.loader.image('ladder', images['objects']['ladder'])
 		this.loader.image('exit', images['objects']['exit'])
 		this.loader.image('logo', images['ui']['logo'])
+		this.loader.image('bg-level-1', images['bg']['level-1'])
+		this.loader.image('bg-level-2', images['bg']['level-2'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
 
 		this.loader.image('kris-idle', images['kris']['idle'])
@@ -71,7 +73,7 @@ export class ImageLoader {
 			this.anims.create({
 				key: 'bucket-' + color,
 				frameRate: 15,
-				frames: this.anims.generateFrameNumbers('bucket-' + color, {start: 0, end: 7}),
+				frames: this.anims.generateFrameNumbers('bucket-' + color, {start: 0, end: 3}),
 				repeat: -1
 			});
 		}

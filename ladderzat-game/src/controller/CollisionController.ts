@@ -13,10 +13,13 @@ export default class CollisionController {
 	constructor(physics: Phaser.Physics.Arcade.ArcadePhysics, context: GameContext) {
 		this.physics = physics;
 		this.context = context;
-		this.playerColliders = new Array();
+		this.playerColliders = [];
 	}
 
 	public setupCollisionDetection() {
+		//Set world bounds
+		this.physics.world.setBounds(1, 1, Constants.screen.width - 2, Constants.world.height - 2, true, true, true, true);
+
 		//Collider for buckets and platform
 		this.physics.add.collider(this.context.buckets, this.context.platforms, function (bucket: SpriteWithDynamicBody) {
 			if (bucket.body.y > Constants.world.height - 24)

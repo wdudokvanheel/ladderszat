@@ -1,12 +1,10 @@
-import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
-import platformsdata from '../assets/data/platforms.json'
+import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import Constants from '../assets/data/constants.yml'
 
 export class PlatformLoader {
-	public getPlatforms(physics: ArcadePhysics): StaticGroup {
+	public createPlatforms(physics: ArcadePhysics, data): StaticGroup {
 		const platforms = physics.add.staticGroup();
-		const data = this.loadPlatformsFromJson();
 		console.debug(`Loaded ${data.length} platforms`)
 
 		data.forEach(platform => {
@@ -23,10 +21,5 @@ export class PlatformLoader {
 			}
 		});
 		return platforms;
-	}
-
-	private loadPlatformsFromJson(): Platform[] {
-		const data = platformsdata as Platform[];
-		return data;
 	}
 }

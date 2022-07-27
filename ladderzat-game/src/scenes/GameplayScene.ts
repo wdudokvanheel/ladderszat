@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Constants from '../assets/data/constants.yml'
+import LevelData from '../assets/data/levels/*.json'
 import CollisionController from '../controller/CollisionController';
 import GraphicsController from '../controller/GraphicsController';
 import {PhysicsController} from '../controller/PhysicsController';
@@ -22,42 +23,66 @@ export class GameplayScene extends Phaser.Scene {
 	private timerNextBucket;
 	private timerDeath;
 
-	private running = true;
+	private playing = true;
 	private readonly context: GameContext;
 	private targetTimeScale = 1;
 
 	constructor() {
 		super('gameplay')
-		this.context = new GameContext(this);
 	}
 
 	preload() {
+		this.context.gameplay = this;
 		this.platformLoader = new PlatformLoader();
 		this.ladderLoader = new LadderLoader();
 		this.objectFactory = new ObjectFactory();
 	}
 
 	create() {
-		this.context.buckets = this.physics.add.group();
-
-		//Create game objects
-		this.context.platforms = this.platformLoader.getPlatforms(this.physics);
-		this.context.ladders = this.ladderLoader.getLadders(this.physics, this.make, this.add);
-		this.context.exit = this.objectFactory.createExit(this.physics);
+		this.physicsController = new PhysicsController(this.context);
+		this.collisionController = new CollisionController(this.physics, this.context);
+		this.graphicsController = new GraphicsController(this.context);
 
 		this.context.input = this.scene.get('ui') as UIOverlayScene;
+
+		this.initLevel();
+	}
+
+	private loadLevelData() {
+		this.context.leveldata = LevelData['level-' + this.context.level];
+		console.debug('Loading data for level ' + this.context.level + ': ' + this.context.leveldata.name);
+
+		//Create game objects
+		this.add.sprite(0, Constants.world.height, "bg-level-" + this.context.level).setOrigin(0, 1);
+
+		this.context.platforms = this.platformLoader.createPlatforms(this.physics, this.context.leveldata.platforms);
+		this.context.ladders = this.ladderLoader.createLadders(this.physics, this.make, this.add, this.textures, this.context.leveldata.ladders);
+		this.context.exit = this.objectFactory.createExit(this.physics);
+		this.context.buckets = this.physics.add.group();
+	}
+
+	private initLevel() {
+		console.debug('Initializing gameplay scene');
+		this.context.reset();
+		this.loadLevelData();
+		this.context.player = this.objectFactory.createPlayer(this.physics);
+		this.context.player.setPosition(this.context.leveldata.start.x, Constants.world.height - this.context.leveldata.start.y);
+
+		this.collisionController.setupCollisionDetection();
+		this.collisionController.createPlayerColliders();
 
 		//Setup camera
 		this.cameras.main.setSize(Constants.screen.width, Constants.layout.gameplay.height);
 		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.world.height);
-		this.physics.world.setBounds(1, 1, Constants.screen.width - 2, Constants.world.height - 2, true, true, true, true);
 
-		this.physicsController = new PhysicsController(this.context);
-		this.collisionController = new CollisionController(this.physics, this.context);
-		this.collisionController.setupCollisionDetection();
-		this.graphicsController = new GraphicsController(this.context);
+		//Set timescale
+		this.targetTimeScale = 1;
+		this.physics.world.timeScale = 1;
+		this.anims.globalTimeScale = 1;
 
-		this.setupNewGame();
+		this.playing = true;
+		this.timerDeath = 2000;
+		this.timerNextBucket = 2000;
 	}
 
 	update(time: number, delta: number) {
@@ -112,15 +137,17 @@ export class GameplayScene extends Phaser.Scene {
 				this.targetTimeScale = 1;
 			}
 
-			if (this.timerDeath <= 0)
+			if (this.timerDeath <= 0 && this.playing) {
+				this.playing = false;
 				this.scene.launch('gameover');
+			}
 
 			return true;
 		}
 		return false;
 	}
 
-	public onHit(enemy: SpriteWithDynamicBody) {
+	public onHit(player: SpriteWithDynamicBody, enemy: SpriteWithDynamicBody) {
 		if (!this.context.isAlive)
 			return;
 
@@ -128,11 +155,10 @@ export class GameplayScene extends Phaser.Scene {
 
 		//Slow down time
 		this.targetTimeScale = 8;
-
 		const corpse = this.objectFactory.createPlayerCorpse(this.physics, this.context);
 
 		//Add some forces away from the collision to the corpse and the colliding bucket
-		enemy.setVelocityY(-100);
+		enemy.setVelocityY(-150);
 		if (enemy.body.x > this.context.player.body.x) {
 			corpse.setVelocityX(-75);
 			enemy.setVelocityX(65);
@@ -156,23 +182,15 @@ export class GameplayScene extends Phaser.Scene {
 		}
 	}
 
-	public setupNewGame() {
-		this.running = true;
-		this.context.reset();
-		this.timerDeath = 2000;
-		this.timerNextBucket = 2000;
-		this.context.player = this.objectFactory.createPlayer(this.physics);
-		this.collisionController.createPlayerColliders();
-	}
-
 	private getCameraY(): number {
 		return Math.min(Constants.world.height - Constants.layout.gameplay.height, this.context.player.y - ((Constants.layout.gameplay.height) / 2) - this.context.player.height);
 	}
 
 	public onExit() {
+		this.context.level = 2;
 		this.context.destroyPlayer();
 		this.context.isAlive = false;
-		this.running = false;
+		this.playing = false;
 		this.scene.launch('gameover');
 	}
 }
