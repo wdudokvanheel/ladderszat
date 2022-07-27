@@ -2,8 +2,8 @@
 
 ### Character feel
 - [x] Force based movement
-- [ ] Jump buffer
-- [ ] Jump power & downward force on release
+- [x] Jump buffer
+- [x] Jump power & downward force on release
 - [ ] OnLandEvent
 - [ ] OnLand Anim
 - [ ] Screenshake on land based on speed
@@ -23,3 +23,4 @@
 - [x] Button to orange on press
 - [ ] Fix d-pad
 - [X] Make slowdown tween
+- [ ] Player -> bucket hitbox

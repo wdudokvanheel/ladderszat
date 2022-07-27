@@ -97,14 +97,20 @@ export class PhysicsController {
 	}
 
 	private updatePlayerJumping() {
-		if (!this.context.jumpInput.key && !this.context.jumpInput.touch)
+		this.context.player.body.setGravityY(0);
+		if (!this.context.jumpInput.key && !this.context.jumpInput.touch) {
 			this.context.isJumpReset = true;
+			if (this.context.isJumping && this.context.player.body.velocity.y < 0) {
+				this.context.player.body.setGravityY(900)
+			}
+		}
 
 		if (this.context.isGrounded && this.context.isJumping) {
 			this.context.jumpInput.key = false;
 			this.context.jumpInput.touch = false;
 			this.context.isJumping = false;
 		}
+
 
 		if (this.context.isJumping)
 			return;
