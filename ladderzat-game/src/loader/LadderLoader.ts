@@ -32,7 +32,7 @@ export class LadderLoader {
 			texture.setPosition(ladder.x, y);
 
 			//Create a matching rectangle for collision detection as it seems impossible with Phaser to center the physics offset with setSize(x, y, center)
-			var collision = factory.rectangle(ladder.x + 3, y, 4, height);
+			var collision = factory.rectangle(ladder.x + 3, y, 1, height);
 			collision.setOrigin(0, 1);
 			ladders.add(collision);
 		});

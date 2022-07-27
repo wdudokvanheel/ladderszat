@@ -32,6 +32,7 @@ camera:
 player:
   jump:
     power: 130
+    releasegravity: 400
   walk:
 #    maxspeed: 50
     maxspeed: 60
