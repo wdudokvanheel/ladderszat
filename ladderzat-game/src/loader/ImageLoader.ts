@@ -23,6 +23,7 @@ export class ImageLoader {
 		this.loader.image('gameover', images['ui']['gameover'])
 		this.loader.image('window', images['ui']['window'])
 		this.loader.image('platform', images['objects']['platform'])
+		this.loader.image('platform-danger', images['objects']['platform-danger'])
 		this.loader.image('ladder', images['objects']['ladder'])
 		this.loader.image('exit', images['objects']['exit'])
 		this.loader.image('logo', images['ui']['logo'])

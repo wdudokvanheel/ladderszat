@@ -2,7 +2,7 @@
   "name": "factory",
   "start": {
     "x": 10,
-    "y": 40
+    "y": 240
   },
   "exit": {
     "x": 10,
@@ -83,7 +83,8 @@
     {
       "x": 135,
       "y": 111,
-      "segments": 2
+      "segments": 2,
+      "type": "danger"
     },
     {
       "x": 17,
@@ -110,7 +111,8 @@
     {
       "x": 7,
       "y": 283,
-      "segments": 2
+      "segments": 2,
+      "type": "danger"
     }
   ]
 }
