@@ -27,11 +27,14 @@ export class ImageLoader {
 		this.loader.image('platform-danger', images['objects']['platform-danger'])
 		this.loader.image('ladder', images['objects']['ladder'])
 		this.loader.image('key', images['objects']['key'])
+		this.loader.image('mixer', images['objects']['mixer'])
+
 		this.loader.image('exit', images['objects']['exit'])
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.image('bg-level-1', images['bg']['level-1'])
 		this.loader.image('bg-level-2', images['bg']['level-2'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
+
 
 		this.loader.image('kris-idle', images['kris']['idle'])
 		this.loader.spritesheet('kris-dead', images['kris']['dead'], {frameWidth: 21, frameHeight: 10})
@@ -45,6 +48,7 @@ export class ImageLoader {
 		for (let i = 0; i < Constants.gfx.bucket.colors.length; i++) {
 			const color = Constants.gfx.bucket.colors[i];
 			this.loader.spritesheet('bucket-' + color, images['objects']['bucket-' + color], {frameWidth: 7, frameHeight: 7});
+			this.loader.spritesheet('mixer-' + color, images['objects']['mixer-' + color], {frameWidth: 17, frameHeight: 26})
 		}
 	}
 
@@ -81,8 +85,15 @@ export class ImageLoader {
 			const color = Constants.gfx.bucket.colors[i];
 
 			this.anims.create({
+				key: 'mixer-' + color,
+				frameRate: 60,
+				frames: this.anims.generateFrameNumbers('mixer-' + color, {start: 0, end: 3}),
+				repeat: -1
+			});
+
+			this.anims.create({
 				key: 'bucket-' + color,
-				frameRate: 15,
+				frameRate: 30,
 				frames: this.anims.generateFrameNumbers('bucket-' + color, {start: 0, end: 3}),
 				repeat: -1
 			});

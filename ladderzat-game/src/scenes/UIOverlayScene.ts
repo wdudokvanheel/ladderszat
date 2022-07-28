@@ -49,7 +49,9 @@ export class UIOverlayScene extends Scene {
 		this.createKeyboardListeners();
 
 		this.debugText = this.add.bitmapText(0, 278, 'main', '', 8);
-		this.score = this.add.bitmapText(4, 5, 'main', '0', 8);
+		this.score = this.add.bitmapText(156, 5, 'main', '0', 8);
+		this.score.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
+		this.score.setOrigin(1, 0)
 	}
 
 	update(time: number, delta: number) {

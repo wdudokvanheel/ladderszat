@@ -1,3 +1,4 @@
+import GameObject = Phaser.GameObjects.GameObject;
 import Group = Phaser.Physics.Arcade.Group;
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -81,5 +82,12 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 
 		this.player.destroy();
 		this.player = undefined;
+	}
+
+	public getObjectByName(name: string) : GameObject{
+		for(let object of this.collectibles.children.getArray()){
+			if(object.name === name)
+				return object;
+		}
 	}
 }

@@ -42,15 +42,13 @@ export class ObjectFactory {
 		return sprite;
 	}
 
-	createBucket(group: Group): SpriteWithDynamicBody {
-		const color = sample(Constants.gfx.bucket.colors);
+	createBucket(group: Group, color: string): SpriteWithDynamicBody {
 		const grp = group.create(10, Constants.world.height - 200, 'bucket-' + color);
 		const bucket = grp as SpriteWithDynamicBody;
 		bucket.setBounce(1, .6);
-		// bucket.setMaxVelocityX(50);
 		bucket.setCollideWorldBounds(true);
 		bucket.setVelocityX(40 + (Math.random() * 10));
-		bucket.setVelocityY(-Math.random() * 100);
+		bucket.setVelocityY(-50 - (Math.random() * 50));
 		bucket.anims.play('bucket-' + color);
 		bucket.refreshBody();
 		return bucket;
@@ -72,11 +70,14 @@ export class ObjectFactory {
 				sprite.setOrigin(0, 1);
 				sprite.refreshBody();
 				sprite.anims.play('coin');
-				sprite.setSize(2, 2, 2, sprite.height-4)
+				sprite.setSize(2, 2, 2, sprite.height - 4)
 				sprite.anims.setProgress(Math.random() * 4);
 				sprite.anims.timeScale = 0.9 + (Math.random() * 0.2);
+				sprite.body.setAllowGravity(false);
+				sprite.setDataEnabled();
+				sprite.data.set('collect', object.type);
 
-			} else if (object.type == 'key') {
+			} else if (object.type === 'key') {
 				var path = new Phaser.Curves.Path();
 				path.add(new Phaser.Curves.Line(new Phaser.Math.Vector2(object.x, Constants.world.height - object.y - 4), new Phaser.Math.Vector2(object.x, Constants.world.height - object.y + 4)));
 				sprite = add.follower(path, 0, 0, 'key');
@@ -88,11 +89,57 @@ export class ObjectFactory {
 					repeat: -1,
 				});
 				group.add(sprite, false);
-			}
+				sprite.body.setAllowGravity(false);
+				sprite.setDataEnabled();
+				sprite.data.set('collect', object.type);
+			} else if (object.type === 'mixer') {
+				sprite = group.create(object.x, Constants.world.height - object.y, object.type);
+				sprite.setName('mixer');
+				sprite.setOrigin(0, 1);
+				sprite.refreshBody();
+				sprite.body.setAllowGravity(false);
+				sprite.setDataEnabled();
+				sprite.resetMixing = function () {
+					this.data.set('color', sample(Constants.gfx.bucket.colors));
+					this.data.set('state', 'empty');
+					this.data.set('timer', 25);
+				}
+				sprite.resetMixing();
+				sprite.update = function () {
+					var timer = this.data.get('timer') ?? 0;
+					var state = this.data.get('state');
+					const target = 1;
 
-			sprite.body.setAllowGravity(false);
-			sprite.setDataEnabled();
-			sprite.data.set('collect', object.type);
+					if (state === 'empty') {
+						this.setTexture('mixer');
+						this.anims.stop();
+					}
+					if (state === 'mixing') {
+						let diff = target - this.anims.timeScale;
+						let movement = Math.pow(Math.abs(diff) * 0.5, 0.5) * Math.sign(diff);
+						this.anims.timeScale += movement / 10;
+					}
+
+					if (timer > 0) {
+						this.data.set('timer', --timer)
+						return;
+					}
+
+					var state = this.data.get('state');
+					if (state === 'empty') {
+						this.anims.play('mixer-' + this.data.get('color'), false);
+						this.anims.pause();
+						this.data.set('state', 'loading');
+						sprite.data.set('timer', 10);
+					}
+					if (state === 'loading') {
+						this.anims.play('mixer-' + this.data.get('color'), false);
+						this.data.set('state', 'mixing');
+						this.anims.timeScale = 0;
+						sprite.data.set('timer', 120);
+					}
+				}
+			}
 		});
 		return group;
 	}

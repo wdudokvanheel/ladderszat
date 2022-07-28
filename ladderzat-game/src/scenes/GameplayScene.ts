@@ -8,6 +8,7 @@ import {ObjectFactory} from '../factory/ObjectFactory';
 import {LadderLoader} from '../loader/LadderLoader';
 import {PlatformLoader} from '../loader/PlatformLoader';
 import GameContext from '../model/GameContext';
+import {MixerSprite} from '../model/MixerSprite';
 import {UIOverlayScene} from './UIOverlayScene';
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
@@ -105,6 +106,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.physicsController.update(delta);
 		this.graphicsController.update();
 
+		this.context.collectibles.runChildUpdate = true;
 		// DEBUG_CONTROLLER.setValue('V', this.context.player.body.velocity.x, false)
 		// DEBUG_CONTROLLER.setValue('G', this.context.isGrounded)
 		// DEBUG_CONTROLLER.setValue('J', this.context.isJumping)
@@ -176,12 +178,17 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	private generateBuckets(delta: number) {
+		let mixer = this.context.getObjectByName('mixer') as MixerSprite;
+		if (!mixer)
+			return;
+
 		this.timerNextBucket -= delta;
 		if (this.timerNextBucket <= 0) {
-			var bucket = this.objectFactory.createBucket(this.context.buckets);
-			bucket.x = -5;
-			bucket.y = 820;
-			this.timerNextBucket += (Math.random() * 1000) + 1500;
+			let bucket = this.objectFactory.createBucket(this.context.buckets, mixer.getData('color'));
+			mixer.resetMixing()
+			bucket.x = 19;
+			bucket.y = Constants.world.height - 200
+			this.timerNextBucket += (Math.random() * 500) + 2000;
 		}
 	}
 
