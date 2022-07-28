@@ -47,18 +47,18 @@ export class ObjectFactory {
 		const bucket = grp as SpriteWithDynamicBody;
 		bucket.setBounce(1, .6);
 		bucket.setCollideWorldBounds(true);
-		bucket.setVelocityX(40 + (Math.random() * 10));
-		bucket.setVelocityY(-50 - (Math.random() * 50));
+		bucket.setVelocityX(50 + (Math.random() * 10));
+		bucket.setVelocityY(-100 - (Math.random() * 50));
 		bucket.anims.play('bucket-' + color);
 		bucket.refreshBody();
 		return bucket;
 	}
 
 	createCollectibles(physics: Phaser.Physics.Arcade.ArcadePhysics, add, context: GameContext): Group {
-		if (!context.leveldata.objects)
-			return;
-
 		var group = physics.add.group();
+
+		if (!context.leveldata.objects)
+			return group;
 
 		context.leveldata.objects.forEach(object => {
 			var sprite;

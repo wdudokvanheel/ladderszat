@@ -188,7 +188,7 @@ export class GameplayScene extends Phaser.Scene {
 			mixer.resetMixing()
 			bucket.x = 19;
 			bucket.y = Constants.world.height - 200
-			this.timerNextBucket += (Math.random() * 500) + 2000;
+			this.timerNextBucket += (Math.random() * 500) + 3000;
 		}
 	}
 
