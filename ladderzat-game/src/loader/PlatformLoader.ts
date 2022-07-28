@@ -9,6 +9,10 @@ export class PlatformLoader {
 
 		data.forEach(platform => {
 			let delta = 0;
+			var name = 'platform';
+			if(platform.type)
+				name += '-' + platform.type;
+
 			if (platform.angled) {
 				if (platform.angled === 'up')
 					delta = 1;
@@ -17,7 +21,7 @@ export class PlatformLoader {
 			}
 
 			for (let i = 0; i < (platform.segments ?? 1); i++) {
-				platforms.create(platform.x + (i * Constants.object.platform.width), (-(platform.y + (i * delta))) + Constants.world.height, 'rail').setOrigin(0, 0).refreshBody();
+				platforms.create(platform.x + (i * Constants.object.platform.width), (-(platform.y + (i * delta))) + Constants.world.height, name).setOrigin(0, 0).refreshBody();
 			}
 		});
 		return platforms;

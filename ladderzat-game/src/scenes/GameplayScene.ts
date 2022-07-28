@@ -57,7 +57,7 @@ export class GameplayScene extends Phaser.Scene {
 
 		this.context.platforms = this.platformLoader.createPlatforms(this.physics, this.context.leveldata.platforms);
 		this.context.ladders = this.ladderLoader.createLadders(this.physics, this.make, this.add, this.textures, this.context.leveldata.ladders);
-		this.context.exit = this.objectFactory.createExit(this.physics);
+		this.context.exit = this.objectFactory.createExit(this.physics, this.context.leveldata.exit);
 		this.context.buckets = this.physics.add.group();
 	}
 

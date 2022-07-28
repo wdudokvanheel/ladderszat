@@ -4,6 +4,7 @@ import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
 import Constants from '../assets/data/constants.yml'
 import {sample} from '../main';
 import GameContext from '../model/GameContext';
+import Vector2 = Phaser.Math.Vector2;
 
 export class ObjectFactory {
 
@@ -18,8 +19,8 @@ export class ObjectFactory {
 		return player;
 	}
 
-	createExit(physics: ArcadePhysics){
-		const exit = physics.add.staticSprite(Constants.level1.exit.x, Constants.world.height - Constants.level1.exit.y, 'exit');
+	createExit(physics: ArcadePhysics, position: Vector2){
+		const exit = physics.add.staticSprite(position.x, Constants.world.height - position.y, 'exit');
 		exit.setOrigin(0, 1);
 		exit.setImmovable(true);
 		exit.refreshBody();

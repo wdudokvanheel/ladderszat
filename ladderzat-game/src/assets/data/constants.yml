@@ -20,11 +20,6 @@ controls:
       x: 7
       y: 7
 
-level1:
-  exit:
-    x: 10
-    y: 283
-
 camera:
   offset:
     y: 32

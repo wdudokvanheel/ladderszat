@@ -12,15 +12,15 @@
 
 ### Bugs
 - [X] Can't climb bottom of ladder
-- [ ] Camera
 - [x] Bucket collision
-- [ ] Bucket gfx
 - [x] Ladder sprite to black on restart
 - [x] iPhone safe area overlap
 - [x] Destroy buckets on leaving
+- [ ] Camera movement
+- [ ] Bucket gfx
 
 ### Improvements
 - [x] Button to orange on press
-- [ ] Fix d-pad
 - [X] Make slowdown tween
-- [ ] Player -> bucket hitbox
+- [ ] Fix d-pad
+- [ ] Shrink player -> bucket hitbox
