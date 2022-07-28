@@ -1,10 +1,10 @@
+import Vector2 = Phaser.Math.Vector2;
 import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
 import Group = Phaser.Physics.Arcade.Group;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import Constants from '../assets/data/constants.yml'
 import {sample} from '../main';
 import GameContext from '../model/GameContext';
-import Vector2 = Phaser.Math.Vector2;
 
 export class ObjectFactory {
 
@@ -19,7 +19,7 @@ export class ObjectFactory {
 		return player;
 	}
 
-	createExit(physics: ArcadePhysics, position: Vector2){
+	createExit(physics: ArcadePhysics, position: Vector2) {
 		const exit = physics.add.staticSprite(position.x, Constants.world.height - position.y, 'exit');
 		exit.setOrigin(0, 1);
 		exit.setImmovable(true);
@@ -56,4 +56,44 @@ export class ObjectFactory {
 		return bucket;
 	}
 
+	createCollectibles(physics: Phaser.Physics.Arcade.ArcadePhysics, add, context: GameContext): Group {
+		if (!context.leveldata.objects)
+			return;
+
+		var group = physics.add.group();
+
+		context.leveldata.objects.forEach(object => {
+			var sprite;
+			if (!object.type)
+				return
+
+			if (object.type === 'coin') {
+				sprite = group.create(object.x, Constants.world.height - object.y, object.type);
+				sprite.setOrigin(0, 1);
+				sprite.refreshBody();
+				sprite.anims.play('coin');
+				sprite.setSize(2, 2, 2, sprite.height-4)
+				sprite.anims.setProgress(Math.random() * 4);
+				sprite.anims.timeScale = 0.9 + (Math.random() * 0.2);
+
+			} else if (object.type == 'key') {
+				var path = new Phaser.Curves.Path();
+				path.add(new Phaser.Curves.Line(new Phaser.Math.Vector2(object.x, Constants.world.height - object.y - 4), new Phaser.Math.Vector2(object.x, Constants.world.height - object.y + 4)));
+				sprite = add.follower(path, 0, 0, 'key');
+				sprite.setOrigin(0, 1);
+				sprite.startFollow({
+					duration: 1500,
+					yoyo: true,
+					ease: 'Sine.easeInOut',
+					repeat: -1,
+				});
+				group.add(sprite, false);
+			}
+
+			sprite.body.setAllowGravity(false);
+			sprite.setDataEnabled();
+			sprite.data.set('collect', object.type);
+		});
+		return group;
+	}
 }

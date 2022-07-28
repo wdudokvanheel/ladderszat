@@ -1,10 +1,10 @@
 import Group = Phaser.Physics.Arcade.Group;
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 import {GameplayScene} from '../scenes/GameplayScene';
 import {UIOverlayScene} from '../scenes/UIOverlayScene';
 import JumpInputModel from './JumpInput';
-import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 
 export default class GameContext extends Phaser.Plugins.BasePlugin {
 	public gameplay: GameplayScene;
@@ -12,11 +12,13 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	//Level data
 	public leveldata;
 	public level = 1;
+
 	public player: SpriteWithDynamicBody;
 	public platforms: StaticGroup;
 	public ladders: StaticGroup;
 	public buckets: Group;
 	public exit: SpriteWithStaticBody;
+	public collectibles: Group;
 
 	//Input
 	public input: UIOverlayScene;
@@ -33,6 +35,8 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 
 	public touchingLadder = undefined;
 	public timeInAir = 0;
+
+	public score = 0;
 
 	constructor(pluginManager) {
 		super(pluginManager);

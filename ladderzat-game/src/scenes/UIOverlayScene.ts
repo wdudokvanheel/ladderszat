@@ -1,7 +1,9 @@
 import {Scene} from 'phaser';
 import Constants from '../assets/data/constants.yml';
 import {DEBUG_CONTROLLER} from '../controller/DebugController';
+import GameContext from '../model/GameContext';
 import JumpInputModel from '../model/JumpInput';
+import BitmapText = Phaser.GameObjects.BitmapText;
 import Sprite = Phaser.GameObjects.Sprite;
 import Key = Phaser.Input.Keyboard.Key;
 import Vector2 = Phaser.Math.Vector2;
@@ -16,6 +18,8 @@ export class UIOverlayScene extends Scene {
 		new Vector2(12, 27)
 	];
 
+	private context: GameContext;
+
 	private dpadButtons: Sprite[] = [];
 	private jumpButton: Sprite;
 
@@ -28,6 +32,7 @@ export class UIOverlayScene extends Scene {
 	private verticalKeyboardDirection: string = undefined;
 
 	private debugText;
+	private score: BitmapText;
 
 	constructor() {
 		super('ui');
@@ -44,6 +49,7 @@ export class UIOverlayScene extends Scene {
 		this.createKeyboardListeners();
 
 		this.debugText = this.add.bitmapText(0, 278, 'main', '', 8);
+		this.score = this.add.bitmapText(4, 5, 'main', '0', 8);
 	}
 
 	update(time: number, delta: number) {
@@ -61,6 +67,7 @@ export class UIOverlayScene extends Scene {
 		}
 
 		this.updateDPadButtonStates();
+		this.score.setText('' + this.context.score)
 		this.debugText.setText(DEBUG_CONTROLLER.getValues());
 	}
 

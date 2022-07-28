@@ -20,11 +20,13 @@ export class ImageLoader {
 		this.loader.spritesheet('button-dpad-left', images['ui']['button-dpad-left'], {frameWidth: 15, frameHeight: 18});
 
 		this.loader.image('background', images['ui']['background'])
+		this.loader.spritesheet('coin', images['objects']['coin'], {frameWidth: 9, frameHeight: 10})
 		this.loader.image('gameover', images['ui']['gameover'])
 		this.loader.image('window', images['ui']['window'])
 		this.loader.image('platform', images['objects']['platform'])
 		this.loader.image('platform-danger', images['objects']['platform-danger'])
 		this.loader.image('ladder', images['objects']['ladder'])
+		this.loader.image('key', images['objects']['key'])
 		this.loader.image('exit', images['objects']['exit'])
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.image('bg-level-1', images['bg']['level-1'])
@@ -47,6 +49,13 @@ export class ImageLoader {
 	}
 
 	public generateAnimations() {
+		this.anims.create({
+			key: 'coin',
+			frames: this.anims.generateFrameNumbers('coin', {start: 0, end: 5}),
+			frameRate: 7,
+			repeat: -1
+		});
+
 		this.anims.create({
 			key: 'kris-climb',
 			frames: this.anims.generateFrameNumbers('kris-climb', {start: 0, end: 1}),

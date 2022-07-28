@@ -2,12 +2,64 @@
   "name": "factory",
   "start": {
     "x": 10,
-    "y": 240
+    "y": 40
   },
   "exit": {
     "x": 10,
     "y": 283
   },
+  "objects": [
+    {
+      "type": "coin",
+      "x": 147,
+      "y": 50
+    },
+    {
+      "type": "coin",
+      "x": 127,
+      "y": 50
+    },
+    {
+      "type": "key",
+      "x": 141,
+      "y": 121
+    },
+    {
+      "type": "coin",
+      "x": 144,
+      "y": 157
+    },
+    {
+      "type": "coin",
+      "x": 120,
+      "y": 156
+    },
+    {
+      "type": "coin",
+      "x": 96,
+      "y": 155
+    },
+    {
+      "type": "coin",
+      "x": 72,
+      "y": 154
+    },
+    {
+      "type": "coin",
+      "x": 7,
+      "y": 247
+    },
+    {
+      "type": "coin",
+      "x": 25,
+      "y": 247
+    },
+    {
+      "type": "coin",
+      "x": 101,
+      "y": 247
+    }
+  ],
   "ladders": [
     {
       "x": 95,
@@ -98,9 +150,15 @@
       "angled": "up"
     },
     {
-      "x": -30,
-      "y": 189,
-      "segments": 7,
+      "x": -6,
+      "y": 187,
+      "segments": 2,
+      "type": "danger"
+    },
+    {
+      "x": 42,
+      "y": 186,
+      "segments": 4,
       "angled": "down"
     },
     {

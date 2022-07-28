@@ -10,6 +10,7 @@ import {PlatformLoader} from '../loader/PlatformLoader';
 import GameContext from '../model/GameContext';
 import {UIOverlayScene} from './UIOverlayScene';
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 
 export class GameplayScene extends Phaser.Scene {
 	private platformLoader: PlatformLoader;
@@ -55,10 +56,11 @@ export class GameplayScene extends Phaser.Scene {
 		//Create game objects
 		this.add.sprite(0, Constants.world.height, "bg-level-" + this.context.level).setOrigin(0, 1);
 
+		this.context.buckets = this.physics.add.group();
 		this.context.platforms = this.platformLoader.createPlatforms(this.physics, this.context.leveldata.platforms);
 		this.context.ladders = this.ladderLoader.createLadders(this.physics, this.make, this.add, this.textures, this.context.leveldata.ladders);
 		this.context.exit = this.objectFactory.createExit(this.physics, this.context.leveldata.exit);
-		this.context.buckets = this.physics.add.group();
+		this.context.collectibles = this.objectFactory.createCollectibles(this.physics, this.add, this.context);
 	}
 
 	private initLevel() {
@@ -83,6 +85,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.playing = true;
 		this.timerDeath = 2000;
 		this.timerNextBucket = 2000;
+		this.input.on('pointerdown', (e) => console.log('Click @ ', Math.round(e.worldX - .5), Math.round((Constants.world.height - e.worldY - .5))));
 	}
 
 	update(time: number, delta: number) {
@@ -192,5 +195,15 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.isAlive = false;
 		this.playing = false;
 		this.scene.launch('gameover');
+	}
+
+	onCollect(player: SpriteWithDynamicBody, object: SpriteWithStaticBody) {
+		if (object.getData('collect') === 'coin') {
+			object.destroy();
+			this.context.score += 100;
+		} else if (object.getData('collect') === 'key') {
+			object.destroy();
+			this.context.score += 500;
+		}
 	}
 }
