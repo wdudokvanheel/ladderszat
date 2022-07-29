@@ -1,6 +1,6 @@
 {
   "name": "ladderzat",
-  "version": "0.6",
+  "version": "0.7",
   "scripts": {
     "start": "parcel src/index.html -p 8000",
     "build": "parcel build src/index.html"

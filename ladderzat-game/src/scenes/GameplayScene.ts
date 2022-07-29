@@ -58,7 +58,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.add.sprite(0, Constants.world.height, "bg-level-" + this.context.level).setOrigin(0, 1);
 
 		this.context.buckets = this.physics.add.group();
-		this.context.platforms = this.platformLoader.createPlatforms(this.physics, this.context.leveldata.platforms);
+		this.context.platforms = this.platformLoader.createPlatforms(this.physics, this.context.leveldata.name, this.context.leveldata.platforms);
 		this.context.ladders = this.ladderLoader.createLadders(this.physics, this.make, this.add, this.textures, this.context.leveldata.ladders);
 		this.context.exit = this.objectFactory.createExit(this.physics, this.context.leveldata.exit);
 		this.context.collectibles = this.objectFactory.createCollectibles(this.physics, this.add, this.context);
@@ -197,11 +197,10 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	public onExit() {
-		this.context.level = 2;
 		this.context.destroyPlayer();
 		this.context.isAlive = false;
 		this.playing = false;
-		this.scene.launch('gameover');
+		this.scene.launch('levelcomplete');
 	}
 
 	onCollect(player: SpriteWithDynamicBody, object: SpriteWithStaticBody) {

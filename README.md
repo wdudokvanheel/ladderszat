@@ -16,7 +16,7 @@
 - [x] Ladder sprite to black on restart
 - [x] iPhone safe area overlap
 - [x] Destroy buckets on leaving
-- [ ] Camera movement
+- [x] Camera movement
 - [ ] Bucket gfx
 
 ### Improvements

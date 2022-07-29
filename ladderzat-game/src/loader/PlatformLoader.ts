@@ -3,15 +3,17 @@ import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import Constants from '../assets/data/constants.yml'
 
 export class PlatformLoader {
-	public createPlatforms(physics: ArcadePhysics, data): StaticGroup {
+	public createPlatforms(physics: ArcadePhysics, level: string, data): StaticGroup {
 		const platforms = physics.add.staticGroup();
 		console.debug(`Loaded ${data.length} platforms`)
 
 		data.forEach(platform => {
 			let delta = 0;
-			var name = 'platform';
+			var name = 'platform-';
 			if(platform.type)
-				name += '-' + platform.type;
+				name += platform.type;
+			else
+				name += level
 
 			if (platform.angled) {
 				if (platform.angled === 'up')

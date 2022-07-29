@@ -3,6 +3,7 @@ import GameContext from './model/GameContext';
 import {GameOverScene} from './scenes/GameOverScene';
 import {GameplayScene} from './scenes/GameplayScene';
 import {InitScene} from './scenes/InitScene';
+import {LevelCompleteScene} from './scenes/LevelCompleteScene';
 import {UIOverlayScene} from './scenes/UIOverlayScene';
 
 export default {
@@ -38,5 +39,5 @@ export default {
 			{key: 'context', plugin: GameContext, start: false, mapping: 'context'}
 		]
 	},
-	scene: [InitScene, GameplayScene, UIOverlayScene, GameOverScene]
+	scene: [InitScene, GameplayScene, UIOverlayScene, GameOverScene, LevelCompleteScene]
 };
