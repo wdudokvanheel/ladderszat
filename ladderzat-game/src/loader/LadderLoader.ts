@@ -4,17 +4,21 @@ import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import TextureManager = Phaser.Textures.TextureManager;
 import Constants from '../assets/data/constants.yml'
+import GameContext from '../model/GameContext';
 
 export class LadderLoader {
-	public createLadders(physics: ArcadePhysics, creator: GameObjectCreator, factory: GameObjectFactory, textures: TextureManager, data): StaticGroup {
+	public createLadders(physics: ArcadePhysics, creator: GameObjectCreator, factory: GameObjectFactory, textures: TextureManager, context: GameContext): StaticGroup {
 		const ladders = physics.add.staticGroup();
 
-		console.debug(`Loaded ${data.length} ladders`)
+		if (!context.leveldata.ladders || context.leveldata.ladders.length == 0)
+			return ladders;
 
-		data.forEach(ladder => {
+		console.debug(`Creating ${context.leveldata.ladders.length} ladders`)
+		var name = context.leveldata.name;
+		context.leveldata.ladders.forEach(ladder => {
 			let height = (ladder.segments ?? 1) * Constants.object.ladder.height;
 			let y = (-ladder.y) + Constants.world.height;
-			const key = 'ladder-' + (ladder.segments ?? 1);
+			const key = 'ladder-' + name + '-' + (ladder.segments ?? 1);
 
 			//Create texture with required amount of steps if it doesn't exist
 			if (!textures.exists(key)) {
@@ -27,7 +31,7 @@ export class LadderLoader {
 
 				//Render the segments in
 				for (let i = 0; i < ladder.segments ?? 1; i++) {
-					texture.draw('ladder', 0, i * 5);
+					texture.draw('ladder-' + name, 0, i * 5);
 				}
 				texture.saveTexture(key);
 			}

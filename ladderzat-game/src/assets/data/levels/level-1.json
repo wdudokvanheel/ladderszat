@@ -1,14 +1,16 @@
 {
   "name": "factory",
   "start": {
-    "x": 10,
-    "y": 40
+    "x": 24,
+    "y": 27
   },
   "exit": {
     "x": 10,
     "y": 283
   },
-  "objects": [
+  "props": [
+  ],
+  "collectibles": [
     {
       "type": "mixer",
       "x": 12,
@@ -63,11 +65,33 @@
       "type": "coin",
       "x": 102,
       "y": 247
+    }
+  ],
+  "objects": [
+    {
+      "type": "static-bucket-red",
+      "x": 3,
+      "y": 6
     },
     {
-      "type": "coin",
-      "x": 143,
-      "y": 247
+      "type": "bucket-stack",
+      "x": 140,
+      "y": 243
+    },
+    {
+      "type": "static-bucket-red",
+      "x": 2,
+      "y": 187
+    },
+    {
+      "type": "static-bucket-red",
+      "x": 3,
+      "y": 193
+    },
+    {
+      "type": "alarm",
+      "x": 83,
+      "y": 234
     }
   ],
   "ladders": [
@@ -97,7 +121,7 @@
       "segments": 7
     },
     {
-      "x": 129,
+      "x": 125,
       "y": 183,
       "segments": 12
     },

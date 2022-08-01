@@ -86,7 +86,6 @@ export class UIOverlayScene extends Scene {
 			this.dpadButtons[2].setFrame(1);
 	}
 
-
 	public getHorizontalDirection(): string {
 		if (this.horizontalTouchDirection === 'left' || this.horizontalKeyboardDirection === 'left')
 			return "left";

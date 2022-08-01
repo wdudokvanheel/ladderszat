@@ -7,7 +7,6 @@ import {sample} from '../main';
 import GameContext from '../model/GameContext';
 
 export class ObjectFactory {
-
 	createPlayer(physics: ArcadePhysics): SpriteWithDynamicBody {
 		const player = physics.add.sprite(0, 0, 'kris-idle');
 		player.setBounce(0);
@@ -54,13 +53,38 @@ export class ObjectFactory {
 		return bucket;
 	}
 
-	createCollectibles(physics: Phaser.Physics.Arcade.ArcadePhysics, add, context: GameContext): Group {
+	createObjects(physics: Phaser.Physics.Arcade.ArcadePhysics, add, context: GameContext): Group {
 		var group = physics.add.group();
 
 		if (!context.leveldata.objects)
 			return group;
 
 		context.leveldata.objects.forEach(object => {
+			var sprite;
+			if (!object.type)
+				return
+
+			sprite = group.create(object.x, Constants.world.height - object.y, object.type);
+			sprite.setOrigin(0, 1);
+			sprite.refreshBody();
+			sprite.body.setAllowGravity(false);
+			sprite.body.immovable = true;
+
+			if (object.type === 'alarm') {
+				sprite.anims.play('alarm', true);
+			}
+		});
+		return group;
+	}
+
+	createCollectibles(physics: Phaser.Physics.Arcade.ArcadePhysics, add, context: GameContext): Group {
+		var group = physics.add.group();
+
+		if (!context.leveldata.collectibles)
+			return group;
+
+		group.runChildUpdate = true;
+		context.leveldata.collectibles.forEach(object => {
 			var sprite;
 			if (!object.type)
 				return
@@ -77,10 +101,10 @@ export class ObjectFactory {
 				sprite.setDataEnabled();
 				sprite.data.set('collect', object.type);
 
-			} else if (object.type === 'key') {
+			} else if (object.type === 'key' || object.type === 'mic') {
 				var path = new Phaser.Curves.Path();
 				path.add(new Phaser.Curves.Line(new Phaser.Math.Vector2(object.x, Constants.world.height - object.y - 4), new Phaser.Math.Vector2(object.x, Constants.world.height - object.y + 4)));
-				sprite = add.follower(path, 0, 0, 'key');
+				sprite = add.follower(path, 0, 0, object.type);
 				sprite.setOrigin(0, 1);
 				sprite.startFollow({
 					duration: 1500,
@@ -142,5 +166,18 @@ export class ObjectFactory {
 			}
 		});
 		return group;
+	}
+
+	createProps(add: Phaser.GameObjects.GameObjectFactory, context: GameContext) {
+		if (!context.leveldata.props)
+			return;
+
+		context.leveldata.props.forEach(object => {
+			if (!object.type)
+				return
+
+			var sprite = add.image(object.x, Constants.world.height - object.y, object.type);
+			sprite.setOrigin(0, 1);
+		});
 	}
 }

@@ -1,6 +1,9 @@
-## TODO
+# Ladderzat - To Do
+
+## General
 
 ### Character feel
+
 - [x] Force based movement
 - [x] Jump buffer
 - [x] Jump power & downward force on release
@@ -11,6 +14,7 @@
 - [ ] Leg bend anim on jump
 
 ### Bugs
+
 - [X] Can't climb bottom of ladder
 - [x] Bucket collision
 - [x] Ladder sprite to black on restart
@@ -20,7 +24,36 @@
 - [ ] Bucket gfx
 
 ### Improvements
+
 - [x] Button to orange on press
 - [X] Make slowdown tween
 - [ ] Fix d-pad
 - [ ] Shrink player -> bucket hitbox
+- [ ] Particle FX
+
+## Levels
+
+### Level 1
+
+- [ ] Background (vents, ducts, large rails)
+- [ ] Lock door
+- [ ] Random objects
+    - [ ] buckets
+    - [ ] screw?
+- [ ] More collectibles?
+- [ ] Longer level?
+
+### Level 2
+
+- [ ] Few platforms / ladders
+- [ ] Wet floor
+- [ ] Construction sign
+- [ ] Collectibles
+    - [ ] Guitar
+    - [ ] Desk
+    - [ ] Speakers
+    - [x] Mic?
+    - [ ] Drums?
+- [ ] Objects
+    - [ ] Couch
+- [ ] Background

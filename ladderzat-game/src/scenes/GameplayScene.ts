@@ -58,10 +58,12 @@ export class GameplayScene extends Phaser.Scene {
 		this.add.sprite(0, Constants.world.height, "bg-level-" + this.context.level).setOrigin(0, 1);
 
 		this.context.buckets = this.physics.add.group();
+		this.objectFactory.createProps(this.add, this.context);
 		this.context.platforms = this.platformLoader.createPlatforms(this.physics, this.context.leveldata.name, this.context.leveldata.platforms);
-		this.context.ladders = this.ladderLoader.createLadders(this.physics, this.make, this.add, this.textures, this.context.leveldata.ladders);
+		this.context.ladders = this.ladderLoader.createLadders(this.physics, this.make, this.add, this.textures, this.context);
 		this.context.exit = this.objectFactory.createExit(this.physics, this.context.leveldata.exit);
 		this.context.collectibles = this.objectFactory.createCollectibles(this.physics, this.add, this.context);
+		this.context.objects = this.objectFactory.createObjects(this.physics, this.add, this.context);
 	}
 
 	private initLevel() {
@@ -106,7 +108,6 @@ export class GameplayScene extends Phaser.Scene {
 		this.physicsController.update(delta);
 		this.graphicsController.update();
 
-		this.context.collectibles.runChildUpdate = true;
 		// DEBUG_CONTROLLER.setValue('V', this.context.player.body.velocity.x, false)
 		// DEBUG_CONTROLLER.setValue('G', this.context.isGrounded)
 		// DEBUG_CONTROLLER.setValue('J', this.context.isJumping)
@@ -207,7 +208,7 @@ export class GameplayScene extends Phaser.Scene {
 		if (object.getData('collect') === 'coin') {
 			object.destroy();
 			this.context.score += 100;
-		} else if (object.getData('collect') === 'key') {
+		} else if (object.getData('collect') === 'key' || object.getData('collect') === 'mic') {
 			object.destroy();
 			this.context.score += 500;
 		}

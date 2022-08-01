@@ -11,7 +11,7 @@ export class LevelCompleteScene extends Scene {
 	}
 
 	create() {
-		let textLevel = this.add.bitmapText(0, 0, 'main', 'Level', 8);
+		let textLevel = this.add.bitmapText(0, 0, 'main', 'Level ' + this.context.level, 8);
 		textLevel.setPosition((160 - textLevel.width) / 2, 32);
 		textLevel.setTintFill(Phaser.Display.Color.ValueToColor('#74a130').color32);
 

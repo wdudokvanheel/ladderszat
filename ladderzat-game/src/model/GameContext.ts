@@ -19,7 +19,10 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	public ladders: StaticGroup;
 	public buckets: Group;
 	public exit: SpriteWithStaticBody;
+	//Items that can be collected
 	public collectibles: Group;
+	//Objects in level that collide
+	public objects: Group;
 
 	//Input
 	public input: UIOverlayScene;

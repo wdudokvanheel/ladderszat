@@ -1,26 +1,135 @@
 {
   "name": "studio",
-  
   "start": {
-    "x": 75,
-    "y": 200
+    "x": 10,
+    "y": 40
   },
   "exit": {
     "x": 10,
     "y": 283
   },
+  "props": [
+    {
+      "x": 11,
+      "y": 85,
+      "type": "hang-light"
+    },
+    {
+      "type": "beams-triple",
+      "x": 32,
+      "y": 6
+    },
+    {
+      "type": "beams-double",
+      "x": 5,
+      "y": 103
+    },
+    {
+      "type": "beams",
+      "x": 127,
+      "y": -5
+    },
+    {
+      "type": "beams",
+      "x": 127,
+      "y": 30
+    },
+    {
+      "type": "beams",
+      "x": 127,
+      "y": 65
+    }
+  ],
   "ladders": [
     {
-      "x": 95,
-      "y": 8,
-      "segments": 24
+      "x": 37,
+      "y": 41,
+      "segments": 13
+    },
+    {
+      "x": 140,
+      "y": 100,
+      "segments": 13
+    }
+  ],
+  "collectibles": [
+    {
+      "x": 135,
+      "y": 74,
+      "type": "coin"
+    },
+    {
+      "x": 63,
+      "y": 48,
+      "type": "coin"
+    },
+    {
+      "x": 85,
+      "y": 48,
+      "type": "coin"
+    },
+    {
+      "x": 26,
+      "y": 144,
+      "type": "mic"
+    }
+  ],
+  "objects": [
+    {
+      "x": 108,
+      "y": 6,
+      "type": "static-bucket-red"
+    },
+    {
+      "x": 116,
+      "y": 6,
+      "type": "static-bucket-blue"
+    },
+    {
+      "x": 67,
+      "y": 106,
+      "type": "crate"
     }
   ],
   "platforms": [
     {
-      "x": -2,
+      "x": 0,
       "y": 6,
+      "segments": 10,
+      "type": "wood-floor"
+    },
+    {
+      "x": 31,
+      "y": 41,
       "segments": 3
+    },
+    {
+      "x": 127,
+      "y": 30
+    },
+    {
+      "x": 127,
+      "y": 65
+    },
+    {
+      "x": 127,
+      "y": 100
+    },
+    {
+      "x": -1,
+      "y": 106,
+      "segments": 4,
+      "type": "wood-floor"
+    },
+    {
+      "x": 5,
+      "y": 128,
+      "segments": 1
+    },
+    {
+      "x": 28,
+      "y": 128,
+      "segments": 1
     }
   ]
 }

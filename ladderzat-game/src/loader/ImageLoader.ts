@@ -24,17 +24,27 @@ export class ImageLoader {
 		this.loader.image('gameover', images['ui']['gameover'])
 		this.loader.image('window', images['ui']['window'])
 		this.loader.image('platform-factory', images['objects']['platform-factory'])
+		this.loader.image('hang-light', images['objects']['hang-light'])
 		this.loader.image('platform-studio', images['objects']['platform-studio'])
 		this.loader.image('platform-danger', images['objects']['platform-danger'])
-		this.loader.image('ladder', images['objects']['ladder'])
+		this.loader.image('platform-wood-floor', images['objects']['platform-woodfloor'])
+		this.loader.image('ladder-studio', images['objects']['ladder-studio'])
+		this.loader.image('ladder-factory', images['objects']['ladder-factory'])
+		this.loader.image('crate', images['objects']['crate'])
+		this.loader.image('mic', images['objects']['mic'])
+		this.loader.image('beams', images['objects']['beams'])
+		this.loader.image('beams-double', images['objects']['beams-double'])
+		this.loader.image('beams-triple', images['objects']['beams-triple'])
 		this.loader.image('key', images['objects']['key'])
 		this.loader.image('mixer', images['objects']['mixer'])
+		this.loader.image('bucket-stack', images['objects']['bucket-stack'])
 
 		this.loader.image('exit', images['objects']['exit'])
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.image('bg-level-1', images['bg']['level-1'])
 		this.loader.image('bg-level-2', images['bg']['level-2'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
+		this.loader.spritesheet('alarm', images['objects']['alarm'], {frameWidth: 3, frameHeight: 3})
 
 
 		this.loader.image('kris-idle', images['kris']['idle'])
@@ -49,7 +59,8 @@ export class ImageLoader {
 		for (let i = 0; i < Constants.gfx.bucket.colors.length; i++) {
 			const color = Constants.gfx.bucket.colors[i];
 			this.loader.spritesheet('bucket-' + color, images['objects']['bucket-' + color], {frameWidth: 7, frameHeight: 7});
-			this.loader.spritesheet('mixer-' + color, images['objects']['mixer-' + color], {frameWidth: 17, frameHeight: 26})
+			this.loader.spritesheet('mixer-' + color, images['objects']['mixer-' + color], {frameWidth: 17, frameHeight: 25});
+			this.loader.image('static-bucket-' + color, images['objects']['static-bucket-' + color]);
 		}
 	}
 
@@ -58,6 +69,13 @@ export class ImageLoader {
 			key: 'coin',
 			frames: this.anims.generateFrameNumbers('coin', {start: 0, end: 5}),
 			frameRate: 7,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'alarm',
+			frames: this.anims.generateFrameNumbers('alarm', {start: 0, end: 3}),
+			frameRate: 5,
 			repeat: -1
 		});
 
