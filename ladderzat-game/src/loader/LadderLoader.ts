@@ -31,7 +31,7 @@ export class LadderLoader {
 
 				//Render the segments in
 				for (let i = 0; i < ladder.segments ?? 1; i++) {
-					texture.draw('ladder-' + name, 0, i * 5);
+					texture.draw('ladder-' + name + (i == 0 ? '-head' : ''), 0, i * 5);
 				}
 				texture.saveTexture(key);
 			}

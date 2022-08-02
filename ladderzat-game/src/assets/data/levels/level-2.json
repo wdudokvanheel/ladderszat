@@ -6,11 +6,15 @@
   },
   "exit": {
     "x": 10,
-    "y": 283
+    "y": 583
   },
   "props": [
     {
-      "x": 11,
+      "x": 13,
+      "y": 85,
+      "type": "hang-light"
+    },    {
+      "x": 73,
       "y": 85,
       "type": "hang-light"
     },
@@ -55,17 +59,27 @@
   "collectibles": [
     {
       "x": 135,
-      "y": 74,
+      "y": 77,
       "type": "coin"
     },
     {
       "x": 63,
-      "y": 48,
+      "y": 46,
       "type": "coin"
     },
     {
       "x": 85,
-      "y": 48,
+      "y": 46,
+      "type": "coin"
+    },
+    {
+      "x": 96,
+      "y": 183,
+      "type": "coin"
+    },
+    {
+      "x": 58,
+      "y": 195,
       "type": "coin"
     },
     {
@@ -130,6 +144,30 @@
       "x": 28,
       "y": 128,
       "segments": 1
+    },
+    {
+      "x": 130,
+      "y": 165,
+      "segments": 2,
+      "type": "wood-floor"
+    },
+    {
+      "x": -16,
+      "y": 201,
+      "segments": 2,
+      "type": "wood-floor"
+    },
+    {
+      "x": 88,
+      "y": 177,
+      "segments": 1,
+      "type": "factory"
+    },
+    {
+      "x": 50,
+      "y": 189,
+      "segments": 1,
+      "type": "factory"
     }
   ]
 }
