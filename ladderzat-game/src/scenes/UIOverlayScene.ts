@@ -68,12 +68,12 @@ export class UIOverlayScene extends Scene {
 			}
 		}
 
-		this.updateDPadButtonStates();
+		this.updateButtonStates();
 		this.score.setText('' + this.context.score)
 		this.debugText.setText(DEBUG_CONTROLLER.getValues());
 	}
 
-	private updateDPadButtonStates() {
+	private updateButtonStates() {
 		this.dpadButtons.forEach(btn => btn.setFrame(0));
 		if (this.getHorizontalDirection() == 'right')
 			this.dpadButtons[1].setFrame(1);

@@ -41,18 +41,6 @@ export class ObjectFactory {
 		return sprite;
 	}
 
-	createBucket(group: Group, color: string): SpriteWithDynamicBody {
-		const grp = group.create(10, Constants.world.height - 200, 'bucket-' + color);
-		const bucket = grp as SpriteWithDynamicBody;
-		bucket.setBounce(1, .6);
-		bucket.setCollideWorldBounds(true);
-		bucket.setVelocityX(50 + (Math.random() * 10));
-		bucket.setVelocityY(-100 - (Math.random() * 50));
-		bucket.anims.play('bucket-' + color);
-		bucket.refreshBody();
-		return bucket;
-	}
-
 	createObjects(physics: Phaser.Physics.Arcade.ArcadePhysics, add, context: GameContext): Group {
 		var group = physics.add.group();
 
@@ -71,7 +59,23 @@ export class ObjectFactory {
 			sprite.body.immovable = true;
 
 			if (object.type === 'alarm') {
-				sprite.anims.play('alarm', true);
+				sprite.anims.play(object.type, true);
+			}
+			if (object.type === 'pipe') {
+				var particles = add.particles('particle-water');
+				var emitter = particles.createEmitter({
+					lifespan: 5000,
+					angle: {min: 245, max: 300},
+					speed: {min: 50, max: 85},
+					bounds: {x: 35, y: sprite.y, w: 85, h: 49},
+					bounce: 0.2,
+					frequency: 1,
+					quantity: 3,
+					gravityY: 300,
+					collideTop: false,
+					collideBottom: true,
+				});
+				emitter.startFollow(sprite, 67, -3);
 			}
 		});
 		return group;
@@ -169,15 +173,24 @@ export class ObjectFactory {
 	}
 
 	createProps(add: Phaser.GameObjects.GameObjectFactory, context: GameContext) {
+		var group = add.group();
+
 		if (!context.leveldata.props)
-			return;
+			return group;
 
 		context.leveldata.props.forEach(object => {
 			if (!object.type)
 				return
 
-			var sprite = add.image(object.x, Constants.world.height - object.y, object.type);
+			var sprite = group.create(object.x, Constants.world.height - object.y, object.type);
 			sprite.setOrigin(0, 1);
+			sprite.setName(object.type);
+
+			if (object.type === 'alarm' || object.type === 'breaker-box-wire') {
+				sprite.anims.play(object.type, true);
+			}
 		});
+
+		return group;
 	}
 }

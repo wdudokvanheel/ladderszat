@@ -6,7 +6,7 @@ import TextureManager = Phaser.Textures.TextureManager;
 import Constants from '../assets/data/constants.yml'
 import GameContext from '../model/GameContext';
 
-export class LadderLoader {
+export class LadderFactory {
 	public createLadders(physics: ArcadePhysics, creator: GameObjectCreator, factory: GameObjectFactory, textures: TextureManager, context: GameContext): StaticGroup {
 		const ladders = physics.add.staticGroup();
 

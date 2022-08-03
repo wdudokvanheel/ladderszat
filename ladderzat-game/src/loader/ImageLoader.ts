@@ -19,11 +19,17 @@ export class ImageLoader {
 		this.loader.spritesheet('button-dpad-down', images['ui']['button-dpad-down'], {frameWidth: 17, frameHeight: 16});
 		this.loader.spritesheet('button-dpad-left', images['ui']['button-dpad-left'], {frameWidth: 15, frameHeight: 18});
 
+		this.loader.image('particle-plus', images['particles']['plus'])
+		this.loader.image('particle-water', images['particles']['water'])
+		this.loader.image('particle-power', images['particles']['power'])
+		this.loader.image('particle-white', images['particles']['white'])
+
 		this.loader.image('background', images['ui']['background'])
 		this.loader.spritesheet('coin', images['objects']['coin'], {frameWidth: 9, frameHeight: 10})
 		this.loader.image('gameover', images['ui']['gameover'])
 		this.loader.image('window', images['ui']['window'])
 		this.loader.image('platform-factory', images['objects']['platform-factory'])
+		this.loader.image('water', images['objects']['water'])
 		this.loader.image('hang-light', images['objects']['hang-light'])
 		this.loader.image('platform-studio', images['objects']['platform-studio'])
 		this.loader.image('platform-danger', images['objects']['platform-danger'])
@@ -33,6 +39,7 @@ export class ImageLoader {
 		this.loader.image('ladder-factory', images['objects']['ladder-factory'])
 		this.loader.image('ladder-factory-head', images['objects']['ladder-factory-head'])
 		this.loader.image('crate', images['objects']['crate'])
+		this.loader.image('pipe', images['objects']['pipe'])
 		this.loader.image('mic', images['objects']['mic'])
 		this.loader.image('beams', images['objects']['beams'])
 		this.loader.image('beams-double', images['objects']['beams-double'])
@@ -40,13 +47,17 @@ export class ImageLoader {
 		this.loader.image('key', images['objects']['key'])
 		this.loader.image('mixer', images['objects']['mixer'])
 		this.loader.image('bucket-stack', images['objects']['bucket-stack'])
+		this.loader.image('breaker-box', images['objects']['breaker-box'])
 
 		this.loader.image('exit', images['objects']['exit'])
+		this.loader.image('warning', images['objects']['warning'])
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.image('bg-level-1', images['bg']['level-1'])
 		this.loader.image('bg-level-2', images['bg']['level-2'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
 		this.loader.spritesheet('alarm', images['objects']['alarm'], {frameWidth: 3, frameHeight: 3})
+		this.loader.spritesheet('breaker-box-wire', images['objects']['breaker-box-wire'], {frameWidth: 15, frameHeight: 9})
+		this.loader.spritesheet('wire', images['objects']['wire'], {frameWidth: 23, frameHeight: 13})
 
 
 		this.loader.image('kris-idle', images['kris']['idle'])
@@ -67,6 +78,19 @@ export class ImageLoader {
 	}
 
 	public generateAnimations() {
+		this.anims.create({
+			key: 'wire-on',
+			frames: this.anims.generateFrameNumbers('wire', {start: 0, end: 2}),
+			frameRate: 3,
+		});
+
+		this.anims.create({
+			key: 'breaker-box-wire',
+			frames: this.anims.generateFrameNumbers('breaker-box-wire', {start: 0, end: 3}),
+			frameRate: 3,
+			repeat: -1
+		});
+
 		this.anims.create({
 			key: 'coin',
 			frames: this.anims.generateFrameNumbers('coin', {start: 0, end: 5}),

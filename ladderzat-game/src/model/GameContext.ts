@@ -23,6 +23,8 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	public collectibles: Group;
 	//Objects in level that collide
 	public objects: Group;
+	//Object in level that don't collide
+	public props;
 
 	//Input
 	public input: UIOverlayScene;
@@ -89,6 +91,16 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 
 	public getObjectByName(name: string) : GameObject{
 		for(let object of this.collectibles.children.getArray()){
+			if(object.name === name)
+				return object;
+		}
+
+		for(let object of this.objects.children.getArray()){
+			if(object.name === name)
+				return object;
+		}
+
+		for(let object of this.props.children.getArray()){
 			if(object.name === name)
 				return object;
 		}

@@ -2,7 +2,7 @@
   "name": "studio",
   "start": {
     "x": 10,
-    "y": 40
+    "y": 240
   },
   "exit": {
     "x": 10,
@@ -13,7 +13,8 @@
       "x": 13,
       "y": 85,
       "type": "hang-light"
-    },    {
+    },
+    {
       "x": 73,
       "y": 85,
       "type": "hang-light"
@@ -42,6 +43,26 @@
       "type": "beams",
       "x": 127,
       "y": 65
+    },
+    {
+      "type": "breaker-box",
+      "x": 118,
+      "y": 265
+    },
+    {
+      "type": "breaker-box-wire",
+      "x": 118,
+      "y": 256
+    },
+    {
+      "type": "warning",
+      "x": 142,
+      "y": 264
+    },
+    {
+      "type": "wire",
+      "x": 114,
+      "y": 241
     }
   ],
   "ladders": [
@@ -54,6 +75,11 @@
       "x": 140,
       "y": 100,
       "segments": 13
+    },
+    {
+      "x": 8,
+      "y": 201,
+      "segments": 8
     }
   ],
   "collectibles": [
@@ -103,6 +129,16 @@
       "x": 67,
       "y": 106,
       "type": "crate"
+    },
+    {
+      "type": "pipe",
+      "x": 0,
+      "y": 290
+    },
+    {
+      "type": "water",
+      "x": 32,
+      "y": 235
     }
   ],
   "platforms": [
@@ -155,7 +191,7 @@
       "x": -16,
       "y": 201,
       "segments": 2,
-      "type": "wood-floor"
+      "type": "factory"
     },
     {
       "x": 88,
@@ -168,6 +204,12 @@
       "y": 189,
       "segments": 1,
       "type": "factory"
+    },
+    {
+      "x": 0,
+      "y": 241,
+      "segments": 10,
+      "type": "wood-floor"
     }
   ]
 }

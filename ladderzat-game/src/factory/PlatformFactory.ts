@@ -2,7 +2,7 @@ import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import Constants from '../assets/data/constants.yml'
 
-export class PlatformLoader {
+export class PlatformFactory {
 	public createPlatforms(physics: ArcadePhysics, level: string, data): StaticGroup {
 		const platforms = physics.add.staticGroup();
 		console.debug(`Loaded ${data.length} platforms`)
