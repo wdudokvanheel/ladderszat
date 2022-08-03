@@ -84,6 +84,11 @@ export class UIOverlayScene extends Scene {
 			this.dpadButtons[0].setFrame(1);
 		else if (this.getVerticalDirection() == 'down')
 			this.dpadButtons[2].setFrame(1);
+
+		if (this.context.jumpInput.key || this.context.jumpInput.touch)
+			this.jumpButton.setFrame(1);
+		else
+			this.jumpButton.setFrame(0);
 	}
 
 	public getHorizontalDirection(): string {
@@ -171,16 +176,13 @@ export class UIOverlayScene extends Scene {
 
 		this.jumpButton.on('pointerdown', function () {
 			ui.jumpTouchDown = true;
-			this.setFrame(1);
 		});
 
 		this.jumpButton.on('pointerup', function () {
-			this.setFrame(0);
 			ui.jumpTouchDown = false;
 		});
 
 		this.jumpButton.on('pointerout', function () {
-			this.setFrame(0);
 			ui.jumpTouchDown = false;
 		});
 	}
