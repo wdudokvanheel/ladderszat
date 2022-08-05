@@ -31,6 +31,10 @@ export default class CollisionController {
 		//Remove current colliders
 		this.playerColliders.forEach(collider => this.physics.world.removeCollider(collider));
 
+		let water = this.context.getObjectByName("water");
+		if (water)
+			this.physics.add.collider(this.context.player, water, this.touchingWaterTest, this.touchingWaterTest, this)
+
 		this.playerColliders.push(
 			//Test to see if player is touching a ladder
 			this.physics.add.overlap(this.context.player, this.context.ladders, this.touchingLadderTest, null, this),
@@ -44,8 +48,15 @@ export default class CollisionController {
 			//Collider for player -> level exit
 			this.physics.add.collider(this.context.player, this.context.exit, this.context.gameplay.onExit, null, this.context.gameplay),
 			//Collider for player -> collectibles
-			this.physics.add.overlap(this.context.player, this.context.collectibles, null, this.context.gameplay.onCollect, this.context.gameplay)
+			this.physics.add.collider(this.context.player, this.context.collectibles, null, this.context.gameplay.onCollect, this.context.gameplay)
 		);
+
+
+	}
+
+	private touchingWaterTest() {
+		this.context.touchingWater = true;
+		return false;
 	}
 
 	private touchingLadderTest(player: SpriteWithDynamicBody, ladder: SpriteWithDynamicBody) {

@@ -38,6 +38,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	public isTouchingLadder = false;
 	public isOnTopOfLadder = false;
 	public isClimbing = false;
+	public touchingWater = false;
 
 	public touchingLadder = undefined;
 	public timeInAir = 0;
@@ -49,17 +50,18 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	}
 
 	//Call on end of update cycle to reset values (so the collision system can set them again)
-	public resetLadderValues() {
+	public resetCollisionValues() {
 		this.touchingLadder = undefined;
 		this.isTouchingLadder = false;
 		this.isOnTopOfLadder = false;
+		this.touchingWater = false;
 	}
 
 	/**
 	 * Reset the context for a new level
 	 */
 	public reset() {
-		this.resetLadderValues();
+		this.resetCollisionValues();
 
 		this.isAlive = true;
 		this.isGrounded = false;

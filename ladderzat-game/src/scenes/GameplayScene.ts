@@ -56,7 +56,7 @@ export class GameplayScene extends Phaser.Scene {
 
 		//Init level-specific logic
 		this.levelLogic.forEach(logic => {
-			if(logic.level == this.context.level)
+			if (logic.level == this.context.level)
 				logic.init(this.context, this.add);
 		});
 
@@ -91,6 +91,10 @@ export class GameplayScene extends Phaser.Scene {
 		//Update level specific logic
 		this.updateLevelLogic(delta);
 
+		//Check if still alive after level logic
+		if(!this.context.isAlive)
+			return;
+
 		//Update camera to follow player
 		this.cameras.main.setBounds(0, this.getCameraY(), Constants.screen.width, Constants.screen.height);
 
@@ -98,7 +102,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.graphicsController.update();
 
 		//Reset values so Phaser's collision system can rewrite the values before the next update
-		this.context.resetLadderValues();
+		this.context.resetCollisionValues();
 	}
 
 	private updateTimescale(delta: number) {

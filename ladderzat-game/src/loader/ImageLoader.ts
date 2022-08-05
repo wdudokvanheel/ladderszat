@@ -29,7 +29,6 @@ export class ImageLoader {
 		this.loader.image('gameover', images['ui']['gameover'])
 		this.loader.image('window', images['ui']['window'])
 		this.loader.image('platform-factory', images['objects']['platform-factory'])
-		this.loader.image('water', images['objects']['water'])
 		this.loader.image('hang-light', images['objects']['hang-light'])
 		this.loader.image('platform-studio', images['objects']['platform-studio'])
 		this.loader.image('platform-danger', images['objects']['platform-danger'])
@@ -58,10 +57,12 @@ export class ImageLoader {
 		this.loader.spritesheet('alarm', images['objects']['alarm'], {frameWidth: 3, frameHeight: 3})
 		this.loader.spritesheet('breaker-box-wire', images['objects']['breaker-box-wire'], {frameWidth: 15, frameHeight: 9})
 		this.loader.spritesheet('wire', images['objects']['wire'], {frameWidth: 23, frameHeight: 13})
+		this.loader.spritesheet('water', images['objects']['water'], {frameWidth: 89, frameHeight: 5})
 
 
 		this.loader.image('kris-idle', images['kris']['idle'])
 		this.loader.spritesheet('kris-dead', images['kris']['dead'], {frameWidth: 21, frameHeight: 10})
+		this.loader.spritesheet('kris-shocked', images['kris']['shocked'], {frameWidth: 20, frameHeight: 23})
 		this.loader.spritesheet('kris-walk', images['kris']['walk'], {frameWidth: 13, frameHeight: 22});
 		this.loader.spritesheet('kris-climb', images['kris']['climb'], {frameWidth: 11, frameHeight: 22});
 
@@ -82,6 +83,13 @@ export class ImageLoader {
 			key: 'wire-on',
 			frames: this.anims.generateFrameNumbers('wire', {start: 0, end: 2}),
 			frameRate: 3,
+		});
+
+		this.anims.create({
+			key: 'water',
+			frames: this.anims.generateFrameNumbers('water', {start: 0, end: 9}),
+			frameRate: 65,
+			repeat: -1
 		});
 
 		this.anims.create({
@@ -109,6 +117,13 @@ export class ImageLoader {
 			key: 'kris-climb',
 			frames: this.anims.generateFrameNumbers('kris-climb', {start: 0, end: 1}),
 			frameRate: 8,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'kris-shocked',
+			frames: this.anims.generateFrameNumbers('kris-shocked', {start: 0, end: 5}),
+			frameRate: 16,
 			repeat: -1
 		});
 

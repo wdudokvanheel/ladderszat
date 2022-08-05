@@ -38,6 +38,13 @@ player:
     up: 60
     down: 80
 
+level2:
+    wire:
+      shocktime: 3000
+      resttime: 3000
+    water:
+      maxspeed: 45
+
 jump:
   buffer: 100
   coyote: 125

@@ -1,11 +1,14 @@
+import Constants from '../assets/data/constants.yml'
 import GameContext from '../model/GameContext';
 import {LevelLogic} from './LevelLogic';
-import Sprite = Phaser.GameObjects.Sprite;
 import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
+import Sprite = Phaser.GameObjects.Sprite;
+import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 
 export class Level2 extends LevelLogic {
 	private state;
 	private timer;
+	private shocking = false;
 	private emitters = [];
 
 	constructor() {
@@ -14,25 +17,18 @@ export class Level2 extends LevelLogic {
 
 	init(context: GameContext, add: GameObjectFactory) {
 		this.emitters = [];
+		this.timer = 0;
+		this.shocking = false;
+		this.state = undefined;
 
-		var wire = context.getObjectByName("wire");
+		let wire = context.getObjectByName("wire");
+		let water = context.getObjectByName("water") as SpriteWithStaticBody;
+
 		if (wire) {
-			// var particles = add.particles('particle-power');
-			// var emitter = particles.createEmitter({
-			// 	lifespan: 500,
-			// 	frequency: 200,
-			// 	speed: {min: 20, max: 30},
-			// 	collideTop: false,
-			// 	collideBottom: true,
-			// 	quantity: 1
-			// });
-			// emitter.startFollow(wire, 2, -1);
-			// this.emitters.push(emitter);
-
-			var particles = add.particles('particle-white');
-			var emitter = particles.createEmitter({
-				lifespan: 350,
-				speed: {min: 30, max: 50},
+			let particles = add.particles('particle-white');
+			let emitter = particles.createEmitter({
+				lifespan: 300,
+				speed: {min: 50, max: 70},
 				collideTop: false,
 				gravityY: 100,
 				collideBottom: true,
@@ -41,14 +37,57 @@ export class Level2 extends LevelLogic {
 			emitter.startFollow(wire, 2, -1);
 			this.emitters.push(emitter);
 		}
+
+		if (water) {
+			//Add power particle emitter
+			let particles = add.particles('particle-white');
+			let emitter = particles.createEmitter({
+				y: water.y - 5,
+				x: {min: water.x, max: water.x + 100},
+				lifespan: 350,
+				angle: {min: 200, max: 350},
+				speed: {min: 100, max: 120},
+				collideTop: false,
+				gravityY: 300,
+				collideBottom: true,
+				frequency: 10,
+			});
+			this.emitters.push(emitter);
+
+			water.body.setSize(water.width - 6, water.height, true);
+		}
 	}
 
 	update(context: GameContext, delta: number) {
 		this.updateWire(context, delta);
-		if (this.state == "down") {
+		this.updateShockEmitters(context);
+
+		if (context.touchingWater)
+			context.player.body.maxSpeed = Constants.level2.water.maxspeed;
+		else
+			context.player.body.maxSpeed = undefined;
+
+		if (this.shocking && context.touchingWater) {
+			var water = context.getObjectByName('water') as SpriteWithStaticBody;
+			context.isAlive = false;
+
+			var shock = context.props.create(context.player.x, water.y - water.height - 1);
+			shock.setOrigin(0, 1);
+			shock.anims.play('kris-shocked');
+			context.destroyPlayer();
+		}
+	}
+
+	private updateShockEmitters(context: GameContext) {
+		let water = context.getObjectByName("water") as Sprite;
+
+		if (this.state == "shock") {
 			this.emitters.forEach(emitter => emitter.start());
+			water.anims.play('water', true);
 		} else {
 			this.emitters.forEach(emitter => emitter.stop());
+			water.anims.setProgress(0);
+			water.anims.pause();
 		}
 	}
 
@@ -66,20 +105,23 @@ export class Level2 extends LevelLogic {
 			this.state = "swingdown";
 			wire.setFrame(1);
 		} else if (this.state === "swingdown") {
-			this.state = "down";
-			this.timer = 2000;
+			this.state = "shock";
+			this.shocking = true;
+			this.timer = Constants.level2.wire.shocktime;
 			wire.setFrame(2);
-		} else if (this.state === "down") {
+		} else if (this.state === "shock") {
 			this.state = "swingout1"
 			this.timer = 200;
 			wire.setFrame(1);
 		} else if (this.state === "swingout1") {
+			this.shocking = false;
 			this.state = "swingout2"
 			this.timer = 200;
 			wire.setFrame(0);
 		} else if (this.state === "swingout2") {
 			this.state = "return"
-			this.timer = 2000;
+			this.timer = Constants.level2.wire.resttime;
+			;
 			wire.setFrame(5);
 		} else if (this.state === "return") {
 			this.state = undefined

@@ -57,8 +57,9 @@ export class ObjectFactory {
 			sprite.refreshBody();
 			sprite.body.setAllowGravity(false);
 			sprite.body.immovable = true;
+			sprite.setName(object.type);
 
-			if (object.type === 'alarm') {
+			if (object.type === 'alarm' || object.type === 'water') {
 				sprite.anims.play(object.type, true);
 			}
 			if (object.type === 'pipe') {
@@ -186,7 +187,7 @@ export class ObjectFactory {
 			sprite.setOrigin(0, 1);
 			sprite.setName(object.type);
 
-			if (object.type === 'alarm' || object.type === 'breaker-box-wire') {
+			if (object.type === 'alarm' || object.type === 'breaker-box-wire' || object.type === 'water') {
 				sprite.anims.play(object.type, true);
 			}
 		});
