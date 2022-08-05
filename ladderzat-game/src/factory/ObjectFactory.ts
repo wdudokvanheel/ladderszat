@@ -61,23 +61,9 @@ export class ObjectFactory {
 
 			if (object.type === 'alarm' || object.type === 'water') {
 				sprite.anims.play(object.type, true);
+				sprite.setDepth(1);
 			}
-			if (object.type === 'pipe') {
-				var particles = add.particles('particle-water');
-				var emitter = particles.createEmitter({
-					lifespan: 5000,
-					angle: {min: 245, max: 300},
-					speed: {min: 50, max: 85},
-					bounds: {x: 35, y: sprite.y, w: 85, h: 49},
-					bounce: 0.2,
-					frequency: 1,
-					quantity: 3,
-					gravityY: 300,
-					collideTop: false,
-					collideBottom: true,
-				});
-				emitter.startFollow(sprite, 67, -3);
-			}
+
 		});
 		return group;
 	}
@@ -106,7 +92,7 @@ export class ObjectFactory {
 				sprite.setDataEnabled();
 				sprite.data.set('collect', object.type);
 
-			} else if (object.type === 'key' || object.type === 'mic') {
+			} else if (object.type === 'key' || object.type === 'mic' || object.type === 'speakers' || object.type === 'guitar-purple') {
 				var path = new Phaser.Curves.Path();
 				path.add(new Phaser.Curves.Line(new Phaser.Math.Vector2(object.x, Constants.world.height - object.y - 4), new Phaser.Math.Vector2(object.x, Constants.world.height - object.y + 4)));
 				sprite = add.follower(path, 0, 0, object.type);
@@ -193,5 +179,17 @@ export class ObjectFactory {
 		});
 
 		return group;
+	}
+
+	createBucket(group: Group, color: string): SpriteWithDynamicBody {
+		const grp = group.create(10, Constants.world.height - 200, 'bucket-' + color);
+		const bucket = grp as SpriteWithDynamicBody;
+		bucket.setBounce(1, .6);
+		bucket.setCollideWorldBounds(true);
+		bucket.setVelocityX(50 + (Math.random() * 10));
+		bucket.setVelocityY(-100 - (Math.random() * 50));
+		bucket.anims.play('bucket-' + color);
+		bucket.refreshBody();
+		return bucket;
 	}
 }

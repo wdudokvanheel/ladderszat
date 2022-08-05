@@ -50,12 +50,11 @@ export default class CollisionController {
 			//Collider for player -> collectibles
 			this.physics.add.collider(this.context.player, this.context.collectibles, null, this.context.gameplay.onCollect, this.context.gameplay)
 		);
-
-
 	}
 
-	private touchingWaterTest() {
-		this.context.touchingWater = true;
+	private touchingWaterTest(player: SpriteWithDynamicBody, water: SpriteWithDynamicBody) {
+		if (player.y + player.height < water.y)
+			this.context.touchingWater = true;
 		return false;
 	}
 

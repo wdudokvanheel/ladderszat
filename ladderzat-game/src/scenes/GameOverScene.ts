@@ -1,7 +1,9 @@
 import {Scene} from 'phaser';
+import GameContext from '../model/GameContext';
 import {GameplayScene} from './GameplayScene';
 
 export class GameOverScene extends Scene {
+	private readonly context: GameContext;
 	private timer = 5000;
 
 	constructor() {
@@ -17,6 +19,7 @@ export class GameOverScene extends Scene {
 		if(this.timer <= 0){
 			this.timer = 5000;
 			this.scene.stop();
+			this.context.level = 1;
 			(this.scene.get('gameplay') as GameplayScene).scene.restart();
 		}
 	}

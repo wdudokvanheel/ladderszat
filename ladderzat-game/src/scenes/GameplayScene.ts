@@ -40,6 +40,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	create() {
 		this.levelLoader = new LevelDataLoader();
+		this.objectFactory = new ObjectFactory();
 		this.physicsController = new PhysicsController(this.context);
 		this.collisionController = new CollisionController(this.physics, this.context);
 		this.graphicsController = new GraphicsController(this.context);
@@ -160,7 +161,6 @@ export class GameplayScene extends Phaser.Scene {
 			enemy.setVelocityX(-65);
 			corpse.setFlipX(false);
 		}
-
 		this.context.destroyPlayer();
 	}
 
@@ -179,7 +179,7 @@ export class GameplayScene extends Phaser.Scene {
 		if (object.getData('collect') === 'coin') {
 			object.destroy();
 			this.context.score += 100;
-		} else if (object.getData('collect') === 'key' || object.getData('collect') === 'mic') {
+		} else if (object.getData('collect') === 'key' || object.getData('collect') === 'mic' || object.getData('collect') === 'speakers'|| object.getData('collect') === 'guitar-purple') {
 			object.destroy();
 			this.context.score += 500;
 		}
