@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import gameConfig from './GameConfig';
 
-let game;
+let game: Phaser.Game;
 
 if (module.hot) {
 	module.hot.dispose(destroyGame);

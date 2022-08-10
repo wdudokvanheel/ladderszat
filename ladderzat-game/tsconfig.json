@@ -1,23 +1,23 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "importHelpers": true,
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "types": [
-      "webpack-env"
-    ],
-    "typeRoots": [
-      "src/types",
-      "node_modules/@types"
-    ]
-  }
+	"compilerOptions": {
+		"module": "commonjs",
+		"allowJs": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"importHelpers": true,
+		"lib": [
+			"es6",
+			"dom"
+		],
+		"types": [
+			"webpack-env"
+		],
+		"typeRoots": [
+			"src/types",
+			"node_modules/@types"
+		]
+	}
 }
 

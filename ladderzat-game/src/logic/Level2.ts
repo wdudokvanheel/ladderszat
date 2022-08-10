@@ -1,13 +1,13 @@
 import Constants from '../assets/data/constants.yml'
 import {sample} from '../main';
 import GameContext from '../model/GameContext';
-import {LevelLogic} from './LevelLogic';
+import LevelLogic from './LevelLogic';
 import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
 import Sprite = Phaser.GameObjects.Sprite;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 
-export class Level2 extends LevelLogic {
+export default class Level2 extends LevelLogic {
 	private state;
 	private timer;
 	private shocking = false;

@@ -3,6 +3,7 @@ import Group = Phaser.Physics.Arcade.Group;
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
+import Constants from '../assets/data/constants.yml';
 import {GameplayScene} from '../scenes/GameplayScene';
 import {UIOverlayScene} from '../scenes/UIOverlayScene';
 import JumpInputModel from './JumpInput';
@@ -13,6 +14,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	//Level data
 	public leveldata;
 	public level = 1;
+	public progress = 0;
 
 	public player: SpriteWithDynamicBody;
 	public platforms: StaticGroup;
@@ -42,6 +44,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 
 	public touchingLadder = undefined;
 	public timeInAir = 0;
+	public drunk = 0;
 
 	public score = 0;
 
@@ -80,6 +83,8 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 		this.buckets = undefined;
 		this.platforms = undefined;
 		this.ladders = undefined;
+		this.score = 0;
+		this.progress = 0;
 		this.destroyPlayer();
 	}
 
@@ -91,20 +96,33 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 		this.player = undefined;
 	}
 
-	public getObjectByName(name: string) : GameObject{
-		for(let object of this.collectibles.children.getArray()){
-			if(object.name === name)
+	public getObjectByName(name: string): GameObject {
+		for (let object of this.collectibles.children.getArray()) {
+			if (object.name === name)
 				return object;
 		}
 
-		for(let object of this.objects.children.getArray()){
-			if(object.name === name)
+		for (let object of this.objects.children.getArray()) {
+			if (object.name === name)
 				return object;
 		}
 
-		for(let object of this.props.children.getArray()){
-			if(object.name === name)
+		for (let object of this.props.children.getArray()) {
+			if (object.name === name)
 				return object;
 		}
+	}
+
+	public getMaxProgressionForLevel(level: number): number {
+		if (level == 3)
+			return 1;
+		return (Constants.gfx.progress.width.level * level + (level - 1) * 2) / (Constants.gfx.progress.width.total);
+	}
+
+	public getMinProgressionForLevel(level: number): number {
+		if (level == 1)
+			return 0;
+		else
+			return this.getMaxProgressionForLevel(level - 1);
 	}
 }

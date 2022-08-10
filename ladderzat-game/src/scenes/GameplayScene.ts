@@ -5,8 +5,9 @@ import GraphicsController from '../controller/GraphicsController';
 import {PhysicsController} from '../controller/PhysicsController';
 import {ObjectFactory} from '../factory/ObjectFactory';
 import {LevelDataLoader} from '../loader/LevelDataLoader';
-import {Level1} from '../logic/Level1';
-import {Level2} from '../logic/Level2';
+import Level1 from '../logic/Level1';
+import Level2 from '../logic/Level2';
+import Level3 from '../logic/Level3';
 import GameContext from '../model/GameContext';
 import {UIOverlayScene} from './UIOverlayScene';
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -27,15 +28,13 @@ export class GameplayScene extends Phaser.Scene {
 	private timerDeath;
 	private targetTimeScale = 1;
 
-
 	constructor() {
 		super('gameplay')
-		this.levelLogic.push(new Level1(), new Level2());
+		this.levelLogic.push(new Level1(), new Level2(), new Level3());
 	}
 
 	preload() {
 		this.context.gameplay = this;
-
 	}
 
 	create() {
@@ -93,7 +92,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.updateLevelLogic(delta);
 
 		//Check if still alive after level logic
-		if(!this.context.isAlive)
+		if (!this.context.isAlive)
 			return;
 
 		//Update camera to follow player
@@ -176,13 +175,30 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	onCollect(player: SpriteWithDynamicBody, object: SpriteWithStaticBody) {
-		if (object.getData('collect') === 'coin') {
+		var type = object.getData('collect');
+		if (!type)
+			return;
+
+		if (type === 'coin') {
 			object.destroy();
 			this.context.score += 100;
-		} else if (object.getData('collect') === 'key' || object.getData('collect') === 'mic' || object.getData('collect') === 'speakers'|| object.getData('collect') === 'guitar-purple') {
+		} else if (type === 'key' || object.getData('collect') === 'mic' || object.getData('collect') === 'speakers' || object.getData('collect') === 'guitar-purple') {
+			this.collectProgressItem();
 			object.destroy();
 			this.context.score += 500;
+		} else if (type === 'drink') {
+			object.destroy();
+			this.context.drunk += .1;
+			this.collectProgressItem();
 		}
+	}
+
+	private collectProgressItem() {
+		if (!this.context.leveldata.progressCollectibles)
+			return;
+
+		let delta = (this.context.getMaxProgressionForLevel(this.context.level) - this.context.getMinProgressionForLevel(this.context.level)) / (this.context.leveldata.progressCollectibles + 1);
+		this.context.progress += delta;
 	}
 
 	private updateLevelLogic(delta: number) {

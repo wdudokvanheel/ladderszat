@@ -63,12 +63,12 @@ export class ImageLoader {
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.image('bg-level-1', images['bg']['level-1'])
 		this.loader.image('bg-level-2', images['bg']['level-2'])
+		this.loader.image('bg-level-3', images['bg']['level-3'])
 		this.loader.spritesheet('button-jump', images['ui']['button-jump'], {frameWidth: 39, frameHeight: 42})
 		this.loader.spritesheet('alarm', images['objects']['alarm'], {frameWidth: 3, frameHeight: 3})
 		this.loader.spritesheet('breaker-box-wire', images['objects']['breaker-box-wire'], {frameWidth: 15, frameHeight: 8})
 		this.loader.spritesheet('wire', images['objects']['wire'], {frameWidth: 23, frameHeight: 13})
 		this.loader.spritesheet('water', images['objects']['water'], {frameWidth: 89, frameHeight: 5})
-
 
 		this.loader.image('kris-idle', images['kris']['idle'])
 		this.loader.spritesheet('kris-dead', images['kris']['dead'], {frameWidth: 21, frameHeight: 10})
@@ -76,7 +76,19 @@ export class ImageLoader {
 		this.loader.spritesheet('kris-walk', images['kris']['walk'], {frameWidth: 13, frameHeight: 22});
 		this.loader.spritesheet('kris-climb', images['kris']['climb'], {frameWidth: 11, frameHeight: 22});
 
+		this.loader.image('progress-base', images['ui']['progress-base']);
+		this.loader.image('progress-start', images['ui']['progress-start']);
+		this.loader.image('progress-part', images['ui']['progress-part']);
+		this.loader.image('progress-end', images['ui']['progress-end']);
+
+		this.loadCollectibles();
 		this.loadBuckets();
+	}
+
+	private loadCollectibles(){
+		Constants.object.drinks.forEach(drink =>{
+			this.loader.image('collect-drink-' + drink, images['collectibles']['drink-' + drink])
+		})
 	}
 
 	private loadBuckets() {

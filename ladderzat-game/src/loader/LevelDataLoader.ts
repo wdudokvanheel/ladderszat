@@ -1,13 +1,13 @@
-import LevelData from '../assets/data/levels/*.json'
 import Constants from '../assets/data/constants.yml';
+import LevelData from '../assets/data/levels/*.json'
 import {LadderFactory} from '../factory/LadderFactory';
 import {ObjectFactory} from '../factory/ObjectFactory';
-import {PlatformFactory} from '../factory/PlatformFactory';
+import PlatformFactory from '../factory/PlatformFactory';
 import GameContext from '../model/GameContext';
 import GameObjectCreator = Phaser.GameObjects.GameObjectCreator;
 import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
-import TextureManager = Phaser.Textures.TextureManager;
 import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
+import TextureManager = Phaser.Textures.TextureManager;
 
 export class LevelDataLoader {
 	private platformFactory: PlatformFactory;
@@ -20,7 +20,7 @@ export class LevelDataLoader {
 		this.objectFactory = new ObjectFactory();
 	}
 
-	public loadLevelDataToContext(context : GameContext, physics: ArcadePhysics, creator: GameObjectCreator, factory: GameObjectFactory, textures: TextureManager) {
+	public loadLevelDataToContext(context: GameContext, physics: ArcadePhysics, creator: GameObjectCreator, factory: GameObjectFactory, textures: TextureManager) {
 		context.leveldata = LevelData['level-' + context.level];
 		console.debug('Loading data for level ' + context.level + ': ' + context.leveldata.name);
 

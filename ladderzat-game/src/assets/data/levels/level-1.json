@@ -1,210 +1,211 @@
 {
-  "name": "factory",
-  "start": {
-    "x": 24,
-    "y": 27
-  },
-  "exit": {
-    "x": 10,
-    "y": 283
-  },
-  "props": [
-  ],
-  "collectibles": [
-    {
-      "type": "mixer",
-      "x": 12,
-      "y": 187
-    },
-    {
-      "type": "coin",
-      "x": 147,
-      "y": 50
-    },
-    {
-      "type": "coin",
-      "x": 127,
-      "y": 50
-    },
-    {
-      "type": "key",
-      "x": 141,
-      "y": 121
-    },
-    {
-      "type": "coin",
-      "x": 144,
-      "y": 157
-    },
-    {
-      "type": "coin",
-      "x": 120,
-      "y": 156
-    },
-    {
-      "type": "coin",
-      "x": 96,
-      "y": 155
-    },
-    {
-      "type": "coin",
-      "x": 72,
-      "y": 154
-    },
-    {
-      "type": "coin",
-      "x": 7,
-      "y": 247
-    },
-    {
-      "type": "coin",
-      "x": 64,
-      "y": 247
-    },
-    {
-      "type": "coin",
-      "x": 102,
-      "y": 247
-    }
-  ],
-  "objects": [
-    {
-      "type": "static-bucket-red",
-      "x": 3,
-      "y": 6
-    },
-    {
-      "type": "bucket-stack",
-      "x": 140,
-      "y": 243
-    },
-    {
-      "type": "static-bucket-red",
-      "x": 2,
-      "y": 187
-    },
-    {
-      "type": "static-bucket-red",
-      "x": 3,
-      "y": 193
-    },
-    {
-      "type": "alarm",
-      "x": 83,
-      "y": 234
-    }
-  ],
-  "ladders": [
-    {
-      "x": 95,
-      "y": 8,
-      "segments": 6
-    },
-    {
-      "x": 23,
-      "y": 41,
-      "segments": 7
-    },
-    {
-      "x": 142,
-      "y": 81,
-      "segments": 6
-    },
-    {
-      "x": 28,
-      "y": 111,
-      "segments": 8
-    },
-    {
-      "x": 53,
-      "y": 151,
-      "segments": 7
-    },
-    {
-      "x": 125,
-      "y": 183,
-      "segments": 12
-    },
-    {
-      "x": 39,
-      "y": 243,
-      "segments": 8
-    }
-  ],
-  "platforms": [
-    {
-      "x": -2,
-      "y": 6,
-      "segments": 3
-    },
-    {
-      "x": 70,
-      "y": 7,
-      "segments": 4,
-      "angled": "up"
-    },
-    {
-      "x": -5,
-      "y": 42,
-      "segments": 5,
-      "angled": "down"
-    },
-    {
-      "x": 115,
-      "y": 38,
-      "segments": 1
-    },
-    {
-      "x": 17,
-      "y": 76,
-      "segments": 6,
-      "angled": "up"
-    },
-    {
-      "x": -11,
-      "y": 112,
-      "segments": 5,
-      "angled": "down"
-    },
-    {
-      "x": 135,
-      "y": 111,
-      "segments": 2,
-      "type": "danger"
-    },
-    {
-      "x": 17,
-      "y": 151,
-      "segments": 2
-    },
-    {
-      "x": 65,
-      "y": 151,
-      "segments": 4,
-      "angled": "up"
-    },
-    {
-      "x": -6,
-      "y": 187,
-      "segments": 2,
-      "type": "danger"
-    },
-    {
-      "x": 42,
-      "y": 186,
-      "segments": 4,
-      "angled": "down"
-    },
-    {
-      "x": -10,
-      "y": 243,
-      "segments": 10
-    },
-    {
-      "x": 7,
-      "y": 283,
-      "segments": 2,
-      "type": "danger"
-    }
-  ]
+	"name": "factory",
+	"progressCollectibles": 1,
+	"start": {
+		"x": 24,
+		"y": 27
+	},
+	"exit": {
+		"x": 10,
+		"y": 283
+	},
+	"props": [
+	],
+	"collectibles": [
+		{
+			"type": "mixer",
+			"x": 12,
+			"y": 187
+		},
+		{
+			"type": "coin",
+			"x": 147,
+			"y": 50
+		},
+		{
+			"type": "coin",
+			"x": 127,
+			"y": 50
+		},
+		{
+			"type": "key",
+			"x": 141,
+			"y": 121
+		},
+		{
+			"type": "coin",
+			"x": 144,
+			"y": 157
+		},
+		{
+			"type": "coin",
+			"x": 120,
+			"y": 156
+		},
+		{
+			"type": "coin",
+			"x": 96,
+			"y": 155
+		},
+		{
+			"type": "coin",
+			"x": 72,
+			"y": 154
+		},
+		{
+			"type": "coin",
+			"x": 7,
+			"y": 247
+		},
+		{
+			"type": "coin",
+			"x": 64,
+			"y": 247
+		},
+		{
+			"type": "coin",
+			"x": 102,
+			"y": 247
+		}
+	],
+	"objects": [
+		{
+			"type": "static-bucket-red",
+			"x": 3,
+			"y": 6
+		},
+		{
+			"type": "bucket-stack",
+			"x": 140,
+			"y": 243
+		},
+		{
+			"type": "static-bucket-red",
+			"x": 2,
+			"y": 187
+		},
+		{
+			"type": "static-bucket-red",
+			"x": 3,
+			"y": 193
+		},
+		{
+			"type": "alarm",
+			"x": 83,
+			"y": 234
+		}
+	],
+	"ladders": [
+		{
+			"x": 95,
+			"y": 8,
+			"segments": 6
+		},
+		{
+			"x": 23,
+			"y": 41,
+			"segments": 7
+		},
+		{
+			"x": 142,
+			"y": 81,
+			"segments": 6
+		},
+		{
+			"x": 28,
+			"y": 111,
+			"segments": 8
+		},
+		{
+			"x": 53,
+			"y": 151,
+			"segments": 7
+		},
+		{
+			"x": 125,
+			"y": 183,
+			"segments": 12
+		},
+		{
+			"x": 39,
+			"y": 243,
+			"segments": 8
+		}
+	],
+	"platforms": [
+		{
+			"x": -2,
+			"y": 6,
+			"segments": 3
+		},
+		{
+			"x": 70,
+			"y": 7,
+			"segments": 4,
+			"angled": "up"
+		},
+		{
+			"x": -5,
+			"y": 42,
+			"segments": 5,
+			"angled": "down"
+		},
+		{
+			"x": 115,
+			"y": 38,
+			"segments": 1
+		},
+		{
+			"x": 17,
+			"y": 76,
+			"segments": 6,
+			"angled": "up"
+		},
+		{
+			"x": -11,
+			"y": 112,
+			"segments": 5,
+			"angled": "down"
+		},
+		{
+			"x": 135,
+			"y": 111,
+			"segments": 2,
+			"type": "danger"
+		},
+		{
+			"x": 17,
+			"y": 151,
+			"segments": 2
+		},
+		{
+			"x": 65,
+			"y": 151,
+			"segments": 4,
+			"angled": "up"
+		},
+		{
+			"x": -6,
+			"y": 187,
+			"segments": 2,
+			"type": "danger"
+		},
+		{
+			"x": 42,
+			"y": 186,
+			"segments": 4,
+			"angled": "down"
+		},
+		{
+			"x": -10,
+			"y": 243,
+			"segments": 10
+		},
+		{
+			"x": 7,
+			"y": 283,
+			"segments": 2,
+			"type": "danger"
+		}
+	]
 }

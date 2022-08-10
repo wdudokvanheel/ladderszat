@@ -3,6 +3,7 @@ import GameContext from '../model/GameContext';
 
 export class PhysicsController {
 	private context: GameContext;
+	private count = 0;
 
 	constructor(context: GameContext) {
 		this.context = context;
@@ -11,25 +12,25 @@ export class PhysicsController {
 	public update(delta: number) {
 		this.context.isGrounded = this.context.player.body.blocked.down || this.context.player.y >= Constants.world.height - this.context.player.height;
 
-		this.updatePlayerVelocity();
+		this.updatePlayerVelocity(delta);
 		this.updatePlayerJumping();
 
 		this.updateInAirTimer(delta);
 		this.updatePlayerGravityOnLadder();
 	}
 
-	private updatePlayerVelocity() {
+	private updatePlayerVelocity(delta: number) {
 		const horiz = this.context.input.getHorizontalDirection();
 		const vert = this.context.input.getVerticalDirection();
 
 		if (horiz != undefined) {
 			if (!this.context.isClimbing || (this.context.player.body.velocity.y == 0)) {
 				if (horiz === 'left')
-					this.setPlayerVelocity(-1);
+					this.setPlayerVelocity(-1, delta);
 				else if (horiz === 'right')
-					this.setPlayerVelocity(1);
+					this.setPlayerVelocity(1, delta);
 				else
-					this.setPlayerVelocity(0);
+					this.setPlayerVelocity(0, delta);
 
 				if (this.context.isClimbing) {
 					this.context.player.body.velocity.y = -100;
@@ -38,7 +39,7 @@ export class PhysicsController {
 				}
 			}
 		} else
-			this.setPlayerVelocity(0);
+			this.setPlayerVelocity(0, delta);
 
 		if (this.context.input.getVerticalDirection() != undefined) {
 			if (!this.context.isClimbing && this.context.isTouchingLadder) {
@@ -72,12 +73,25 @@ export class PhysicsController {
 		return x * Math.pow(1 - damp, delta * 10);
 	}
 
-	private setPlayerVelocity(input: number) {
+	private setPlayerVelocity(input: number, delta: number) {
 		let targetSpeed = input * Constants.player.walk.maxspeed;
 		let diff = targetSpeed - this.context.player.body.velocity.x;
 
-		let accelRate = (Math.abs(targetSpeed) > 0.01) ? Constants.player.walk.acceleration : Constants.player.walk.deceleration;
-		let movement = Math.pow(Math.abs(diff) * accelRate, Constants.player.walk.damping) * Math.sign(diff);
+		var maxSpeed = Math.abs(targetSpeed);
+		var accel = Constants.player.walk.acceleration;
+		var decel = Constants.player.walk.deceleration;
+		var damp = Constants.player.walk.damping;
+
+		if (this.context.drunk != 0) {
+			// maxSpeed -= 0.2;
+			this.context.drunk = Math.min(1, this.context.drunk);
+			accel = this.getDrunkValue(Constants.player.drunk.acceleration, Constants.player.walk.acceleration, this.context.drunk);
+			decel = this.getDrunkValue(Constants.player.drunk.deceleration, Constants.player.walk.deceleration, this.context.drunk);
+			damp = this.getDrunkValue(Constants.player.drunk.damping, Constants.player.walk.damping, this.context.drunk);
+		}
+
+		let accelRate = (maxSpeed > 0.01) ? accel : decel;
+		let movement = Math.pow(Math.abs(diff) * accelRate, damp) * Math.sign(diff);
 
 		//Cutoff to stop movement
 		if (targetSpeed == 0 && Math.abs(this.context.player.body.velocity.x) < 5) {
@@ -87,6 +101,20 @@ export class PhysicsController {
 
 		//Apply force
 		this.context.player.body.velocity.x += movement;
+
+		//Add extra force when drunk
+		if (this.context.drunk != 0) {
+			this.count++;
+
+			if (Math.random() > 0.6)
+				this.context.player.body.velocity.x -= (Math.sin(this.count / Math.PI)) * 5;
+			// if (Math.random() > 0.90 + (0.1 * (1 - this.context.drunk)))
+			// 	this.context.player.body.velocity.x *= .8 + (1 - this.context.drunk);
+		}
+	}
+
+	private getDrunkValue(min: number, max: number, drunk: number) {
+		return (min * drunk) + (max * (1 - drunk));
 	}
 
 	private startClimbing() {

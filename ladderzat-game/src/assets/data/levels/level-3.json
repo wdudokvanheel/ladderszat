@@ -1,0 +1,28 @@
+{
+	"name": "wasted",
+	"progressCollectibles": 9,
+	"start": {
+		"x": 20,
+		"y": 40
+	},
+	"exit": {
+		"x": 10,
+		"y": 583
+	},
+	"collectibles": [
+	],
+	"objects": [
+	],
+	"props": [
+	],
+	"platforms": [
+		{
+			"x": 0,
+			"y": 6,
+			"segments": 10,
+			"type": "wood-floor"
+		}
+	],
+	"ladders": [
+	]
+}

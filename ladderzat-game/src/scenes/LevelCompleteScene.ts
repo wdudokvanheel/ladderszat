@@ -32,6 +32,7 @@ export class LevelCompleteScene extends Scene {
 
 	private setNextLevel() {
 		if (this.context.level < 3) {
+			this.context.progress = this.context.getMaxProgressionForLevel(this.context.level);
 			this.context.level++;
 		}
 	}

@@ -1,5 +1,9 @@
 # Ladderzat - To Do
 
+## TODO
+
+Level 3a
+
 ## General
 
 ### Character feel
@@ -45,13 +49,13 @@
 
 ### Level 2
 
-- [ ] Few platforms / ladders
-- [ ] Wet floor
+- [x] Few platforms / ladders
+- [x] Wet floor
 - [ ] Construction sign
 - [ ] Collectibles
-    - [ ] Guitar
-    - [ ] Desk
-    - [ ] Speakers
+    - [x] Guitar
+    - [x] Desk
+    - [x] Speakers
     - [x] Mic?
     - [ ] Drums?
 - [ ] Objects

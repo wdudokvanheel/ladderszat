@@ -1,63 +1,77 @@
 screen:
-  width: 160
-  height: 286
+    width: 160
+    height: 286
 
 world:
-  height: 1024
+    height: 1024
 
 layout:
-  input:
-    height: 70
-  gameplay:
-    height: 217
+    input:
+        height: 70
+    gameplay:
+        height: 217
 
 controls:
-  dpad:
-    center:
-      x: 37
-      y: 251
-    deadzone:
-      x: 7
-      y: 7
+    dpad:
+        center:
+            x: 37
+            y: 251
+        deadzone:
+            x: 7
+            y: 7
 
 camera:
-  offset:
-    y: 32
+    offset:
+        y: 32
 
 player:
-  jump:
-    power: 130
-    releasegravity: 400
-  walk:
-#    maxspeed: 50
-    maxspeed: 60
-    acceleration: 0.6
-    deceleration: 0.5
-    damping: 0.5
-  climb:
-    up: 60
-    down: 80
+    jump:
+        power: 130
+        releasegravity: 400
+    walk:
+        maxspeed: 60
+        acceleration: 0.6
+        deceleration: 0.5
+        damping: 0.5
+    drunk:
+        maxspeed: 50
+        acceleration: 0.01
+        deceleration: 0.01
+        damping: 0.05
+    climb:
+        up: 60
+        down: 80
 
 level2:
     wire:
-      shocktime: 3000
-      resttime: 3000
+        shocktime: 3000
+        resttime: 3000
     water:
-      maxspeed: 45
+        maxspeed: 45
 
 jump:
-  buffer: 100
-  coyote: 125
+    buffer: 100
+    coyote: 125
 
 object:
-  platform:
-    width: 24
-  ladder:
-    width: 9
-    height: 5
+    platform:
+        width: 24
+    ladder:
+        width: 9
+        height: 5
+    drinks:
+        - vodka
+        - beer
+        - cocktail
+        - wine
 
 gfx:
-  bucket:
-    colors:
-      - red
-      - blue
+    progress:
+        width:
+            total: 152
+            level: 49
+
+    bucket:
+        colors:
+            - red
+            - blue

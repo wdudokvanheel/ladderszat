@@ -1,10 +1,10 @@
 import Constants from '../assets/data/constants.yml';
 import GameContext from '../model/GameContext';
 import {MixerSprite} from '../model/MixerSprite';
-import {LevelLogic} from './LevelLogic';
+import LevelLogic from './LevelLogic';
 import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
 
-export class Level1 extends LevelLogic {
+export default class Level1 extends LevelLogic {
 	private timerNextBucket: number;
 
 	constructor() {

@@ -32,7 +32,20 @@ export class UIOverlayScene extends Scene {
 	private verticalKeyboardDirection: string = undefined;
 
 	private debugText;
+
+	//Progresbar
+	private progress = 0;
+	private progressPart: Sprite;
+	private progressEnd: Sprite;
+
+	//Score & waster indicator
 	private score: BitmapText;
+	private wasted: BitmapText;
+
+	private drunkText = false;
+	private drunkTextTimer = 0;
+	private highlight = false;
+	private highlightTimer = 0;
 
 	constructor() {
 		super('ui');
@@ -47,11 +60,8 @@ export class UIOverlayScene extends Scene {
 		this.createDPad();
 		this.createJumpButton();
 		this.createKeyboardListeners();
-
-		this.debugText = this.add.bitmapText(0, 278, 'main', '', 8);
-		this.score = this.add.bitmapText(156, 5, 'main', '0', 8);
-		this.score.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
-		this.score.setOrigin(1, 0)
+		this.createProgressbar();
+		this.createUiTexts();
 	}
 
 	update(time: number, delta: number) {
@@ -69,7 +79,8 @@ export class UIOverlayScene extends Scene {
 		}
 
 		this.updateButtonStates();
-		this.score.setText('' + this.context.score)
+		this.updateProgressbar();
+		this.updateUiTexts();
 		this.debugText.setText(DEBUG_CONTROLLER.getValues());
 	}
 
@@ -254,5 +265,80 @@ export class UIOverlayScene extends Scene {
 					break;
 			}
 		});
+	}
+
+	private createProgressbar() {
+		this.add.sprite(0, 0, "progress-base").setOrigin(0, 0);
+		this.add.sprite(2, 4, "progress-start").setOrigin(0, 0);
+		this.progressPart = this.add.sprite(4, 4, "progress-part").setOrigin(0, 0);
+		this.progressEnd = this.add.sprite(10, 4, "progress-end").setOrigin(0, 0);
+	}
+
+	private createUiTexts() {
+		this.debugText = this.add.bitmapText(0, 278, 'main', '', 8);
+		this.score = this.add.bitmapText(80, 4, 'main', '0', 8);
+		this.score.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
+		this.score.setOrigin(0, 0)
+
+		this.wasted = this.add.bitmapText(80, this.score.y, 'main', 'LADDERZAT', 8);
+		this.wasted.alpha = 0;
+		this.wasted.setTintFill(Phaser.Display.Color.ValueToColor('#ed0e69').color32);
+		this.wasted.setOrigin(0, 0)
+		this.wasted.setPosition((Constants.screen.width - this.wasted.width) / 2, this.wasted.y);
+	}
+
+	private updateProgressbar() {
+		if (this.progress < this.context.progress) {
+			let diff = this.context.progress - this.progress;
+			let accelRate = 0.0003;
+			let delta = Math.pow(Math.abs(diff) * accelRate, 0.5) * Math.sign(diff);
+			this.progress += delta;
+		}
+
+		this.progress = Math.min(this.progress, this.context.progress);
+		this.progress = Math.max(0, this.progress);
+		this.progress = Math.min(this.progress, 1);
+
+		let prog = this.progress * Constants.gfx.progress.width.total;
+		this.progressPart.displayWidth = prog;
+		this.progressEnd.setPosition(4 + prog, 4);
+	}
+
+	private updateUiTexts() {
+		this.score.setText('' + this.context.score);
+		this.score.setPosition((Constants.screen.width - this.score.width) / 2, this.score.y);
+
+		if (this.highlight) {
+			this.score.setTintFill(Phaser.Display.Color.ValueToColor('#ed0e69').color32);
+			this.wasted.setTintFill(Phaser.Display.Color.ValueToColor('#ed0e69').color32);
+		} else {
+			this.score.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
+			this.wasted.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
+		}
+		if (this.drunkText) {
+			this.score.alpha = 0;
+			this.wasted.alpha = 1;
+		} else {
+			this.score.alpha = 1;
+			this.wasted.alpha = 0;
+		}
+
+		if (this.context.progress >= 1) {
+			this.drunkTextTimer--;
+
+			if (this.drunkTextTimer <= 0) {
+				if (this.drunkText)
+					this.drunkTextTimer = 180;
+				else
+					this.drunkTextTimer = 120;
+				this.drunkText = !this.drunkText
+			}
+
+			this.highlightTimer--;
+			if (this.highlightTimer <= 0) {
+				this.highlight = !this.highlight;
+				this.highlightTimer = 15;
+			}
+		}
 	}
 }

@@ -13,6 +13,7 @@ export class ObjectFactory {
 		player.setOrigin(0, 0);
 		player.setDataEnabled();
 		player.setCollideWorldBounds(true);
+		player.setDepth(2);
 		player.body.setMaxVelocityY(400);
 		player.refreshBody();
 		return player;
