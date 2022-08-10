@@ -63,7 +63,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	/**
 	 * Reset the context for a new level
 	 */
-	public reset() {
+	public resetLevelValues() {
 		this.resetCollisionValues();
 
 		this.isAlive = true;
@@ -83,9 +83,13 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 		this.buckets = undefined;
 		this.platforms = undefined;
 		this.ladders = undefined;
+		this.destroyPlayer();
+	}
+
+	public reset(){
 		this.score = 0;
 		this.progress = 0;
-		this.destroyPlayer();
+		this.level = 1;
 	}
 
 	public destroyPlayer() {

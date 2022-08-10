@@ -21,7 +21,6 @@ function destroyGame() {
 	if (!game)
 		return;
 	game.destroy(true);
-	game.runDestroy();
 	game = null;
 }
 

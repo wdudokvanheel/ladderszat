@@ -13,11 +13,6 @@
 	],
 	"collectibles": [
 		{
-			"type": "mixer",
-			"x": 12,
-			"y": 187
-		},
-		{
 			"type": "coin",
 			"x": 147,
 			"y": 50
@@ -69,6 +64,11 @@
 		}
 	],
 	"objects": [
+		{
+			"type": "mixer",
+			"x": 12,
+			"y": 187
+		},
 		{
 			"type": "static-bucket-red",
 			"x": 3,

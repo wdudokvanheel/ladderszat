@@ -1,5 +1,6 @@
 import Constants from '../assets/data/constants.yml';
 import GameContext from '../model/GameContext';
+import Vector2 = Phaser.Math.Vector2;
 import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
 import Collider = Phaser.Physics.Arcade.Collider;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -22,9 +23,16 @@ export default class CollisionController {
 
 		//Collider for buckets and platform
 		this.physics.add.collider(this.context.buckets, this.context.platforms, function (bucket: SpriteWithDynamicBody) {
+			//Corpses use the bucket group for easy collision setup, shake the camera once when hitting a platform
+			if (bucket.name === 'corpse') {
+				bucket.name = 'corpsed';
+				this.context.gameplay.cameras.main.shake(120, new Vector2(0, 0.02));
+			}
+
+			//Allow buckets to leave the level after they've collided on the lower part of the level
 			if (bucket.body.y > Constants.world.height - 24)
 				bucket.body.setCollideWorldBounds(false);
-		});
+		}, null, this);
 	}
 
 	public createPlayerColliders() {
@@ -44,7 +52,7 @@ export default class CollisionController {
 			this.physics.add.collider(this.context.player, this.context.ladders, null, this.ladderBlockTest, this),
 			this.physics.add.collider(this.context.player, this.context.objects, null, null, this),
 			//Collider for player -> buckets
-			this.physics.add.collider(this.context.player, this.context.buckets, this.context.gameplay.onHit, null, this.context.gameplay),
+			this.physics.add.overlap(this.context.player, this.context.buckets, null, this.context.gameplay.onHit, this.context.gameplay),
 			//Collider for player -> level exit
 			this.physics.add.collider(this.context.player, this.context.exit, this.context.gameplay.onExit, null, this.context.gameplay),
 			//Collider for player -> collectibles

@@ -12,7 +12,7 @@ export default class Level1 extends LevelLogic {
 	}
 
 	init(context: GameContext, add: GameObjectFactory) {
-		this.timerNextBucket = 500;
+		this.timerNextBucket = 0;
 	}
 
 	update(context: GameContext, delta: number) {

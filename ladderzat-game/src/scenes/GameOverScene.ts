@@ -19,7 +19,7 @@ export class GameOverScene extends Scene {
 		if(this.timer <= 0){
 			this.timer = 5000;
 			this.scene.stop();
-			this.context.level = 1;
+			this.context.reset();
 			(this.scene.get('gameplay') as GameplayScene).scene.restart();
 		}
 	}

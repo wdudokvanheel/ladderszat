@@ -38,7 +38,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.gameplay = this;
 		this.events.on('land', (power) => {
 			if (power >= 125)
-				this.cameras.main.shake(50, new Vector2(0, 0.005 * ((power / 120))));
+				this.cameras.main.shake(50, new Vector2(0, 0.005 * ((power / 75))));
 		}, this);
 	}
 
@@ -56,7 +56,7 @@ export class GameplayScene extends Phaser.Scene {
 
 	private initLevel() {
 		console.debug('Initializing gameplay scene');
-		this.context.reset();
+		this.context.resetLevelValues();
 		this.levelLoader.loadLevelDataToContext(this.context, this.physics, this.make, this.add, this.textures);
 
 		//Init level-specific logic
@@ -148,7 +148,10 @@ export class GameplayScene extends Phaser.Scene {
 		if (!this.context.isAlive)
 			return;
 
-		this.cameras.main.shake(120, new Vector2(0, 0.015));
+		if (!this.checkBucketHit(player, enemy))
+			return;
+
+		this.cameras.main.shake(120, new Vector2(0, 0.010));
 		this.context.isAlive = false;
 
 		//Slow down time
@@ -167,6 +170,18 @@ export class GameplayScene extends Phaser.Scene {
 			corpse.setFlipX(false);
 		}
 		this.context.destroyPlayer();
+	}
+
+	private checkBucketHit(player: SpriteWithDynamicBody, enemy: SpriteWithDynamicBody): boolean {
+		//Ignore top few pixels of player
+		if (enemy.y + enemy.height < player.y + 6)
+			return false;
+
+		//Ignore bottom pixels of player
+		if (enemy.y > player.y + player.height - 3)
+			return false;
+
+		return true;
 	}
 
 	private getCameraY(): number {

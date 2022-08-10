@@ -34,7 +34,7 @@ export class ObjectFactory {
 		var sprite = physics.add.sprite(context.player.x, context.player.y, "kris-dead") as SpriteWithDynamicBody;
 		sprite.anims.playAfterDelay("kris-dead", 850);
 		context.buckets.add(sprite, false);
-
+		sprite.setName('corpse');
 		sprite.body.setSize(9, sprite.height - 1, false);
 		sprite.body.setAllowDrag(true);
 		sprite.body.setDragX(0.05);
@@ -47,6 +47,7 @@ export class ObjectFactory {
 
 	createObjects(physics: Phaser.Physics.Arcade.ArcadePhysics, add, context: GameContext): Group {
 		var group = physics.add.group();
+		group.runChildUpdate = true;
 
 		if (!context.leveldata.objects)
 			return group;
@@ -55,6 +56,57 @@ export class ObjectFactory {
 			var sprite;
 			if (!object.type)
 				return
+
+			if (object.type === 'mixer') {
+				sprite = group.create(object.x, Constants.world.height - object.y, object.type);
+				sprite.setName('mixer');
+				sprite.setOrigin(0, 1);
+				sprite.refreshBody();
+				sprite.body.setAllowGravity(false);
+				sprite.setDataEnabled();
+				sprite.body.immovable = true;
+				sprite.resetMixing = function () {
+					this.data.set('color', sample(Constants.gfx.bucket.colors));
+					this.data.set('state', 'empty');
+					this.data.set('timer', 25);
+				}
+				sprite.resetMixing();
+				sprite.update = function () {
+					var timer = this.data.get('timer') ?? 0;
+					var state = this.data.get('state');
+					const target = 1;
+
+					if (state === 'empty') {
+						this.setTexture('mixer');
+						this.anims.stop();
+					}
+					if (state === 'mixing') {
+						let diff = target - this.anims.timeScale;
+						let movement = Math.pow(Math.abs(diff) * 0.5, 0.5) * Math.sign(diff);
+						this.anims.timeScale += movement / 10;
+					}
+
+					if (timer > 0) {
+						this.data.set('timer', --timer)
+						return;
+					}
+
+					var state = this.data.get('state');
+					if (state === 'empty') {
+						this.anims.play('mixer-' + this.data.get('color'), false);
+						this.anims.pause();
+						this.data.set('state', 'loading');
+						sprite.data.set('timer', 10);
+					}
+					if (state === 'loading') {
+						this.anims.play('mixer-' + this.data.get('color'), false);
+						this.data.set('state', 'mixing');
+						this.anims.timeScale = 0;
+						sprite.data.set('timer', 120);
+					}
+				}
+				return;
+			}
 
 			sprite = group.create(object.x, Constants.world.height - object.y, object.type);
 			sprite.setOrigin(0, 1);
@@ -102,53 +154,6 @@ export class ObjectFactory {
 				sprite.body.setAllowGravity(false);
 				sprite.setDataEnabled();
 				sprite.data.set('collect', object.type);
-			} else if (object.type === 'mixer') {
-				sprite = group.create(object.x, Constants.world.height - object.y, object.type);
-				sprite.setName('mixer');
-				sprite.setOrigin(0, 1);
-				sprite.refreshBody();
-				sprite.body.setAllowGravity(false);
-				sprite.setDataEnabled();
-				sprite.resetMixing = function () {
-					this.data.set('color', sample(Constants.gfx.bucket.colors));
-					this.data.set('state', 'empty');
-					this.data.set('timer', 25);
-				}
-				sprite.resetMixing();
-				sprite.update = function () {
-					var timer = this.data.get('timer') ?? 0;
-					var state = this.data.get('state');
-					const target = 1;
-
-					if (state === 'empty') {
-						this.setTexture('mixer');
-						this.anims.stop();
-					}
-					if (state === 'mixing') {
-						let diff = target - this.anims.timeScale;
-						let movement = Math.pow(Math.abs(diff) * 0.5, 0.5) * Math.sign(diff);
-						this.anims.timeScale += movement / 10;
-					}
-
-					if (timer > 0) {
-						this.data.set('timer', --timer)
-						return;
-					}
-
-					var state = this.data.get('state');
-					if (state === 'empty') {
-						this.anims.play('mixer-' + this.data.get('color'), false);
-						this.anims.pause();
-						this.data.set('state', 'loading');
-						sprite.data.set('timer', 10);
-					}
-					if (state === 'loading') {
-						this.anims.play('mixer-' + this.data.get('color'), false);
-						this.data.set('state', 'mixing');
-						this.anims.timeScale = 0;
-						sprite.data.set('timer', 120);
-					}
-				}
 			}
 		});
 		return group;
