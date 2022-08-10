@@ -5,6 +5,9 @@ import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
 import Constants from '../assets/data/constants.yml'
 import {sample} from '../main';
 import GameContext from '../model/GameContext';
+import Sprite = Phaser.GameObjects.Sprite;
+import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
+import PathFollower = Phaser.GameObjects.PathFollower;
 
 export class ObjectFactory {
 	createPlayer(physics: ArcadePhysics): SpriteWithDynamicBody {
@@ -69,13 +72,13 @@ export class ObjectFactory {
 		return group;
 	}
 
-	createCollectibles(physics: Phaser.Physics.Arcade.ArcadePhysics, add, context: GameContext): Group {
+	createCollectibles(physics: Phaser.Physics.Arcade.ArcadePhysics, add: GameObjectFactory, context: GameContext): Group {
 		var group = physics.add.group();
+		group.runChildUpdate = true;
 
 		if (!context.leveldata.collectibles)
 			return group;
 
-		group.runChildUpdate = true;
 		context.leveldata.collectibles.forEach(object => {
 			var sprite;
 			if (!object.type)
@@ -94,16 +97,7 @@ export class ObjectFactory {
 				sprite.data.set('collect', object.type);
 
 			} else if (object.type === 'key' || object.type === 'mic' || object.type === 'speakers' || object.type === 'guitar-purple') {
-				var path = new Phaser.Curves.Path();
-				path.add(new Phaser.Curves.Line(new Phaser.Math.Vector2(object.x, Constants.world.height - object.y - 4), new Phaser.Math.Vector2(object.x, Constants.world.height - object.y + 4)));
-				sprite = add.follower(path, 0, 0, object.type);
-				sprite.setOrigin(0, 1);
-				sprite.startFollow({
-					duration: 1500,
-					yoyo: true,
-					ease: 'Sine.easeInOut',
-					repeat: -1,
-				});
+				sprite = this.createBouncingSprite(add, object.x, object.y, object.type);
 				group.add(sprite, false);
 				sprite.body.setAllowGravity(false);
 				sprite.setDataEnabled();
@@ -158,6 +152,20 @@ export class ObjectFactory {
 			}
 		});
 		return group;
+	}
+
+	createBouncingSprite(add: GameObjectFactory, x: number, y: number, texture: string, bounce = 4, duration = bounce * 375): Sprite {
+		var path = new Phaser.Curves.Path();
+		path.add(new Phaser.Curves.Line(new Phaser.Math.Vector2(x, Constants.world.height - y - bounce), new Phaser.Math.Vector2(x, Constants.world.height - y + bounce)));
+		var sprite = add.follower(path, 0, 0, texture) as PathFollower;
+		sprite.startFollow({
+			duration,
+			yoyo: true,
+			ease: 'Sine.easeInOut',
+			repeat: -1,
+		});
+		sprite.setOrigin(0, 1);
+		return sprite as Sprite;
 	}
 
 	createProps(add: Phaser.GameObjects.GameObjectFactory, context: GameContext) {

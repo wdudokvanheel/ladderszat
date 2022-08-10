@@ -37,7 +37,7 @@ player:
         maxspeed: 50
         acceleration: 0.01
         deceleration: 0.01
-        damping: 0.05
+        damping: 0.1
     climb:
         up: 60
         down: 80

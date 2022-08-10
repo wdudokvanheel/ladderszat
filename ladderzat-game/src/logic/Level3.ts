@@ -1,5 +1,4 @@
 import Constants from '../assets/data/constants.yml'
-import {DEBUG_CONTROLLER} from '../controller/DebugController';
 import PlatformFactory from '../factory/PlatformFactory';
 import {sample} from '../main';
 import GameContext from '../model/GameContext';
@@ -27,12 +26,11 @@ export default class Level3 extends LevelLogic {
 
 	private createCollectibles(context: GameContext, factory: GameObjectFactory) {
 		for (let i = 0; i < this.levels; i++) {
-			var sprite = context.collectibles.create(59 + (i % 2 == 0 ? 50 : 0), Constants.world.height - (15 * i + 25), 'collect-drink-' + sample(Constants.object.drinks)) as SpriteWithDynamicBody;
+			let sprite = this.objectFactory.createBouncingSprite(factory,59 + (i % 2 == 0 ? 50 : 0), 15 * i + 25, 'collect-drink-' + sample(Constants.object.drinks), 2, 550);
+			context.collectibles.add(sprite, false);
+			(sprite as SpriteWithDynamicBody).body.setAllowGravity(false);
 			sprite.setDataEnabled();
-			sprite.setOrigin(0, 1);
-			sprite.refreshBody();
 			sprite.data.set('collect', 'drink');
-			sprite.body.setAllowGravity(false)
 		}
 	}
 }
