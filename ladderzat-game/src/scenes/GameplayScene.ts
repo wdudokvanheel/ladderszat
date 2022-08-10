@@ -12,6 +12,7 @@ import GameContext from '../model/GameContext';
 import {UIOverlayScene} from './UIOverlayScene';
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
+import Vector2 = Phaser.Math.Vector2;
 
 export class GameplayScene extends Phaser.Scene {
 	private objectFactory: ObjectFactory;
@@ -35,12 +36,16 @@ export class GameplayScene extends Phaser.Scene {
 
 	preload() {
 		this.context.gameplay = this;
+		this.events.on('land', (power) => {
+			if (power >= 125)
+				this.cameras.main.shake(50, new Vector2(0, 0.005 * ((power / 120))));
+		}, this);
 	}
 
 	create() {
 		this.levelLoader = new LevelDataLoader();
 		this.objectFactory = new ObjectFactory();
-		this.physicsController = new PhysicsController(this.context);
+		this.physicsController = new PhysicsController(this.context, this.events);
 		this.collisionController = new CollisionController(this.physics, this.context);
 		this.graphicsController = new GraphicsController(this.context);
 
@@ -143,6 +148,7 @@ export class GameplayScene extends Phaser.Scene {
 		if (!this.context.isAlive)
 			return;
 
+		this.cameras.main.shake(120, new Vector2(0, 0.015));
 		this.context.isAlive = false;
 
 		//Slow down time

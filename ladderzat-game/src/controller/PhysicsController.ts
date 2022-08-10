@@ -1,12 +1,12 @@
 import Constants from '../assets/data/constants.yml';
 import GameContext from '../model/GameContext';
+import EventEmitter = Phaser.Events.EventEmitter;
 
 export class PhysicsController {
-	private context: GameContext;
 	private count = 0;
+	private lastSpeed = 0;
 
-	constructor(context: GameContext) {
-		this.context = context;
+	constructor(private context: GameContext, private events: EventEmitter) {
 	}
 
 	public update(delta: number) {
@@ -17,6 +17,7 @@ export class PhysicsController {
 
 		this.updateInAirTimer(delta);
 		this.updatePlayerGravityOnLadder();
+		this.lastSpeed = this.context.player.body.velocity.y;
 	}
 
 	private updatePlayerVelocity(delta: number) {
@@ -33,6 +34,7 @@ export class PhysicsController {
 					this.setPlayerVelocity(0, delta);
 
 				if (this.context.isClimbing) {
+					this.events.emit('jump');
 					this.context.player.body.velocity.y = -100;
 					this.context.isJumping = true;
 					this.context.isClimbing = false;
@@ -125,6 +127,9 @@ export class PhysicsController {
 	}
 
 	private updatePlayerJumping() {
+		if (this.context.player.body.touching.down && this.context.timeInAir > 0)
+			this.events.emit('land', this.lastSpeed);
+
 		this.context.player.body.setGravityY(0);
 		if (!this.context.jumpInput.key && !this.context.jumpInput.touch) {
 			this.context.isJumpReset = true;
@@ -164,6 +169,7 @@ export class PhysicsController {
 	}
 
 	private performJump() {
+		this.events.emit('jump');
 		this.context.isJumpReset = false;
 		this.context.isJumping = true;
 		this.context.isClimbing = false;
