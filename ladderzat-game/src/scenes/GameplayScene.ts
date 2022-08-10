@@ -37,8 +37,8 @@ export class GameplayScene extends Phaser.Scene {
 	preload() {
 		this.context.gameplay = this;
 		this.events.on('land', (power) => {
-			if (power >= 125)
-				this.cameras.main.shake(50, new Vector2(0, 0.005 * ((power / 75))));
+			if (power >= 30)
+				this.cameras.main.shake(50, new Vector2(0, 0.005 * (Math.max(1, power / 50))));
 		}, this);
 	}
 
