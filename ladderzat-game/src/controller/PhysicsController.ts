@@ -107,7 +107,7 @@ export class PhysicsController {
 			this.count++;
 
 			if (Math.random() > 0.6)
-				this.context.player.body.velocity.x -= (Math.sin(this.count / Math.PI)) * 5;
+				this.context.player.body.velocity.x -= (Math.sin(this.count / Math.PI)) * (6 * this.context.drunk);
 			// if (Math.random() > 0.90 + (0.1 * (1 - this.context.drunk)))
 			// 	this.context.player.body.velocity.x *= .8 + (1 - this.context.drunk);
 		}
