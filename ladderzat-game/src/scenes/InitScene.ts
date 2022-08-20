@@ -15,6 +15,9 @@ export class InitScene extends Scene {
 		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.screen.height);
 
 		this.load.bitmapFont('main', '../assets/fonts/atari-classic.png', '../assets/fonts/atari-classic.xml');
+		this.load.audio('lvl1-bg', ['../assets/audio/rarekwast.m4a', '../assets/audio/rarekwast.mp3']);
+		this.load.audio('lvl2-bg', ['../assets/audio/rarekwast.m4a', '../assets/audio/rarekwast.mp3']);
+		this.load.audio('lvl3-bg', ['../assets/audio/ladderszat.m4a', '../assets/audio/ladderszat.mp3']);
 	}
 
 	update(time: number, delta: number) {

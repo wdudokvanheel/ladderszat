@@ -34,6 +34,7 @@ export default {
 			debug: false
 		}
 	},
+
 	plugins: {
 		global: [
 			{key: 'context', plugin: GameContext, start: false, mapping: 'context'}

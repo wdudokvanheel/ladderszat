@@ -23,7 +23,7 @@
 		"typescript": "^4.7.4"
 	},
 	"staticFiles": {
-		"staticPath": "src/assets/fonts/",
-		"staticOutPath": "assets/fonts"
+		"staticPath": "src/assets/",
+		"staticOutPath": "assets/"
 	}
 }

@@ -13,6 +13,7 @@ import {UIOverlayScene} from './UIOverlayScene';
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 import Vector2 = Phaser.Math.Vector2;
+import BaseSound = Phaser.Sound.BaseSound;
 
 export class GameplayScene extends Phaser.Scene {
 	private objectFactory: ObjectFactory;
@@ -28,6 +29,7 @@ export class GameplayScene extends Phaser.Scene {
 	private playing = true;
 	private timerDeath;
 	private targetTimeScale = 1;
+	private bgMusic: BaseSound;
 
 	constructor() {
 		super('gameplay')
@@ -50,7 +52,6 @@ export class GameplayScene extends Phaser.Scene {
 		this.graphicsController = new GraphicsController(this.context);
 
 		this.context.input = this.scene.get('ui') as UIOverlayScene;
-
 		this.initLevel();
 	}
 
@@ -81,6 +82,22 @@ export class GameplayScene extends Phaser.Scene {
 		this.playing = true;
 		this.timerDeath = 2000;
 		this.input.on('pointerdown', (e) => console.log('Click @ ', Math.round(e.worldX - .5), Math.round((Constants.world.height - e.worldY - .5))));
+		this.startBGMusic();
+	}
+
+	private startBGMusic(): void {
+		this.sound.stopAll();
+		this.bgMusic = this.sound.add('lvl' + this.context.level + '-bg');
+		var conf = {
+			mute: false,
+			volume: 0.3,
+			rate: 1,
+			detune: 0,
+			seek: 0,
+			loop: true,
+			delay: 0
+		}
+		this.bgMusic.play(conf);
 	}
 
 	update(time: number, delta: number) {
@@ -136,6 +153,7 @@ export class GameplayScene extends Phaser.Scene {
 
 			if (this.timerDeath <= 0 && this.playing) {
 				this.playing = false;
+				this.bgMusic.stop();
 				this.scene.launch('gameover');
 			}
 
