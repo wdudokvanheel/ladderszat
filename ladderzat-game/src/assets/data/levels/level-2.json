@@ -3,7 +3,7 @@
 	"progressCollectibles": 3,
 	"start": {
 		"x": 20,
-		"y": 40
+		"y": 340
 	},
 	"exit": {
 		"x": 10,

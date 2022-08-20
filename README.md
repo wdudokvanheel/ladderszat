@@ -2,7 +2,7 @@
 
 ## TODO
 
-Level 3a
+Level 3
 
 ## General
 
@@ -13,7 +13,7 @@ Level 3a
 - [x] Jump power & downward force on release
 - [ ] OnLandEvent
 - [ ] OnLand Anim
-- [ ] Screenshake on land based on speed
+- [x] Screenshake on land based on speed
 - [ ] Smoke on jump / walk
 - [ ] Leg bend anim on jump
 
@@ -25,14 +25,14 @@ Level 3a
 - [x] iPhone safe area overlap
 - [x] Destroy buckets on leaving
 - [x] Camera movement
-- [ ] Bucket gfx
+- [x] Bucket gfx
 
 ### Improvements
 
 - [x] Button to orange on press
 - [X] Make slowdown tween
 - [ ] Fix d-pad
-- [ ] Shrink player -> bucket hitbox
+- [x] Shrink player -> bucket hitbox
 - [ ] Particle FX
 
 ## Levels

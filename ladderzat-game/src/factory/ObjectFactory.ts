@@ -1,3 +1,6 @@
+import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
+import PathFollower = Phaser.GameObjects.PathFollower;
+import Sprite = Phaser.GameObjects.Sprite;
 import Vector2 = Phaser.Math.Vector2;
 import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
 import Group = Phaser.Physics.Arcade.Group;
@@ -5,9 +8,6 @@ import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
 import Constants from '../assets/data/constants.yml'
 import {sample} from '../main';
 import GameContext from '../model/GameContext';
-import Sprite = Phaser.GameObjects.Sprite;
-import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
-import PathFollower = Phaser.GameObjects.PathFollower;
 
 export class ObjectFactory {
 	createPlayer(physics: ArcadePhysics): SpriteWithDynamicBody {
@@ -32,7 +32,8 @@ export class ObjectFactory {
 
 	createPlayerCorpse(physics: ArcadePhysics, context: GameContext): SpriteWithDynamicBody {
 		var sprite = physics.add.sprite(context.player.x, context.player.y, "kris-dead") as SpriteWithDynamicBody;
-		sprite.anims.playAfterDelay("kris-dead", 850);
+		if(Constants.gfx.gore)
+			sprite.anims.playAfterDelay("kris-dead", 850);
 		context.buckets.add(sprite, false);
 		sprite.setName('corpse');
 		sprite.body.setSize(9, sprite.height - 1, false);

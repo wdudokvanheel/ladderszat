@@ -66,6 +66,7 @@ object:
         - wine
 
 gfx:
+    gore: false
     progress:
         width:
             total: 152
