@@ -20,6 +20,7 @@ pipeline {
             steps {
                 dir("ladderzat-game") {
                     sh 'npm install && npm run build'
+                    sh 'rm -Rf dist/assets/style dist/assets/images dist/assets/data'
                     stash includes: 'dist/**/*', name: 'builtSources'
                     script {
                         def packageJSON = readJSON file: 'package.json'
