@@ -42,6 +42,8 @@ export class ImageLoader {
 		this.loader.image('crate', images['objects']['crate'])
 		this.loader.image('guitars', images['objects']['guitars'])
 		this.loader.image('pipe', images['objects']['pipe'])
+		this.loader.image('pen', images['objects']['pen'])
+		this.loader.image('paper', images['objects']['paper'])
 		this.loader.image('mic', images['objects']['mic'])
 		this.loader.image('beams', images['objects']['beams'])
 		this.loader.image('guitar-acoustic', images['objects']['guitar-acoustic'])

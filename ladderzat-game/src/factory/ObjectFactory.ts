@@ -27,6 +27,7 @@ export class ObjectFactory {
 		exit.setOrigin(0, 1);
 		exit.setImmovable(true);
 		exit.refreshBody();
+		exit.body.setSize(1, 2, true);
 		return exit;
 	}
 
@@ -149,7 +150,7 @@ export class ObjectFactory {
 				sprite.setDataEnabled();
 				sprite.data.set('collect', object.type);
 
-			} else if (object.type === 'key' || object.type === 'mic' || object.type === 'speakers' || object.type === 'guitar-purple') {
+			} else{
 				sprite = this.createBouncingSprite(add, object.x, object.y, object.type);
 				group.add(sprite, false);
 				sprite.body.setAllowGravity(false);
@@ -201,7 +202,7 @@ export class ObjectFactory {
 		const bucket = grp as SpriteWithDynamicBody;
 		bucket.setBounce(1, .6);
 		bucket.setCollideWorldBounds(true);
-		bucket.setVelocityX(50 + (Math.random() * 10));
+		bucket.setVelocityX(Constants.object.bucket.speed + (Math.random() * 10));
 		bucket.setVelocityY(-100 - (Math.random() * 50));
 		bucket.anims.play('bucket-' + color);
 		bucket.refreshBody();

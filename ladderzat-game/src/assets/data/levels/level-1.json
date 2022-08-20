@@ -1,73 +1,68 @@
 {
 	"name": "factory",
-	"progressCollectibles": 1,
+	"progressCollectibles": 3,
 	"start": {
 		"x": 24,
 		"y": 27
 	},
 	"exit": {
-		"x": 10,
-		"y": 283
+		"x": 32,
+		"y": 347
 	},
 	"props": [
 	],
 	"collectibles": [
 		{
-			"type": "coin",
-			"x": 147,
-			"y": 50
-		},
-		{
-			"type": "coin",
-			"x": 127,
-			"y": 50
-		},
-		{
 			"type": "key",
-			"x": 141,
+			"x": 130,
+			"y": 52
+		},
+		{
+			"type": "coin",
+			"x": 143,
 			"y": 121
 		},
 		{
-			"type": "coin",
-			"x": 144,
-			"y": 157
+			"type": "pen",
+			"x": 20,
+			"y": 122
 		},
 		{
 			"type": "coin",
-			"x": 120,
-			"y": 156
+			"x": 143,
+			"y": 162
+		},
+		{
+			"type": "coin",
+			"x": 119,
+			"y": 161
 		},
 		{
 			"type": "coin",
 			"x": 96,
-			"y": 155
+			"y": 160
 		},
 		{
 			"type": "coin",
 			"x": 72,
-			"y": 154
+			"y": 159
+		},
+		{
+			"type": "paper",
+			"x": 70,
+			"y": 284
 		},
 		{
 			"type": "coin",
-			"x": 7,
-			"y": 247
-		},
-		{
-			"type": "coin",
-			"x": 64,
-			"y": 247
-		},
-		{
-			"type": "coin",
-			"x": 102,
-			"y": 247
+			"x": 139,
+			"y": 350
 		}
 	],
 	"objects": [
 		{
 			"type": "mixer",
 			"x": 12,
-			"y": 187
+			"y": 210
 		},
 		{
 			"type": "static-bucket-red",
@@ -75,24 +70,14 @@
 			"y": 6
 		},
 		{
-			"type": "bucket-stack",
-			"x": 140,
-			"y": 243
-		},
-		{
-			"type": "static-bucket-red",
+			"type": "static-bucket-blue",
 			"x": 2,
-			"y": 187
+			"y": 210
 		},
 		{
 			"type": "static-bucket-red",
 			"x": 3,
-			"y": 193
-		},
-		{
-			"type": "alarm",
-			"x": 83,
-			"y": 234
+			"y": 216
 		}
 	],
 	"ladders": [
@@ -112,24 +97,29 @@
 			"segments": 6
 		},
 		{
-			"x": 28,
-			"y": 111,
-			"segments": 8
+			"x": 67,
+			"y": 109,
+			"segments": 9
 		},
 		{
-			"x": 53,
-			"y": 151,
-			"segments": 7
+			"x": 44,
+			"y": 154,
+			"segments": 11
 		},
 		{
-			"x": 125,
-			"y": 183,
-			"segments": 12
+			"x": 120,
+			"y": 206,
+			"segments": 13
 		},
 		{
-			"x": 39,
-			"y": 243,
-			"segments": 8
+			"x": 145,
+			"y": 272,
+			"segments": 14
+		},
+		{
+			"x": 15,
+			"y": 267,
+			"segments": 16
 		}
 	],
 	"platforms": [
@@ -175,37 +165,49 @@
 		},
 		{
 			"x": 17,
-			"y": 151,
+			"y": 154,
 			"segments": 2
 		},
 		{
 			"x": 65,
-			"y": 151,
+			"y": 154,
 			"segments": 4,
 			"angled": "up"
 		},
 		{
 			"x": -6,
-			"y": 187,
+			"y": 210,
 			"segments": 2,
 			"type": "danger"
 		},
 		{
 			"x": 42,
-			"y": 186,
+			"y": 209,
 			"segments": 4,
 			"angled": "down"
 		},
 		{
 			"x": -10,
-			"y": 243,
-			"segments": 10
+			"y": 266,
+			"segments": 3,
+			"angled": "up"
+		},
+		{
+			"x": 90,
+			"y": 270,
+			"segments": 3,
+			"angled": "up"
 		},
 		{
 			"x": 7,
-			"y": 283,
+			"y": 347,
 			"segments": 2,
 			"type": "danger"
+		},
+		{
+			"x": 132,
+			"y": 342,
+			"segments": 1
 		}
 	]
 }

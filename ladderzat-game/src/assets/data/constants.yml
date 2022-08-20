@@ -29,7 +29,7 @@ player:
         power: 130
         releasegravity: 400
     walk:
-        maxspeed: 60
+        maxspeed: 50
         acceleration: 0.6
         deceleration: 0.5
         damping: 0.5
@@ -54,6 +54,8 @@ jump:
     coyote: 125
 
 object:
+    bucket:
+        speed: 30
     platform:
         width: 24
     ladder:

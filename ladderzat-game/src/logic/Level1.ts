@@ -25,8 +25,8 @@ export default class Level1 extends LevelLogic {
 			let bucket = this.objectFactory.createBucket(context.buckets, mixer.getData('color'));
 			mixer.resetMixing()
 			bucket.x = 19;
-			bucket.y = Constants.world.height - 200
-			this.timerNextBucket += (Math.random() * 500) + 3000;
+			bucket.y = Constants.world.height - 223
+			this.timerNextBucket += (Math.random() * 500) + 4000;
 		}
 	}
 }

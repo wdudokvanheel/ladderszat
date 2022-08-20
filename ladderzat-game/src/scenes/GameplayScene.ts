@@ -203,15 +203,16 @@ export class GameplayScene extends Phaser.Scene {
 		if (type === 'coin') {
 			object.destroy();
 			this.context.score += 100;
-		} else if (type === 'key' || object.getData('collect') === 'mic' || object.getData('collect') === 'speakers' || object.getData('collect') === 'guitar-purple') {
-			this.collectProgressItem();
-			object.destroy();
-			this.context.score += 500;
 		} else if (type === 'drink') {
 			object.destroy();
 			this.context.drunk += .1;
 			this.collectProgressItem();
+		} else {
+			this.collectProgressItem();
+			object.destroy();
+			this.context.score += 500;
 		}
+
 	}
 
 	private collectProgressItem() {
