@@ -1,36 +1,40 @@
 import Constants from '../assets/data/constants.yml'
-import PlatformFactory from '../factory/PlatformFactory';
 import {sample} from '../main';
 import GameContext from '../model/GameContext';
 import LevelLogic from './LevelLogic';
 import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
-import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
 export default class Level3 extends LevelLogic {
-	private levels = 20;
-	private platformFactory = new PlatformFactory();
+	private timerNextBucket: number;
 
 	constructor() {
 		super(3);
 	}
 
 	init(context: GameContext, factory: GameObjectFactory) {
-		for (let i = 0; i < this.levels; i++) {
-			this.platformFactory.createPlatform(context.platforms, 'platform-studio', 50 + (i % 2 == 0 ? 50 : 0), 15 * i + 20);
-		}
-		this.createCollectibles(context, factory);
+		this.timerNextBucket = 1000;
 	}
 
 	update(context: GameContext, delta: number) {
+		this.timerNextBucket -= delta;
+		if (this.timerNextBucket <= 0) {
+			let bucket = this.objectFactory.createBucket(context.buckets, sample(Constants.gfx.bucket.colors));
+			bucket.setBounce(0);
+			bucket.setCollideWorldBounds(true);
+			bucket.setVelocityX(Math.random() * 200 - 100);
+			bucket.setVelocityY(-50 - (Math.random() * 50));
+			// bucket.body.setAllowGravity(false);
+			bucket.setGravityY(-200);
+			bucket.setGravityX(0);
+			bucket.x = 80;
+			bucket.y = Constants.world.height - 135
+			this.timerNextBucket += 500;
+		}
 	}
 
-	private createCollectibles(context: GameContext, factory: GameObjectFactory) {
-		for (let i = 0; i < this.levels; i++) {
-			let sprite = this.objectFactory.createBouncingSprite(factory,59 + (i % 2 == 0 ? 50 : 0), 15 * i + 25, 'collect-drink-' + sample(Constants.object.drinks), 2, 550);
-			context.collectibles.add(sprite, false);
-			(sprite as SpriteWithDynamicBody).body.setAllowGravity(false);
-			sprite.setDataEnabled();
-			sprite.data.set('collect', 'drink');
-		}
+	bucketCollision(context: GameContext, bucket: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody) {
+		if (bucket.name === 'corpsed')
+			return;
+		bucket.destroy(true);
 	}
 }

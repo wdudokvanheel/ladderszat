@@ -1,8 +1,8 @@
 {
-	"name": "wasted",
+	"name": "bar",
 	"progressCollectibles": 9,
 	"start": {
-		"x": 20,
+		"x": 75,
 		"y": 40
 	},
 	"exit": {
@@ -12,8 +12,24 @@
 	"collectibles": [
 	],
 	"objects": [
+
 	],
 	"props": [
+		{
+			"x": 76,
+			"y": 120,
+			"type": "koos"
+		},
+		{
+			"x": 60,
+			"y": 118,
+			"type": "platform-studio"
+		},
+		{
+			"x": 76,
+			"y": 118,
+			"type": "platform-studio"
+		}
 	],
 	"platforms": [
 		{
@@ -21,8 +37,30 @@
 			"y": 6,
 			"segments": 10,
 			"type": "wood-floor"
+		},
+		{
+			"x": -12,
+			"y": 41,
+			"segments": 2,
+			"type": "studio"
+		},
+		{
+			"x": 124,
+			"y": 41,
+			"segments": 2,
+			"type": "studio"
 		}
 	],
 	"ladders": [
+		{
+			"x": 6,
+			"y": 6,
+			"segments":  7
+		},
+		{
+			"x": 144,
+			"y": 6,
+			"segments":  7
+		}
 	]
 }

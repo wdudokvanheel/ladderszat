@@ -32,6 +32,13 @@ export default class CollisionController {
 			//Allow buckets to leave the level after they've collided on the lower part of the level
 			if (bucket.body.y > Constants.world.height - 24)
 				bucket.body.setCollideWorldBounds(false);
+
+
+			//Level-specific logic
+			this.context.gameplay.levelLogic.forEach(logic => {
+				if (logic.level == this.context.level)
+					logic.bucketCollision(this.context, bucket)
+			})
 		}, null, this);
 	}
 
