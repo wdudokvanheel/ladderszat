@@ -83,6 +83,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.timerDeath = 2000;
 		this.input.on('pointerdown', (e) => console.log('Click @ ', Math.round(e.worldX - .5), Math.round((Constants.world.height - e.worldY - .5))));
 		this.startBGMusic();
+		this.context.input.reset();
 	}
 
 	private startBGMusic(): void {
@@ -218,13 +219,14 @@ export class GameplayScene extends Phaser.Scene {
 		if (!type)
 			return;
 
+		this.levelLogic.forEach(logic => {
+			if (logic.level == this.context.level)
+				logic.collectibleCollision(this.context, object);
+		});
+
 		if (type === 'coin') {
 			object.destroy();
 			this.context.score += 100;
-		} else if (type === 'drink') {
-			object.destroy();
-			this.context.drunk += .1;
-			this.collectProgressItem();
 		} else {
 			this.collectProgressItem();
 			object.destroy();
@@ -237,8 +239,8 @@ export class GameplayScene extends Phaser.Scene {
 		if (!this.context.leveldata.progressCollectibles)
 			return;
 
-		let delta = (this.context.getMaxProgressionForLevel(this.context.level) - this.context.getMinProgressionForLevel(this.context.level)) / (this.context.leveldata.progressCollectibles + 1);
-		this.context.progress += delta;
+		let progression = (this.context.getMaxProgressionForLevel(this.context.level) - this.context.getMinProgressionForLevel(this.context.level)) / (this.context.leveldata.progressCollectibles + 1);
+		this.context.progress += progression;
 	}
 
 	private updateLevelLogic(delta: number) {

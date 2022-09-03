@@ -14,7 +14,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	//Level data
 	public leveldata;
 	public level = 3;
-	public progress = 0;
+	public progress = .66;
 
 	public player: SpriteWithDynamicBody;
 	public platforms: StaticGroup;

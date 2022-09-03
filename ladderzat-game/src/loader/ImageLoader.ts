@@ -59,6 +59,7 @@ export class ImageLoader {
 		this.loader.image('beams-double', images['objects']['beams-double'])
 		this.loader.image('beams-triple', images['objects']['beams-triple'])
 		this.loader.image('key', images['objects']['key'])
+		this.loader.image('medpack', images['objects']['medpack'])
 		this.loader.image('mixer', images['objects']['mixer'])
 		this.loader.image('bucket-stack', images['objects']['bucket-stack'])
 		this.loader.image('breaker-box', images['objects']['breaker-box'])

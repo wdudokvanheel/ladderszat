@@ -17,6 +17,7 @@ export default abstract class LevelLogic {
 
 	public abstract update(context: GameContext, delta: number);
 	public bucketCollision(context: GameContext, bucket: SpriteWithDynamicBody){}
+	public collectibleCollision(context: GameContext, collectible: SpriteWithDynamicBody){}
 }
 
 

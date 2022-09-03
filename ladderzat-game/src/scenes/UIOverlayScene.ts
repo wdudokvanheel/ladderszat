@@ -84,6 +84,11 @@ export class UIOverlayScene extends Scene {
 		this.debugText.setText(DEBUG_CONTROLLER.getValues());
 	}
 
+	reset(){
+		this.highlight = false;
+		this.drunkText = false;
+	}
+
 	private updateButtonStates() {
 		this.dpadButtons.forEach(btn => btn.setFrame(0));
 		if (this.getHorizontalDirection() == 'right')
