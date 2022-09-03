@@ -285,7 +285,7 @@ export class UIOverlayScene extends Scene {
 		this.score.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
 		this.score.setOrigin(0, 0)
 
-		this.wasted = this.add.bitmapText(80, this.score.y, 'main', 'LADDERZAT', 8);
+		this.wasted = this.add.bitmapText(80, this.score.y, 'main', 'LADDERS ZAT', 8);
 		this.wasted.alpha = 0;
 		this.wasted.setTintFill(Phaser.Display.Color.ValueToColor('#ed0e69').color32);
 		this.wasted.setOrigin(0, 0)
