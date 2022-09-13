@@ -262,9 +262,9 @@ export class GameplayScene extends Phaser.Scene {
 			alpha: {start: 1, end: 0},
 			quantity: 20,
 		});
-		emitter.explode(20, object.x + (object.width / 2), object.y - (object.height / 2));
+		emitter.explode(20, player.x + (player.width / 2), player.y + (player.height / 2));
 
-		return `true`;
+		return false;
 	}
 
 	private collectProgressItem(object: SpriteWithStaticBody) {
