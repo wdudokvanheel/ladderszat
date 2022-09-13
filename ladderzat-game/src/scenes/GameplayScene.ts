@@ -256,7 +256,7 @@ export class GameplayScene extends Phaser.Scene {
 
 		var particles = this.add.particles('paint');
 		var emitter = particles.createEmitter({
-			frame: ['blue'],
+			frame: ['purple'],
 			speed: 55,
 			lifespan: 275,
 			alpha: {start: 1, end: 0},

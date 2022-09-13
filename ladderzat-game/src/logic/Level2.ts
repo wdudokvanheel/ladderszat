@@ -93,7 +93,7 @@ export default class Level2 extends LevelLogic {
 			var water = context.getObjectByName('water') as SpriteWithStaticBody;
 			context.isAlive = false;
 
-			var shock = context.props.create(context.player.x - 6, water.y - water.height - 1);
+			var shock = context.props.create(context.player.x - 6, water.y - water.height);
 			shock.setOrigin(0, 1);
 			shock.anims.play('kris-shocked');
 			context.destroyPlayer();
@@ -142,11 +142,11 @@ export default class Level2 extends LevelLogic {
 			this.timer = Constants.level2.wire.shocktime;
 			wire.setFrame(2);
 		} else if (this.state === "shock") {
+			this.shocking = false;
 			this.state = "swingout1"
 			this.timer = 200;
 			wire.setFrame(1);
 		} else if (this.state === "swingout1") {
-			this.shocking = false;
 			this.state = "swingout2"
 			this.timer = 200;
 			wire.setFrame(0);
