@@ -1,5 +1,6 @@
 import Constants from '../assets/data/constants.yml'
 import images from "../assets/images/*/*.png";
+import paintParticles from "../assets/images/particles/paint.json"
 import AnimationManager = Phaser.Animations.AnimationManager;
 
 import LoaderPlugin = Phaser.Loader.LoaderPlugin;
@@ -33,6 +34,8 @@ export class ImageLoader {
 		this.loader.image('platform-studio', images['objects']['platform-studio'])
 		this.loader.image('platform-danger', images['objects']['platform-danger'])
 		this.loader.image('platform-wood-floor', images['objects']['platform-woodfloor'])
+		this.loader.image('platform-bar', images['objects']['platform-bar'])
+		this.loader.image('platform-barseats', images['objects']['platform-barseats'])
 		this.loader.image('platform-carpet', images['objects']['platform-carpet'])
 		this.loader.image('pipe-damage', images['objects']['pipe-damage'])
 		this.loader.image('ladder-studio', images['objects']['ladder-studio'])
@@ -41,7 +44,6 @@ export class ImageLoader {
 		this.loader.image('ladder-factory-head', images['objects']['ladder-factory-head'])
 		this.loader.image('ladder-bar-head', images['objects']['ladder-bar-head'])
 		this.loader.image('ladder-bar', images['objects']['ladder-bar'])
-		this.loader.image('koos', images['objects']['koos'])
 		this.loader.image('crate', images['objects']['crate'])
 		this.loader.image('guitars', images['objects']['guitars'])
 		this.loader.image('pipe', images['objects']['pipe'])
@@ -81,11 +83,15 @@ export class ImageLoader {
 		this.loader.spritesheet('kris-shocked', images['kris']['shocked'], {frameWidth: 20, frameHeight: 23})
 		this.loader.spritesheet('kris-walk', images['kris']['walk'], {frameWidth: 13, frameHeight: 22});
 		this.loader.spritesheet('kris-climb', images['kris']['climb'], {frameWidth: 11, frameHeight: 22});
+		this.loader.spritesheet('koos', images['objects']['koos'], {frameWidth: 7, frameHeight: 23});
 
+		this.loader.image('titlebg', images['ui']['titlebg']);
 		this.loader.image('progress-base', images['ui']['progress-base']);
 		this.loader.image('progress-start', images['ui']['progress-start']);
 		this.loader.image('progress-part', images['ui']['progress-part']);
 		this.loader.image('progress-end', images['ui']['progress-end']);
+
+		this.loader.atlas('paint', images['particles']['paint'], paintParticles);
 
 		this.loadCollectibles();
 		this.loadBuckets();
@@ -107,6 +113,13 @@ export class ImageLoader {
 	}
 
 	public generateAnimations() {
+		this.anims.create({
+			key: 'koos-throw',
+			frames: this.anims.generateFrameNumbers('koos', {start: 0, end: 1}),
+			frameRate: 3,
+			repeat: 0
+		});
+
 		this.anims.create({
 			key: 'wire-on',
 			frames: this.anims.generateFrameNumbers('wire', {start: 0, end: 2}),

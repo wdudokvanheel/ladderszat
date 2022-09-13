@@ -71,6 +71,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 		this.isJumping = false;
 		this.timeInAir = 0;
 		this.isClimbing = false;
+		this.drunk = 0;
 
 		//Remove all objects
 		if (this.buckets && this.buckets.children)

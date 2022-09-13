@@ -64,6 +64,7 @@ object:
     drinks:
         - vodka
         - beer
+        - whiskey
         - cocktail
         - wine
 

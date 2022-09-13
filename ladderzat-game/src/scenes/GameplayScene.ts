@@ -30,6 +30,7 @@ export class GameplayScene extends Phaser.Scene {
 	private timerDeath;
 	private targetTimeScale = 1;
 	private bgMusic: BaseSound;
+	private explodingBucketEmitter;
 
 	constructor() {
 		super('gameplay')
@@ -62,8 +63,10 @@ export class GameplayScene extends Phaser.Scene {
 
 		//Init level-specific logic
 		this.levelLogic.forEach(logic => {
-			if (logic.level == this.context.level)
+			if (logic.level == this.context.level) {
 				logic.init(this.context, this.add);
+				logic.setCamera(this.cameras.main);
+			}
 		});
 
 		//Setup collision handling
@@ -134,6 +137,8 @@ export class GameplayScene extends Phaser.Scene {
 		if (Math.abs(diff) < 0.3) {
 			this.physics.world.timeScale = this.targetTimeScale;
 			this.anims.globalTimeScale = this.targetTimeScale;
+			if (this.explodingBucketEmitter)
+				this.explodingBucketEmitter.timeScale = 1 / this.targetTimeScale;
 			return;
 		}
 
@@ -141,6 +146,9 @@ export class GameplayScene extends Phaser.Scene {
 		let movement = Math.pow(Math.abs(diff) * accelRate, 0.5) * Math.sign(diff);
 		this.physics.world.timeScale += movement;
 		this.anims.globalTimeScale = this.physics.world.timeScale;
+		if (this.explodingBucketEmitter) {
+			this.explodingBucketEmitter.timeScale = 1 / this.physics.world.timeScale;
+		}
 	}
 
 	private isPlayerDead(delta: number): boolean {
@@ -188,6 +196,19 @@ export class GameplayScene extends Phaser.Scene {
 			enemy.setVelocityX(-65);
 			corpse.setFlipX(false);
 		}
+
+		var particles = this.add.particles('paint');
+		var emitter = particles.createEmitter({
+			frame: ['red', 'purple', 'blue', 'green'],
+			angle: {min: 150, max: 400},
+			speed: {min: 0, max: 120},
+			gravityY: 350,
+			lifespan: 1000,
+			quantity: 50,
+		});
+		emitter.explode(350, enemy.x, enemy.y);
+		this.explodingBucketEmitter = emitter;
+		enemy.destroy(true);
 		this.context.destroyPlayer();
 	}
 
@@ -228,14 +249,25 @@ export class GameplayScene extends Phaser.Scene {
 			object.destroy();
 			this.context.score += 100;
 		} else {
-			this.collectProgressItem();
+			this.collectProgressItem(object);
 			object.destroy();
 			this.context.score += 500;
 		}
 
+		var particles = this.add.particles('paint');
+		var emitter = particles.createEmitter({
+			frame: ['blue'],
+			speed: 55,
+			lifespan: 275,
+			alpha: {start: 1, end: 0},
+			quantity: 20,
+		});
+		emitter.explode(20, object.x + (object.width / 2), object.y - (object.height / 2));
+
+		return `true`;
 	}
 
-	private collectProgressItem() {
+	private collectProgressItem(object: SpriteWithStaticBody) {
 		if (!this.context.leveldata.progressCollectibles)
 			return;
 

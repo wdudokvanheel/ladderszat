@@ -1,6 +1,9 @@
 {
 	"name": "factory",
 	"progressCollectibles": 3,
+	"title": "The Factory",
+	"introA": "Collect the pen,",
+	"introB": "paper and keys",
 	"start": {
 		"x": 24,
 		"y": 27

@@ -1,5 +1,8 @@
 {
 	"name": "bar",
+	"title": "The Bar",
+	"introA": "Celebrate and",
+	"introB": "get drunk!",
 	"progressCollectibles": 9,
 	"start": {
 		"x": 75,
@@ -23,32 +26,31 @@
 		{
 			"x": 60,
 			"y": 118,
-			"type": "platform-studio"
+			"type": "platform-barseats"
 		},
 		{
 			"x": 76,
 			"y": 118,
-			"type": "platform-studio"
+			"type": "platform-barseats"
 		}
 	],
 	"platforms": [
 		{
 			"x": 0,
 			"y": 6,
-			"segments": 10,
-			"type": "wood-floor"
+			"segments": 10
 		},
 		{
 			"x": -12,
 			"y": 41,
 			"segments": 2,
-			"type": "studio"
+			"type": "barseats"
 		},
 		{
 			"x": 124,
 			"y": 41,
 			"segments": 2,
-			"type": "studio"
+			"type": "barseats"
 		}
 	],
 	"ladders": [

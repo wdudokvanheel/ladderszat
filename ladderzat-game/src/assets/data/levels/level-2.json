@@ -1,5 +1,8 @@
 {
 	"name": "studio",
+	"title": "The Studio",
+	"introA": "Collect music gear",
+	"introB": "to build your studio",
 	"progressCollectibles": 3,
 	"start": {
 		"x": 20,
