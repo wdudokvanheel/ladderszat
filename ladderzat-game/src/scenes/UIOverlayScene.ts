@@ -48,10 +48,7 @@ export class UIOverlayScene extends Scene {
 	private highlightTimer = 0;
 
 	private introTimer = 180;
-	private introBG;
-	private introLevelName: BitmapText;
-	private introGoalA: BitmapText;
-	private introGoalB: BitmapText;
+	private introText;
 
 	constructor() {
 		super('ui');
@@ -94,19 +91,7 @@ export class UIOverlayScene extends Scene {
 		this.highlight = false;
 		this.drunkText = false;
 		this.introTimer = 180;
-		if (this.introLevelName) {
-			this.introLevelName.setText(this.context.leveldata.title);
-			this.introGoalA.setText(this.context.leveldata.introA);
-			this.introGoalB.setText(this.context.leveldata.introB);
-			this.introGoalA.alpha = 1;
-			this.introGoalB.alpha = 1;
-			this.introLevelName.alpha = 1;
-			this.introBG.alpha = 1;
-
-			this.introLevelName.setPosition((Constants.screen.width - this.introLevelName.width) / 2, this.introLevelName.y);
-			this.introGoalA.setPosition((Constants.screen.width - this.introGoalA.width) / 2, this.introGoalA.y);
-			this.introGoalB.setPosition((Constants.screen.width - this.introGoalB.width) / 2, this.introGoalB.y);
-		}
+		this.createIntroText();
 	}
 
 	private updateButtonStates() {
@@ -310,22 +295,49 @@ export class UIOverlayScene extends Scene {
 		this.wasted.setTintFill(Phaser.Display.Color.ValueToColor('#ed0e69').color32);
 		this.wasted.setOrigin(0, 0)
 		this.wasted.setPosition((Constants.screen.width - this.wasted.width) / 2, this.wasted.y);
+		this.createIntroText();
+	}
 
-		this.introBG = this.add.sprite(0, 40, 'titlebg').setOrigin(0, 0);
+	private createIntroText() {
+		if (this.introText) {
+			this.introText.texture.clear();
+			this.introText.setAlpha(1);
+		} else {
+			this.introText = this.make.renderTexture({
+				width: Constants.screen.width,
+				height: 64,
+				x: 0,
+				y: 32
+			}, true);
+			this.introText.setOrigin(0, 0);
+		}
 
-		var text = 48;
-		this.introLevelName = this.add.dynamicBitmapText(0, text, 'main', this.context.leveldata.title, 12);
-		this.introLevelName.setTintFill(Phaser.Display.Color.ValueToColor('#ad2537').color32);
+		var level = this.make.dynamicBitmapText({
+			font: 'main',
+			text: this.context.leveldata.title,
+			size: 12
+		}, false);
 
-		this.introGoalA = this.add.bitmapText(0, text + 16, 'main', this.context.leveldata.introA, 8);
-		this.introGoalA.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
+		var goalA = this.make.dynamicBitmapText({
+			font: 'main',
+			text: this.context.leveldata.introA,
+			size: 8
+		}, false);
 
-		this.introGoalB = this.add.bitmapText(0, text + 26, 'main', this.context.leveldata.introB, 8);
-		this.introGoalB.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
+		var goalB = this.make.dynamicBitmapText({
+			font: 'main',
+			text: this.context.leveldata.introB,
+			size: 8
+		}, false);
 
-		this.introLevelName.setPosition((Constants.screen.width - this.introLevelName.width) / 2, this.introLevelName.y);
-		this.introGoalA.setPosition((Constants.screen.width - this.introGoalA.width) / 2, this.introGoalA.y);
-		this.introGoalB.setPosition((Constants.screen.width - this.introGoalB.width) / 2, this.introGoalB.y);
+		level.setTintFill(Phaser.Display.Color.ValueToColor('#ad2537').color32);
+		goalA.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
+		goalB.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
+
+		this.introText.draw('titlebg', 0, 0);
+		this.introText.draw(level, (Constants.screen.width - level.width) / 2, 12);
+		this.introText.draw(goalA, (Constants.screen.width - goalA.width) / 2, 36);
+		this.introText.draw(goalB, (Constants.screen.width - goalB.width) / 2, 48);
 	}
 
 	private updateProgressbar() {
@@ -349,10 +361,7 @@ export class UIOverlayScene extends Scene {
 		if (this.introTimer > 0) {
 			if (--this.introTimer < 60) {
 				const alpha = this.introTimer / 60;
-				this.introLevelName.alpha = (alpha);
-				this.introGoalA.alpha = (alpha);
-				this.introGoalB.alpha = (alpha);
-				this.introBG.alpha = (alpha);
+				this.introText.setAlpha(alpha);
 			}
 		}
 
