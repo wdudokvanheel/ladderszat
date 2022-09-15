@@ -330,7 +330,7 @@ export class UIOverlayScene extends Scene {
 			size: 8
 		}, false);
 
-		level.setTintFill(Phaser.Display.Color.ValueToColor('#ad2537').color32);
+		level.setTintFill(Phaser.Display.Color.ValueToColor(this.context.leveldata.titleColor).color32);
 		goalA.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
 		goalB.setTintFill(Phaser.Display.Color.ValueToColor('#dedede').color32);
 

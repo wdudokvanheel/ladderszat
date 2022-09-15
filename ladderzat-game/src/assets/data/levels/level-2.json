@@ -1,12 +1,13 @@
 {
 	"name": "studio",
+	"titleColor": "#ad2537",
 	"title": "The Studio",
 	"introA": "Collect music gear",
 	"introB": "to build your studio",
-	"progressCollectibles": 3,
+	"progressCollectibles": 4,
 	"start": {
-		"x": 20,
-		"y": 40
+		"x": 8,
+		"y": 25
 	},
 	"exit": {
 		"x": 10,
@@ -39,34 +40,44 @@
 			"type": "coin"
 		},
 		{
-			"x": 26,
+			"x": 10,
 			"y": 149,
-			"type": "guitar-purple"
+			"type": "drums"
 		},
 		{
-			"x": 62,
+			"x": 67,
 			"y": 355,
-			"type": "speakers"
-		},
-		{
-			"x": 31,
-			"y": 400,
-			"type": "coin"
-		},
-		{
-			"x": 55,
-			"y": 401,
-			"type": "coin"
-		},
-		{
-			"x": 79,
-			"y": 402,
-			"type": "coin"
+			"type": "rhodes"
 		},
 		{
 			"x": 141,
 			"y": 185,
 			"type": "mic"
+		},
+		{
+			"x": 42,
+			"y": 440,
+			"type": "guitar-purple"
+		},
+		{
+			"x": 90,
+			"y": 440,
+			"type": "coin"
+		},
+		{
+			"x": 23,
+			"y": 500,
+			"type": "studio-desk"
+		},
+		{
+			"x": 71,
+			"y": 497,
+			"type": "coin"
+		},
+		{
+			"x": 95,
+			"y": 496,
+			"type": "coin"
 		}
 	],
 	"objects": [
@@ -94,11 +105,6 @@
 			"type": "pipe-damage",
 			"x": 67,
 			"y": 295
-		},
-		{
-			"type": "bucket-stack",
-			"x": 140,
-			"y": 395
 		}
 	],
 	"props": [
@@ -158,29 +164,49 @@
 			"y": 295
 		},
 		{
-			"type": "board",
-			"x": 15,
-			"y": 525
+			"type": "beams",
+			"x": 82,
+			"y": 394
 		},
 		{
-			"type": "studio-desk",
-			"x": 32,
-			"y": 473
+			"type": "beams",
+			"x": 34,
+			"y": 392
 		},
 		{
-			"type": "mic-stand",
-			"x": 5,
-			"y": 475
+			"type": "studio-ground",
+			"x": 0,
+			"y": 575
 		},
 		{
-			"type": "guitars",
-			"x": 72,
-			"y": 530
+			"x": 23,
+			"y": 575,
+			"type": "studio-desk-shadow"
 		},
 		{
-			"type": "nm-logo",
-			"x": 119,
-			"y": 487
+			"x": 97,
+			"y": 575,
+			"type": "mic-shadow"
+		},
+		{
+			"x": 130,
+			"y": 575,
+			"type": "rhodes-shadow"
+		},
+		{
+			"x": 3,
+			"y": 642,
+			"type": "guitar-purple-shadow"
+		},
+		{
+			"x": 29,
+			"y": 630,
+			"type": "drums-shadow"
+		},
+		{
+			"type": "studio-ground-shadow",
+			"x": 0,
+			"y": 575
 		}
 	],
 	"platforms": [
@@ -285,14 +311,25 @@
 			"type": "wood-floor"
 		},
 		{
-			"x": 0,
-			"y": 475,
-			"segments": 10,
-			"type": "carpet"
+			"x": 82,
+			"y": 429,
+			"segments": 1
+		},
+		{
+			"x": 34,
+			"y": 427,
+			"segments": 1
+		},
+		{
+			"x": -8,
+			"y": 490,
+			"segments": 7,
+			"angled": "down",
+			"type": "factory"
 		},
 		{
 			"x": 0,
-			"y": 525,
+			"y": 575,
 			"segments": 10,
 			"type": "carpet"
 		}
@@ -324,9 +361,14 @@
 			"segments": 10
 		},
 		{
-			"x": 128,
+			"x": 126,
 			"y": 395,
-			"segments": 16
+			"segments": 18
+		},
+		{
+			"x": 114,
+			"y": 485,
+			"segments": 18
 		}
 	]
 }

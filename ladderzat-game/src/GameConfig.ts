@@ -8,7 +8,7 @@ import {UIOverlayScene} from './scenes/UIOverlayScene';
 
 export default {
 	type: Phaser.AUTO,
-	backgroundColor: '#221f1f',
+	backgroundColor: '#360f8a',
 	scale: {
 		mode: Phaser.Scale.ScaleModes.FIT,
 		autoCenter: Phaser.Scale.CENTER_BOTH,

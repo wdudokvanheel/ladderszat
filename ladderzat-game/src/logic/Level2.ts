@@ -13,6 +13,9 @@ export default class Level2 extends LevelLogic {
 	private shocking = false;
 	private emitters = [];
 	private timerNextBucket = 2000;
+	private cameraYOverwrite = 0;
+	private collectedAllItems = false;
+	private collectibles = ['mic', 'rhodes', 'guitar-purple', 'drums', 'studio-desk'];
 
 	constructor() {
 		super(2);
@@ -102,12 +105,67 @@ export default class Level2 extends LevelLogic {
 		this.timerNextBucket -= delta;
 		if (this.timerNextBucket <= 0) {
 			let bucket = this.objectFactory.createBucket(context.buckets, sample(Constants.gfx.bucket.colors));
-			bucket.x = 160;
-			bucket.y = Constants.world.height - 415;
+			bucket.x = 170;
+			bucket.y = Constants.world.height - 420;
 			bucket.setCollideWorldBounds(false);
 			bucket.setVelocityX(-bucket.body.velocity.x);
-			this.timerNextBucket += 3000;
+			bucket.setVelocityY(-175);
+
+			bucket = this.objectFactory.createBucket(context.buckets, sample(Constants.gfx.bucket.colors));
+			bucket.x = -10;
+			bucket.y = Constants.world.height - 496;
+			bucket.setCollideWorldBounds(false);
+			bucket.setVelocityX(bucket.body.velocity.x);
+			bucket.setVelocityY(-175);
+			this.timerNextBucket += 2750;
 		}
+		if (context.player && context.isAlive)
+			this.updateCamera(context);
+	}
+
+	private collectibleCollision(context: GameContext, collectible: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody) {
+		const type = collectible.data.get('collect');
+		if (type === 'coin')
+			return;
+
+		const shadow = context.getObjectByName(`${type}-shadow`);
+		if (shadow)
+			shadow.destroy(true);
+
+		var collectedAll = true;
+		for (const i in this.collectibles) {
+			if (context.getObjectByName(`${this.collectibles[i]}-shadow`)) {
+				collectedAll = false;
+				break;
+			}
+		}
+
+		if (collectedAll)
+			this.collectedAllItems = true;
+
+		if(collectedAll){
+			const shadow = context.getObjectByName('studio-ground-shadow');
+			if(shadow)
+				shadow.destroy(true);
+		}
+	}
+
+
+	private updateCamera(context: GameContext) {
+		const targetY = 263;
+		const currentY = this.camera.getBounds().y;
+
+		if (context.player.y <= 427) {
+			if (this.cameraYOverwrite == -1)
+				this.cameraYOverwrite = currentY;
+
+			if (this.cameraYOverwrite > targetY) {
+				this.camera.setBounds(0, this.cameraYOverwrite, Constants.screen.width, Constants.screen.height);
+				this.cameraYOverwrite--;
+			}
+		} else
+			this.cameraYOverwrite = -1;
+
 	}
 
 	private updateShockEmitters(context: GameContext) {

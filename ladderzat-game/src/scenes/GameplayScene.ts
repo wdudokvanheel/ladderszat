@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../assets/data/constants.yml'
 import CollisionController from '../controller/CollisionController';
+import {DEBUG_CONTROLLER} from '../controller/DebugController';
 import GraphicsController from '../controller/GraphicsController';
 import {PhysicsController} from '../controller/PhysicsController';
 import {ObjectFactory} from '../factory/ObjectFactory';
@@ -114,8 +115,6 @@ export class GameplayScene extends Phaser.Scene {
 		if (this.isPlayerDead(delta))
 			return;
 
-		//Update level specific logic
-		this.updateLevelLogic(delta);
 
 		//Check if still alive after level logic
 		if (!this.context.isAlive)
@@ -123,8 +122,11 @@ export class GameplayScene extends Phaser.Scene {
 
 		//Update camera to follow player
 		this.cameras.main.setBounds(0, this.getCameraY(), Constants.screen.width, Constants.screen.height);
-
 		this.physicsController.update(delta);
+
+		//Update level specific logic
+		this.updateLevelLogic(delta);
+
 		this.graphicsController.update();
 
 		//Reset values so Phaser's collision system can rewrite the values before the next update
@@ -224,7 +226,7 @@ export class GameplayScene extends Phaser.Scene {
 		return true;
 	}
 
-	private getCameraY(): number {
+	public getCameraY(): number {
 		return Math.min(Constants.world.height - Constants.layout.gameplay.height, this.context.player.y - ((Constants.layout.gameplay.height) / 2) - this.context.player.height);
 	}
 
@@ -258,11 +260,11 @@ export class GameplayScene extends Phaser.Scene {
 		var emitter = particles.createEmitter({
 			frame: ['purple'],
 			speed: 55,
-			lifespan: 275,
+			lifespan: 350,
 			alpha: {start: 1, end: 0},
 			quantity: 20,
 		});
-		emitter.explode(20, player.x + (player.width / 2), player.y + (player.height / 2));
+		emitter.explode(30, player.x + (player.width / 2), player.y + (player.height / 2));
 
 		return false;
 	}

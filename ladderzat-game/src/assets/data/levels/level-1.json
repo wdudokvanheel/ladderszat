@@ -1,6 +1,7 @@
 {
 	"name": "factory",
 	"progressCollectibles": 3,
+	"titleColor": "#601de7",
 	"title": "The Factory",
 	"introA": "Collect the pen,",
 	"introB": "paper and keys",
