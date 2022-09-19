@@ -14,7 +14,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	//Level data
 	public leveldata;
 	public level = 2;
-	public progress = .33333;
+	public progress = 0;
 
 	public player: SpriteWithDynamicBody;
 	public platforms: StaticGroup;
@@ -87,7 +87,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 		this.destroyPlayer();
 	}
 
-	public reset(){
+	public reset() {
 		this.score = 0;
 		this.progress = 0;
 		this.level = 1;

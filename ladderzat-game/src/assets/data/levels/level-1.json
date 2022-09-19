@@ -5,6 +5,7 @@
 	"title": "The Factory",
 	"introA": "Collect the pen,",
 	"introB": "paper and keys",
+
 	"start": {
 		"x": 24,
 		"y": 27
@@ -14,6 +15,11 @@
 		"y": 347
 	},
 	"props": [
+		{
+			"type": "exit-shadow",
+			"x": 32,
+			"y": 347
+		}
 	],
 	"collectibles": [
 		{

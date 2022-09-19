@@ -6,6 +6,7 @@ import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
 
 export default class Level1 extends LevelLogic {
 	private timerNextBucket: number;
+	private collectibles = 0;
 
 	constructor() {
 		super(1);
@@ -28,5 +29,30 @@ export default class Level1 extends LevelLogic {
 			bucket.y = Constants.world.height - 223
 			this.timerNextBucket += (Math.random() * 500) + 4000;
 		}
+	}
+
+	collectibleCollision(context: GameContext, collectible: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody) {
+		super.collectibleCollision(context, collectible);
+		const type = collectible.data.get('collect');
+		if (type === 'coin')
+			return;
+
+		this.collectibles++;
+		if(this.collectibles == 3){
+			let shadow = context.getObjectByName('exit-shadow');
+			if(shadow)
+				shadow.destroy(true);
+		}
+	}
+
+	public canExit(context: GameContext) : boolean{
+		if(this.collectibles == 3)
+			return true;
+
+		if(context.input.introTimer == 0)
+			context.input.createIntroText();
+		else
+			context.input.introTimer = 180;
+		return false;
 	}
 }

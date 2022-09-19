@@ -33,7 +33,6 @@ export default class CollisionController {
 			if (bucket.body.y > Constants.world.height - 24)
 				bucket.body.setCollideWorldBounds(false);
 
-
 			//Level-specific logic
 			this.context.gameplay.levelLogic.forEach(logic => {
 				if (logic.level == this.context.level)
@@ -61,7 +60,7 @@ export default class CollisionController {
 			//Collider for player -> buckets
 			this.physics.add.overlap(this.context.player, this.context.buckets, null, this.context.gameplay.onHit, this.context.gameplay),
 			//Collider for player -> level exit
-			this.physics.add.collider(this.context.player, this.context.exit, this.context.gameplay.onExit, null, this.context.gameplay),
+			this.physics.add.overlap(this.context.player, this.context.exit, this.context.gameplay.onExit, null, this.context.gameplay),
 			//Collider for player -> collectibles
 			this.physics.add.collider(this.context.player, this.context.collectibles, null, this.context.gameplay.onCollect, this.context.gameplay)
 		);

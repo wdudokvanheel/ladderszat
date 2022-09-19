@@ -4,19 +4,21 @@ import {GameplayScene} from './GameplayScene';
 
 export class LevelCompleteScene extends Scene {
 	private context: GameContext;
-	private timer = 2000;
+	private timer = 2500;
 
 	constructor() {
 		super('levelcomplete');
 	}
 
 	create() {
-		let textLevel = this.add.bitmapText(0, 0, 'main', 'Level ' + this.context.level, 8);
-		textLevel.setPosition((160 - textLevel.width) / 2, 32);
-		textLevel.setTintFill(Phaser.Display.Color.ValueToColor('#74a130').color32);
+		this.add.sprite(0, 32, 'titlebg').setOrigin(0, 0);
 
-		textLevel = this.add.bitmapText(0, 0, 'main', 'Complete', 8);
-		textLevel.setPosition((160 - textLevel.width) / 2, 48);
+		let textLevel = this.add.bitmapText(0, 0, 'main', this.context.leveldata.title, 12);
+		textLevel.setPosition((160 - textLevel.width) / 2, 44);
+		textLevel.setTintFill(Phaser.Display.Color.ValueToColor(this.context.leveldata.titleColor).color32);
+
+		textLevel = this.add.bitmapText(0, 0, 'main', 'Level complete!', 8);
+		textLevel.setPosition((160 - textLevel.width) / 2, 32+36);
 		textLevel.setTintFill(Phaser.Display.Color.ValueToColor('#74a130').color32);
 	}
 
@@ -26,6 +28,11 @@ export class LevelCompleteScene extends Scene {
 			this.timer = 2000;
 			this.scene.stop();
 			this.setNextLevel();
+			if(this.context.player) {
+				this.context.destroyPlayer();
+				this.context.isAlive = false;
+			}
+
 			(this.scene.get('gameplay') as GameplayScene).scene.restart();
 		}
 	}

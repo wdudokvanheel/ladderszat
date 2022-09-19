@@ -231,6 +231,18 @@ export class GameplayScene extends Phaser.Scene {
 	}
 
 	public onExit() {
+		let canExit = true;
+
+		this.levelLogic.forEach(logic => {
+			if (logic.level == this.context.level)
+				if(!logic.canExit(this.context))
+					canExit = false;
+
+		});
+
+		if(!canExit)
+			return true;
+
 		this.context.destroyPlayer();
 		this.context.isAlive = false;
 		this.playing = false;
@@ -256,14 +268,13 @@ export class GameplayScene extends Phaser.Scene {
 			this.context.score += 500;
 		}
 
-		var particles = this.add.particles('paint');
+		var particles = this.add.particles('particle-pickup');
 		var emitter = particles.createEmitter({
-			frame: ['purple'],
 			speed: 55,
-			lifespan: 350,
-			alpha: {start: 1, end: 0},
-			quantity: 20,
+			lifespan: 200,
+			alpha: {start: 1, end: 0, ease: 'Bounce.easeIn'},
 		});
+
 		emitter.explode(30, player.x + (player.width / 2), player.y + (player.height / 2));
 
 		return false;

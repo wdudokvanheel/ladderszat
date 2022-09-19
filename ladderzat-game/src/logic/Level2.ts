@@ -6,8 +6,11 @@ import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
 import Sprite = Phaser.GameObjects.Sprite;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
+import ParticleEmitter = Phaser.GameObjects.Particles.ParticleEmitter;
 
 export default class Level2 extends LevelLogic {
+	private factory: GameObjectFactory;
 	private state;
 	private timer;
 	private shocking = false;
@@ -16,23 +19,27 @@ export default class Level2 extends LevelLogic {
 	private cameraYOverwrite = 0;
 	private collectedAllItems = false;
 	private collectibles = ['mic', 'rhodes', 'guitar-purple', 'drums', 'studio-desk'];
+	private noteEmitter: ParticleEmitter;
+	private winCountDown = 240;
+	private startedNoteEmitter = false;
 
 	constructor() {
 		super(2);
 	}
 
-	init(context: GameContext, add: GameObjectFactory) {
+	init(context: GameContext, factory: GameObjectFactory) {
 		this.emitters = [];
 		this.timer = 0;
 		this.shocking = false;
 		this.state = undefined;
 		this.timerNextBucket = 2000;
+		this.factory = factory;
 
 		let wire = context.getObjectByName("wire");
 		let water = context.getObjectByName("water") as SpriteWithStaticBody;
 
 		if (wire) {
-			let particles = add.particles('particle-white');
+			let particles = factory.particles('particle-white');
 			let emitter = particles.createEmitter({
 				lifespan: 300,
 				speed: {min: 50, max: 70},
@@ -47,7 +54,7 @@ export default class Level2 extends LevelLogic {
 
 		if (water) {
 			//Add power particle emitter
-			let particles = add.particles('particle-white');
+			let particles = factory.particles('particle-white');
 			let emitter = particles.createEmitter({
 				y: water.y - 5,
 				x: {min: water.x, max: water.x + 100},
@@ -66,7 +73,7 @@ export default class Level2 extends LevelLogic {
 		}
 
 		var sprite = context.getObjectByName('pipe-damage') as SpriteWithDynamicBody;
-		var particles = add.particles('particle-water');
+		var particles = factory.particles('particle-water');
 		var emitter = particles.createEmitter({
 			lifespan: 5000,
 			angle: {min: 220, max: 315},
@@ -119,11 +126,61 @@ export default class Level2 extends LevelLogic {
 			bucket.setVelocityY(-175);
 			this.timerNextBucket += 2750;
 		}
+
 		if (context.player && context.isAlive)
 			this.updateCamera(context);
+
+		this.updateExit(context);
 	}
 
-	private collectibleCollision(context: GameContext, collectible: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody) {
+	private updateExit(context: GameContext) {
+		if (context.player.y <= 427 && context.player.body.blocked.down && !context.isJumping && !context.isClimbing && context.player.body.velocity.y <= 0) {
+			if (!this.collectedAllItems) {
+				if (context.input.introTimer == 0)
+					context.input.createIntroText();
+				else
+					context.input.introTimer = 60;
+			} else {
+				if (context.player.x > 93)
+					context.input.overrideHorizontal = 'left';
+				else {
+					context.input.overrideHorizontal = '';
+					context.player.setFlipX(false);
+
+					if (!this.startedNoteEmitter) {
+						this.startedNoteEmitter = true;
+						context.gameplay.time.delayedCall(500, function(){
+							var particles = this.factory.particles('note');
+							this.noteEmitter = particles.createEmitter({
+								x: context.player.x + 12,
+								y: context.player.y - 5,
+								angle: {min: 210, max: 310},
+								speed: 14,
+								gravityY: -40,
+								frequency: 750,
+								lifespan: 1500,
+								alpha: {start: 1, end: 0, ease: 'Bounce.easeIn'},
+								quantity: 1,
+							});
+						}, null, this);
+
+					} else if (--this.winCountDown <= 0) {
+						context.buckets.clear(true);
+						context.gameplay.scene.launch('levelcomplete');
+					}
+				}
+			}
+		}
+	}
+
+	private
+
+	collectibleCollision(context
+							 :
+							 GameContext, collectible
+							 :
+							 Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
+	) {
 		const type = collectible.data.get('collect');
 		if (type === 'coin')
 			return;
@@ -143,15 +200,20 @@ export default class Level2 extends LevelLogic {
 		if (collectedAll)
 			this.collectedAllItems = true;
 
-		if(collectedAll){
+		if (collectedAll) {
 			const shadow = context.getObjectByName('studio-ground-shadow');
-			if(shadow)
+			if (shadow)
 				shadow.destroy(true);
 		}
 	}
 
 
-	private updateCamera(context: GameContext) {
+	private
+
+	updateCamera(context
+					 :
+					 GameContext
+	) {
 		const targetY = 263;
 		const currentY = this.camera.getBounds().y;
 
@@ -168,7 +230,12 @@ export default class Level2 extends LevelLogic {
 
 	}
 
-	private updateShockEmitters(context: GameContext) {
+	private
+
+	updateShockEmitters(context
+							:
+							GameContext
+	) {
 		let water = context.getObjectByName("water") as Sprite;
 
 		if (this.state == "shock") {
@@ -181,7 +248,14 @@ export default class Level2 extends LevelLogic {
 		}
 	}
 
-	private updateWire(context: GameContext, delta: number) {
+	private
+
+	updateWire(context
+				   :
+				   GameContext, delta
+				   :
+				   number
+	) {
 		const wire = context.getObjectByName("wire") as Sprite;
 		if (!wire)
 			return;

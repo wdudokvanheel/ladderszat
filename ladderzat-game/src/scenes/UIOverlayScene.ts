@@ -47,8 +47,10 @@ export class UIOverlayScene extends Scene {
 	private highlight = false;
 	private highlightTimer = 0;
 
-	private introTimer = 180;
+	public introTimer = 0;
 	private introText;
+
+	public overrideHorizontal: string;
 
 	constructor() {
 		super('ui');
@@ -90,7 +92,7 @@ export class UIOverlayScene extends Scene {
 	reset() {
 		this.highlight = false;
 		this.drunkText = false;
-		this.introTimer = 180;
+		this.overrideHorizontal = undefined;
 		this.createIntroText();
 	}
 
@@ -113,6 +115,9 @@ export class UIOverlayScene extends Scene {
 	}
 
 	public getHorizontalDirection(): string {
+		if (this.overrideHorizontal != undefined)
+			return this.overrideHorizontal;
+
 		if (this.horizontalTouchDirection === 'left' || this.horizontalKeyboardDirection === 'left')
 			return "left";
 		else if (this.horizontalTouchDirection === 'right' || this.horizontalKeyboardDirection === 'right')
@@ -122,6 +127,9 @@ export class UIOverlayScene extends Scene {
 	}
 
 	public getVerticalDirection(): string {
+		if (this.overrideHorizontal != undefined)
+			return undefined;
+
 		if (this.verticalTouchDirection === 'up' || this.verticalKeyboardDirection === 'up')
 			return 'up';
 		else if (this.verticalTouchDirection === 'down' || this.verticalKeyboardDirection === 'down')
@@ -155,6 +163,9 @@ export class UIOverlayScene extends Scene {
 	public getJumpInput(): JumpInputModel {
 		const key = this.isJumpKeyDown();
 		const touch = this.isJumpTouchDown();
+
+		if(this.overrideHorizontal != undefined)
+			return new JumpInputModel(false, false);
 
 		return new JumpInputModel(key, touch);
 	}
@@ -298,7 +309,12 @@ export class UIOverlayScene extends Scene {
 		this.createIntroText();
 	}
 
-	private createIntroText() {
+	public createIntroText(title = true) {
+		if (this.introTimer > 0) {
+			return;
+		}
+		this.introTimer = 180;
+
 		if (this.introText) {
 			this.introText.texture.clear();
 			this.introText.setAlpha(1);
@@ -338,6 +354,7 @@ export class UIOverlayScene extends Scene {
 		this.introText.draw(level, (Constants.screen.width - level.width) / 2, 12);
 		this.introText.draw(goalA, (Constants.screen.width - goalA.width) / 2, 36);
 		this.introText.draw(goalB, (Constants.screen.width - goalB.width) / 2, 48);
+		this.introText.setAlpha(1);
 	}
 
 	private updateProgressbar() {

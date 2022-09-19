@@ -28,10 +28,10 @@ export class LevelDataLoader {
 		factory.sprite(0, Constants.world.height, "bg-level-" + context.level).setOrigin(0, 1);
 
 		context.buckets = physics.add.group();
+		context.exit = this.objectFactory.createExit(physics, context.leveldata.exit);
 		context.props = this.objectFactory.createProps(factory, context);
 		context.platforms = this.platformFactory.createPlatforms(physics, context.leveldata.name, context.leveldata.platforms);
 		context.ladders = this.ladderFactory.createLadders(physics, creator, factory, textures, context);
-		context.exit = this.objectFactory.createExit(physics, context.leveldata.exit);
 		context.collectibles = this.objectFactory.createCollectibles(physics, factory, context);
 		context.objects = this.objectFactory.createObjects(physics, factory, context);
 

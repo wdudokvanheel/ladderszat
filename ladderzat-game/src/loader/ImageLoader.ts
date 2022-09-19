@@ -24,6 +24,7 @@ export class ImageLoader {
 		this.loader.image('particle-water', images['particles']['water'])
 		this.loader.image('particle-power', images['particles']['power'])
 		this.loader.image('particle-white', images['particles']['white'])
+		this.loader.image('particle-pickup', images['particles']['pickup'])
 
 		this.loader.image('background', images['ui']['background'])
 		this.loader.spritesheet('coin', images['objects']['coin'], {frameWidth: 9, frameHeight: 10})
@@ -74,7 +75,9 @@ export class ImageLoader {
 		this.loader.image('studio-ground', images['objects']['studio-ground'])
 		this.loader.image('studio-ground-shadow', images['objects']['studio-ground-shadow'])
 
+		this.loader.image('note', images['objects']['note'])
 		this.loader.image('exit', images['objects']['exit'])
+		this.loader.image('exit-shadow', images['objects']['exit-shadow'])
 		this.loader.image('warning', images['objects']['warning'])
 		this.loader.image('logo', images['ui']['logo'])
 		this.loader.image('bg-level-1', images['bg']['level-1'])

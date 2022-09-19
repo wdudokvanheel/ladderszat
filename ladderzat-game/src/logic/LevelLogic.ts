@@ -23,6 +23,10 @@ export default abstract class LevelLogic {
 	public setCamera(camera: Camera){
 		this.camera = camera;
 	}
+
+	public canExit(context: GameContext) : boolean{
+		return true;
+	}
 }
 
 
