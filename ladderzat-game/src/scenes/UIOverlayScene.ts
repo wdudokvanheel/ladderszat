@@ -342,7 +342,6 @@ export class UIOverlayScene extends Scene {
 			return;
 		}
 		this.introTimer = 180;
-		this.introTimer = 10;
 
 		if (this.introText) {
 			this.introText.texture.clear();

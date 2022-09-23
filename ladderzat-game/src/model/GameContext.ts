@@ -48,7 +48,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	public timeInAir = 0;
 	public drunk = 0;
 
-	public score = 230;
+	public score = 0;
 
 	constructor(pluginManager) {
 		super(pluginManager);

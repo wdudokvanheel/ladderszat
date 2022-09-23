@@ -1,11 +1,7 @@
 import {Scene} from 'phaser';
 import Constants from '../assets/data/constants.yml';
-import {DEBUG_CONTROLLER} from '../controller/DebugController';
 import GameContext from '../model/GameContext';
-import {GameplayScene} from './GameplayScene';
 import {HighscoreScene} from './HighscoreScene';
-import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
-import Sprite = Phaser.GameObjects.Sprite;
 import BitmapText = Phaser.GameObjects.BitmapText;
 
 export class EnterNameScene extends Scene {
@@ -17,6 +13,9 @@ export class EnterNameScene extends Scene {
 	private nameBitmaps = [];
 	private inputTimer = 0;
 
+	private submitBtn;
+	private submitDisabled;
+
 	constructor() {
 		super('entername');
 	}
@@ -25,10 +24,13 @@ export class EnterNameScene extends Scene {
 		let _this = this;
 
 		this.add.sprite(0, 17, 'gameover').setOrigin(0, 0);
-		const button = this.add.sprite(0, 192, 'submit').setOrigin(0, 0);
-		button.setPosition((Constants.screen.width - button.width) / 2, button.y);
-		button.setInteractive();
-		button.on('pointerdown', function () {
+		this.submitBtn = this.add.sprite(0, 192, 'submit').setOrigin(0, 0);
+		this.submitDisabled = this.add.sprite(0, 192, 'submit-disabled').setOrigin(0, 0);
+		this.submitDisabled.setPosition((Constants.screen.width - this.submitDisabled.width) / 2, this.submitDisabled.y);
+
+		this.submitBtn.setPosition((Constants.screen.width - this.submitBtn.width) / 2, this.submitBtn.y);
+		this.submitBtn.setInteractive();
+		this.submitBtn.on('pointerdown', function () {
 			_this.submit();
 		});
 		this.renderTextCenter('Highscore', 48, '#ad2537', 14);
@@ -103,10 +105,18 @@ export class EnterNameScene extends Scene {
 	}
 
 	private verifyName() {
-		return true;
+		return this.name.join('').trim().length > 0
 	}
 
 	update(time: number, delta: number) {
+		if(this.verifyName()){
+			this.submitDisabled.setAlpha(0);
+			this.submitBtn.setAlpha(1);
+		}
+		else{
+			this.submitDisabled.setAlpha(1);
+			this.submitBtn.setAlpha(0);
+		}
 		this.selectorUp.setPosition(26 + this.index * 15, 119+24);
 		this.selectorDown.setPosition(26 + this.index * 15, 146+24);
 
