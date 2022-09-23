@@ -4,16 +4,18 @@ import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
 import Constants from '../assets/data/constants.yml';
+import HighscoreController from '../controller/HighscoreController';
 import {GameplayScene} from '../scenes/GameplayScene';
 import {UIOverlayScene} from '../scenes/UIOverlayScene';
 import JumpInputModel from './JumpInput';
 
 export default class GameContext extends Phaser.Plugins.BasePlugin {
 	public gameplay: GameplayScene;
+	public highscore = new HighscoreController();
 
 	//Level data
 	public leveldata;
-	public level = 2;
+	public level = 1;
 	public progress = 0;
 
 	public player: SpriteWithDynamicBody;
@@ -46,7 +48,7 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 	public timeInAir = 0;
 	public drunk = 0;
 
-	public score = 0;
+	public score = 230;
 
 	constructor(pluginManager) {
 		super(pluginManager);
@@ -87,10 +89,10 @@ export default class GameContext extends Phaser.Plugins.BasePlugin {
 		this.destroyPlayer();
 	}
 
-	public reset() {
+	public reset(level = 1) {
 		this.score = 0;
-		this.progress = 0;
-		this.level = 1;
+		this.progress = (1 / 3) * (level - 1)
+		this.level = level;
 	}
 
 	public destroyPlayer() {

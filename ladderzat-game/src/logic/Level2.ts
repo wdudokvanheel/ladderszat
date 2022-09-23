@@ -3,11 +3,10 @@ import {sample} from '../main';
 import GameContext from '../model/GameContext';
 import LevelLogic from './LevelLogic';
 import GameObjectFactory = Phaser.GameObjects.GameObjectFactory;
+import ParticleEmitter = Phaser.GameObjects.Particles.ParticleEmitter;
 import Sprite = Phaser.GameObjects.Sprite;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 import SpriteWithStaticBody = Phaser.Types.Physics.Arcade.SpriteWithStaticBody;
-import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import ParticleEmitter = Phaser.GameObjects.Particles.ParticleEmitter;
 
 export default class Level2 extends LevelLogic {
 	private factory: GameObjectFactory;
@@ -134,7 +133,7 @@ export default class Level2 extends LevelLogic {
 	}
 
 	private updateExit(context: GameContext) {
-		if (context.player.y <= 427 && context.player.body.blocked.down && !context.isJumping && !context.isClimbing && context.player.body.velocity.y <= 0) {
+		if (context.player && context.isAlive && context.player.y <= 427 && context.player.body.blocked.down && !context.isJumping && !context.isClimbing && context.player.body.velocity.y <= 0) {
 			if (!this.collectedAllItems) {
 				if (context.input.introTimer == 0)
 					context.input.createIntroText();
@@ -149,7 +148,7 @@ export default class Level2 extends LevelLogic {
 
 					if (!this.startedNoteEmitter) {
 						this.startedNoteEmitter = true;
-						context.gameplay.time.delayedCall(500, function(){
+						context.gameplay.time.delayedCall(500, function () {
 							var particles = this.factory.particles('note');
 							this.noteEmitter = particles.createEmitter({
 								x: context.player.x + 12,
@@ -173,14 +172,7 @@ export default class Level2 extends LevelLogic {
 		}
 	}
 
-	private
-
-	collectibleCollision(context
-							 :
-							 GameContext, collectible
-							 :
-							 Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
-	) {
+	public collectibleCollision(context: GameContext, collectible: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody) {
 		const type = collectible.data.get('collect');
 		if (type === 'coin')
 			return;
@@ -208,12 +200,7 @@ export default class Level2 extends LevelLogic {
 	}
 
 
-	private
-
-	updateCamera(context
-					 :
-					 GameContext
-	) {
+	private updateCamera(context: GameContext) {
 		const targetY = 263;
 		const currentY = this.camera.getBounds().y;
 
@@ -230,12 +217,7 @@ export default class Level2 extends LevelLogic {
 
 	}
 
-	private
-
-	updateShockEmitters(context
-							:
-							GameContext
-	) {
+	private updateShockEmitters(context: GameContext) {
 		let water = context.getObjectByName("water") as Sprite;
 
 		if (this.state == "shock") {
@@ -248,14 +230,7 @@ export default class Level2 extends LevelLogic {
 		}
 	}
 
-	private
-
-	updateWire(context
-				   :
-				   GameContext, delta
-				   :
-				   number
-	) {
+	private updateWire(context: GameContext, delta: number) {
 		const wire = context.getObjectByName("wire") as Sprite;
 		if (!wire)
 			return;

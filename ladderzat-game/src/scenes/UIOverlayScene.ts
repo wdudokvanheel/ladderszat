@@ -51,6 +51,7 @@ export class UIOverlayScene extends Scene {
 	private introText;
 
 	public overrideHorizontal: string;
+	public ignoreKeyboard = false;
 
 	constructor() {
 		super('ui');
@@ -98,6 +99,27 @@ export class UIOverlayScene extends Scene {
 
 	private updateButtonStates() {
 		this.dpadButtons.forEach(btn => btn.setFrame(0));
+
+		if(this.ignoreKeyboard){
+			if (this.horizontalTouchDirection == 'right')
+				this.dpadButtons[1].setFrame(1);
+			else if (this.horizontalTouchDirection == 'left')
+				this.dpadButtons[3].setFrame(1);
+
+			if (this.verticalTouchDirection == 'up')
+				this.dpadButtons[0].setFrame(1);
+			else if (this.verticalTouchDirection == 'down')
+				this.dpadButtons[2].setFrame(1);
+
+
+			if (this.context.jumpInput.touch)
+				this.jumpButton.setFrame(1);
+			else
+				this.jumpButton.setFrame(0);
+			return;
+		}
+
+
 		if (this.getHorizontalDirection() == 'right')
 			this.dpadButtons[1].setFrame(1);
 		else if (this.getHorizontalDirection() == 'left')
@@ -114,9 +136,12 @@ export class UIOverlayScene extends Scene {
 			this.jumpButton.setFrame(0);
 	}
 
-	public getHorizontalDirection(): string {
+	public getHorizontalDirection(ignoreKeyboard = false): string {
 		if (this.overrideHorizontal != undefined)
 			return this.overrideHorizontal;
+
+		if (ignoreKeyboard)
+			return this.horizontalTouchDirection;
 
 		if (this.horizontalTouchDirection === 'left' || this.horizontalKeyboardDirection === 'left')
 			return "left";
@@ -126,9 +151,12 @@ export class UIOverlayScene extends Scene {
 		return undefined;
 	}
 
-	public getVerticalDirection(): string {
+	public getVerticalDirection(ignoreKeyboard = false): string {
 		if (this.overrideHorizontal != undefined)
 			return undefined;
+
+		if (ignoreKeyboard)
+			return this.verticalTouchDirection;
 
 		if (this.verticalTouchDirection === 'up' || this.verticalKeyboardDirection === 'up')
 			return 'up';
@@ -164,7 +192,7 @@ export class UIOverlayScene extends Scene {
 		const key = this.isJumpKeyDown();
 		const touch = this.isJumpTouchDown();
 
-		if(this.overrideHorizontal != undefined)
+		if (this.overrideHorizontal != undefined)
 			return new JumpInputModel(false, false);
 
 		return new JumpInputModel(key, touch);
@@ -314,6 +342,7 @@ export class UIOverlayScene extends Scene {
 			return;
 		}
 		this.introTimer = 180;
+		this.introTimer = 10;
 
 		if (this.introText) {
 			this.introText.texture.clear();

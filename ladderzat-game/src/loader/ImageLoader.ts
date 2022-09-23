@@ -80,6 +80,10 @@ export class ImageLoader {
 		this.loader.image('exit-shadow', images['objects']['exit-shadow'])
 		this.loader.image('warning', images['objects']['warning'])
 		this.loader.image('logo', images['ui']['logo'])
+		this.loader.image('selector', images['ui']['selector']);
+		this.loader.image('keyselector', images['ui']['keyselector']);
+		this.loader.image('keyspace', images['ui']['keyspace']);
+		this.loader.image('submit', images['ui']['submit']);
 		this.loader.image('bg-level-1', images['bg']['level-1'])
 		this.loader.image('bg-level-2', images['bg']['level-2'])
 		this.loader.image('bg-level-3', images['bg']['level-3'])

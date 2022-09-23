@@ -6,4 +6,8 @@ export default class JumpInputModel {
 		this.key = key;
 		this.touch = touch;
 	}
+
+	public isJumping(){
+		return this.key || this.touch;
+	}
 }

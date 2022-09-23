@@ -261,11 +261,11 @@ export class GameplayScene extends Phaser.Scene {
 
 		if (type === 'coin') {
 			object.destroy();
-			this.context.score += 100;
+			this.context.score += 10;
 		} else {
 			this.collectProgressItem(object);
 			object.destroy();
-			this.context.score += 500;
+			this.context.score += 100;
 		}
 
 		var particles = this.add.particles('particle-pickup');
