@@ -17,13 +17,15 @@ public class WebController{
 	@Autowired
 	private HighscoreService service;
 
-	@GetMapping("top10")
+	@GetMapping({"top10", "/api/top10"})
+	@CrossOrigin(origins = {"${cors1}", "${cors2}"})
 	@ResponseBody
 	public List<HighscoreModel> getTop10(){
 		return service.getTop10();
 	}
 
-	@PostMapping("submit")
+	@PostMapping({"submit", "/api/submit"})
+	@CrossOrigin(origins = {"${cors1}", "${cors2}"})
 	@ResponseBody
 	public SubmissionResultModel submitScore(@RequestBody HighscoreSubmissionModel model, HttpServletRequest request){
 		return service.submitScore(model.name, model.score, request.getRemoteAddr());

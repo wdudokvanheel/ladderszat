@@ -1,6 +1,6 @@
 {
 	"name": "ladderzat",
-	"version": "0.15",
+	"version": "0.16",
 	"scripts": {
 		"start": "parcel src/index.html -p 8000",
 		"build": "parcel build src/index.html --no-source-maps"

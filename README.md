@@ -1,63 +1,19 @@
-# Ladderzat - To Do
+# Ladders Zat 
 
-## TODO
+Initial SQL for highscores
 
-Level 3
+```
+INSERT INTO `highscore` (`created`, `ip`, `name`, `score`)
+VALUES
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 10000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 9000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 8000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 7000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 6000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 5000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 4000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 3000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 2000),
+	(1663992493735, '0:0:0:0:0:0:0:1', 'SIRKRIS', 1000);
+```
 
-## General
-
-### Character feel
-
-- [x] Force based movement
-- [x] Jump buffer
-- [x] Jump power & downward force on release
-- [ ] OnLandEvent
-- [ ] OnLand Anim
-- [x] Screenshake on land based on speed
-- [ ] Smoke on jump / walk
-- [ ] Leg bend anim on jump
-
-### Bugs
-
-- [X] Can't climb bottom of ladder
-- [x] Bucket collision
-- [x] Ladder sprite to black on restart
-- [x] iPhone safe area overlap
-- [x] Destroy buckets on leaving
-- [x] Camera movement
-- [x] Bucket gfx
-
-### Improvements
-
-- [x] Button to orange on press
-- [X] Make slowdown tween
-- [ ] Fix d-pad
-- [x] Shrink player -> bucket hitbox
-- [ ] Particle FX
-
-## Levels
-
-### Level 1
-
-- [ ] Background (vents, ducts, large rails)
-- [ ] Lock door
-- [ ] Random objects
-    - [ ] buckets
-    - [ ] screw?
-- [ ] More collectibles?
-- [ ] Longer level?
-
-### Level 2
-
-- [x] Few platforms / ladders
-- [x] Wet floor
-- [ ] Construction sign
-- [ ] Collectibles
-    - [x] Guitar
-    - [x] Desk
-    - [x] Speakers
-    - [x] Mic?
-    - [ ] Drums?
-- [ ] Objects
-    - [ ] Couch
-- [ ] Background

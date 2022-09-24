@@ -13,9 +13,6 @@ pipeline {
 
     stages {
         stage('Build') {
-            when {
-                changeset 'ladderzat-scoreserver/**'
-            }
             stages {
                 stage('Build JAR') {
                     agent {

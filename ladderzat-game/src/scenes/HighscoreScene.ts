@@ -40,7 +40,7 @@ export class HighscoreScene extends Scene {
 		y += 12;
 		for (let score of top) {
 			let color = '#dedede';
-			if (score == this.mine)
+			if (this.mine && score.rank == this.mine.rank)
 				color = '#ffe629';
 
 			this.renderText('' + score.rank, 44, y, color, 8).setOrigin(1, 0);
@@ -56,7 +56,7 @@ export class HighscoreScene extends Scene {
 			y += 14;
 			for (let score of this.contextTop) {
 				let color = '#dedede';
-				if (score == this.mine)
+				if (this.mine && score.rank == this.mine.rank)
 					color = '#ffe629';
 
 				this.renderText('' + score.rank, 44, y, color, 8).setOrigin(1, 0);
@@ -102,7 +102,7 @@ export class HighscoreScene extends Scene {
 	submitScore(score: number, name: string) {
 		this.loading = true;
 		let _this = this;
-		this.context.highscore.submitScore(name, score, function (score: HighscoreSubmission, top10: Highscore[]) {
+		this.context.highscore.submitScore(name, score, function (score: HighscoreSubmission) {
 			_this.mine = score.score;
 			if (score.score.rank > 10) {
 				_this.top5 = true;
@@ -110,6 +110,9 @@ export class HighscoreScene extends Scene {
 				_this.contextTop = _this.contextTop.concat(score.better);
 				_this.contextTop.push(score.score);
 				_this.contextTop = _this.contextTop.concat(score.worse);
+			}
+			else{
+
 			}
 			_this.loading = false;
 			_this.scene.restart();
