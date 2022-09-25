@@ -4,6 +4,7 @@ import CollisionController from '../controller/CollisionController';
 import {DEBUG_CONTROLLER} from '../controller/DebugController';
 import GraphicsController from '../controller/GraphicsController';
 import {PhysicsController} from '../controller/PhysicsController';
+import {SoundController} from '../controller/SoundController';
 import {ObjectFactory} from '../factory/ObjectFactory';
 import {LevelDataLoader} from '../loader/LevelDataLoader';
 import Level1 from '../logic/Level1';
@@ -23,6 +24,7 @@ export class GameplayScene extends Phaser.Scene {
 	private physicsController: PhysicsController;
 	private collisionController: CollisionController;
 	private graphicsController: GraphicsController;
+	private soundController: SoundController;
 
 	private levelLogic = [];
 
@@ -41,8 +43,10 @@ export class GameplayScene extends Phaser.Scene {
 	preload() {
 		this.context.gameplay = this;
 		this.events.on('land', (power) => {
-			if (power >= 30)
+			if (power >= 30) {
 				this.cameras.main.shake(50, new Vector2(0, 0.005 * (Math.max(1, power / 50))));
+				this.events.emit('landfx');
+			}
 		}, this);
 	}
 
@@ -50,8 +54,9 @@ export class GameplayScene extends Phaser.Scene {
 		this.levelLoader = new LevelDataLoader();
 		this.objectFactory = new ObjectFactory();
 		this.physicsController = new PhysicsController(this.context, this.events);
-		this.collisionController = new CollisionController(this.physics, this.context);
+		this.collisionController = new CollisionController(this.physics, this.events, this.context);
 		this.graphicsController = new GraphicsController(this.context);
+		this.soundController = new SoundController(this.events, this.sound);
 
 		this.context.input = this.scene.get('ui') as UIOverlayScene;
 		this.initLevel();
@@ -182,7 +187,7 @@ export class GameplayScene extends Phaser.Scene {
 
 		this.cameras.main.shake(120, new Vector2(0, 0.010));
 		this.context.isAlive = false;
-
+		this.events.emit('hitfx');
 		//Slow down time
 		this.targetTimeScale = 8;
 		const corpse = this.objectFactory.createPlayerCorpse(this.physics, this.context);
@@ -212,6 +217,8 @@ export class GameplayScene extends Phaser.Scene {
 		this.explodingBucketEmitter = emitter;
 		enemy.destroy(true);
 		this.context.destroyPlayer();
+		this.events.emit('gameover');
+
 	}
 
 	private checkBucketHit(player: SpriteWithDynamicBody, enemy: SpriteWithDynamicBody): boolean {
@@ -246,6 +253,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.destroyPlayer();
 		this.context.isAlive = false;
 		this.playing = false;
+		this.events.emit('win')
 		this.scene.launch('levelcomplete');
 	}
 
@@ -262,10 +270,12 @@ export class GameplayScene extends Phaser.Scene {
 		if (type === 'coin') {
 			object.destroy();
 			this.context.score += 10;
+			this.events.emit('collectcoin');
 		} else {
 			this.collectProgressItem(object);
 			object.destroy();
 			this.context.score += 100;
+			this.events.emit('collectobj');
 		}
 
 		var particles = this.add.particles('particle-pickup');
@@ -276,7 +286,6 @@ export class GameplayScene extends Phaser.Scene {
 		});
 
 		emitter.explode(30, player.x + (player.width / 2), player.y + (player.height / 2));
-
 		return false;
 	}
 

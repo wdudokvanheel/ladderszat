@@ -1,19 +1,14 @@
 import Constants from '../assets/data/constants.yml';
 import GameContext from '../model/GameContext';
+import EventEmitter = Phaser.Events.EventEmitter;
 import Vector2 = Phaser.Math.Vector2;
-import ArcadePhysics = Phaser.Physics.Arcade.ArcadePhysics;
 import Collider = Phaser.Physics.Arcade.Collider;
 import SpriteWithDynamicBody = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
 export default class CollisionController {
-	private physics: ArcadePhysics;
-	private context: GameContext
-
 	private playerColliders: Collider[];
 
-	constructor(physics: Phaser.Physics.Arcade.ArcadePhysics, context: GameContext) {
-		this.physics = physics;
-		this.context = context;
+	constructor(private physics: Phaser.Physics.Arcade.ArcadePhysics, private events: EventEmitter, private context: GameContext) {
 		this.playerColliders = [];
 	}
 
@@ -26,6 +21,7 @@ export default class CollisionController {
 			//Corpses use the bucket group for easy collision setup, shake the camera once when hitting a platform
 			if (bucket.name === 'corpse') {
 				bucket.name = 'corpsed';
+				this.events.emit('landfx');
 				this.context.gameplay.cameras.main.shake(120, new Vector2(0, 0.02));
 			}
 

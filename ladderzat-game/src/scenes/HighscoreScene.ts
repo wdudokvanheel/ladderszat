@@ -71,6 +71,7 @@ export class HighscoreScene extends Scene {
 			button.setPosition((Constants.screen.width - button.width) / 2, button.y);
 			button.setInteractive();
 			button.on('pointerdown', function () {
+				_this.context.gameplay.events.emit('selector');
 				if (!_this.loading)
 					_this.newGame();
 			});
@@ -110,9 +111,6 @@ export class HighscoreScene extends Scene {
 				_this.contextTop = _this.contextTop.concat(score.better);
 				_this.contextTop.push(score.score);
 				_this.contextTop = _this.contextTop.concat(score.worse);
-			}
-			else{
-
 			}
 			_this.loading = false;
 			_this.scene.restart();

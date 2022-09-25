@@ -101,6 +101,7 @@ export default class Level2 extends LevelLogic {
 		if (this.shocking && context.touchingWater) {
 			var water = context.getObjectByName('water') as SpriteWithStaticBody;
 			context.isAlive = false;
+			context.gameplay.events.emit('buzz');
 
 			var shock = context.props.create(context.player.x - 6, water.y - water.height);
 			shock.setOrigin(0, 1);

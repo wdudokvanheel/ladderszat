@@ -4,7 +4,7 @@ import {ImageLoader} from '../loader/ImageLoader';
 
 export class InitScene extends Scene {
 	private images: ImageLoader;
-
+	private sfx = ['jump', 'land', 'collectObj', 'collectCoin', 'hit', 'gameover', 'win', 'selectorfx', 'buzz']
 	constructor() {
 		super('init');
 	}
@@ -15,6 +15,10 @@ export class InitScene extends Scene {
 		this.cameras.main.setBounds(0, 0, Constants.screen.width, Constants.screen.height);
 
 		this.load.bitmapFont('main', '../assets/fonts/atari-classic.png', '../assets/fonts/atari-classic.xml');
+
+		for(let fx of this.sfx)
+			this.load.audio(fx, `../assets/audio/${fx}.wav`);
+
 		this.load.audio('lvl1-bg', ['../assets/audio/rarekwast.m4a', '../assets/audio/rarekwast.mp3']);
 		this.load.audio('lvl2-bg', ['../assets/audio/rarekwast.m4a', '../assets/audio/rarekwast.mp3']);
 		this.load.audio('lvl3-bg', ['../assets/audio/ladderszat.m4a', '../assets/audio/ladderszat.mp3']);

@@ -124,6 +124,7 @@ export default class Level3 extends LevelLogic {
 		emitter.explode(500, bucket.x, bucket.y + 3)
 		bucket.destroy(true);
 		this.camera.shake(120, new Vector2(0, 0.010));
+		context.gameplay.events.emit('hitfx');
 	}
 
 	private generateMedPack(context: GameContext, delta: number) {

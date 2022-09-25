@@ -43,6 +43,7 @@ export class GameOverScene extends Scene {
 			button.setInteractive();
 			button.on('pointerdown', function (e, a, b) {
 				_this.clickButton(_this.optionTexts[option].text);
+				_this.context.gameplay.events.emit('selector');
 			});
 
 			this.optionTexts[option] = this.renderTextCenter(options[option], y, '#dedede', 8);

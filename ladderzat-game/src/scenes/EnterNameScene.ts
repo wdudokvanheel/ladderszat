@@ -31,6 +31,7 @@ export class EnterNameScene extends Scene {
 		this.submitBtn.setPosition((Constants.screen.width - this.submitBtn.width) / 2, this.submitBtn.y);
 		this.submitBtn.setInteractive();
 		this.submitBtn.on('pointerdown', function () {
+			_this.context.gameplay.events.emit('selector');
 			_this.submit();
 		});
 		this.renderTextCenter('Highscore', 48, '#ad2537', 14);
@@ -98,6 +99,7 @@ export class EnterNameScene extends Scene {
 
 	submit() {
 		if (this.verifyName()) {
+			this.context.gameplay.events.emit('selector');
 			this.scene.stop();
 			this.scene.launch('highscore');
 			(this.scene.get('highscore') as HighscoreScene).submitScore(this.context.score, this.name.join('').trim().toUpperCase());
@@ -161,6 +163,7 @@ export class EnterNameScene extends Scene {
 	}
 
 	private charDown() {
+		this.context.gameplay.events.emit('selector');
 		let next = String.fromCharCode(this.name[this.index].charCodeAt(0) + 1);
 		if (this.name[this.index] === 'Z')
 			next = ' ';
@@ -171,6 +174,7 @@ export class EnterNameScene extends Scene {
 	}
 
 	private charUp() {
+		this.context.gameplay.events.emit('selector');
 		let next = String.fromCharCode(this.name[this.index].charCodeAt(0) - 1);
 		if (this.name[this.index] === 'A')
 			next = ' ';
@@ -181,12 +185,14 @@ export class EnterNameScene extends Scene {
 	}
 
 	private prevChar() {
+		this.context.gameplay.events.emit('selector');
 		this.index--;
 		if (this.index < 0)
 			this.index = this.name.length - 1;
 	}
 
 	private nextChar() {
+		this.context.gameplay.events.emit('selector');
 		this.index++;
 		if (this.index >= this.name.length)
 			this.index = 0;
