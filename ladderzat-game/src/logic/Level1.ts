@@ -14,6 +14,7 @@ export default class Level1 extends LevelLogic {
 
 	init(context: GameContext, add: GameObjectFactory) {
 		this.timerNextBucket = 0;
+		this.collectibles = 0;
 	}
 
 	update(context: GameContext, delta: number) {
