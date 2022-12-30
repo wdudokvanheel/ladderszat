@@ -84,8 +84,8 @@ export default class Level3 extends LevelLogic {
 	private increaseDifficulty(context: GameContext) {
 		// if(context.progress < 1)
 		// 	return;
-		this.nextBadDropSleep *= .85;
-		this.maxSpeed *= 1.15;
+		this.nextBadDropSleep *= .8;
+		// this.maxSpeed *= 1.15;
 		this.nextMedSleep *= 1.15;
 	}
 
@@ -96,15 +96,19 @@ export default class Level3 extends LevelLogic {
 		if (type === 'medpack') {
 			context.drunk = 0;
 			this.hasMedPack = false;
+			this.reachedLadderzat = false;
 			return;
 		}
 
-		context.drunk += .1;
-
+		context.drunk += .2;
 		let progression = (context.getMaxProgressionForLevel(context.level) - context.getMinProgressionForLevel(context.level)) / (context.leveldata.progressCollectibles + 1);
 		context.progress += progression;
-		if (context.progress >= 1)
+
+		if(context.drunk >= 1 && !this.reachedLadderzat){
+			this.increaseDifficulty(context);
 			this.reachedLadderzat = true;
+			context.gameplay.events.emit('chant');
+		}
 	}
 
 	bucketCollision(context: GameContext, bucket: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody) {

@@ -110,7 +110,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.bgMusic.play(conf);
 	}
 
-	private stopBGMusic() : void{
+	public stopBGMusic() : void{
 	 this.sound.add(this.bgMusic.key);
 		this.tweens.add({
 			targets:  this.bgMusic,

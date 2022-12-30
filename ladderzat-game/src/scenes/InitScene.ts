@@ -19,9 +19,11 @@ export class InitScene extends Scene {
 		for(let fx of this.sfx)
 			this.load.audio(fx, `../assets/audio/${fx}.wav`);
 
-		this.load.audio('lvl1-bg', ['../assets/audio/rarekwast.m4a', '../assets/audio/rarekwast.mp3']);
-		this.load.audio('lvl2-bg', ['../assets/audio/losseschroeven.m4a', '../assets/audio/rarekwast.mp3']);
+		this.load.audio('lvl1-bg', ['../assets/audio/losseschroeven.m4a', '../assets/audio/losseschroeven.mp3']);
+		this.load.audio('lvl2-bg', ['../assets/audio/rarekwast.m4a', '../assets/audio/rarekwast.mp3']);
 		this.load.audio('lvl3-bg', ['../assets/audio/ladderszat.m4a', '../assets/audio/ladderszat.mp3']);
+		this.load.audio('chant', ['../assets/audio/chant.m4a', '../assets/audio/chant.mp3']);
+		this.load.audio('rapper', ['../assets/audio/rapper.m4a', '../assets/audio/rapper.mp3']);
 	}
 
 	update(time: number, delta: number) {

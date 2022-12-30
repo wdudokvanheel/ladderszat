@@ -13,6 +13,8 @@ export class SoundController {
 	private win;
 	private selector;
 	private buzz;
+	private chant;
+	private rapper;
 
 	constructor(private events: EventEmitter, sound) {
 		const _this = this;
@@ -44,9 +46,17 @@ export class SoundController {
 		this.win = sound.add('win');
 		this.selector = sound.add('selectorfx');
 		this.buzz = sound.add('buzz');
+		this.chant = sound.add('chant');
+		this.rapper = sound.add('rapper');
 
 		events.on('jump', function () {
 			_this.jump.play(this.conf);
+		});
+		events.on('chant', function () {
+			_this.chant.play(this.conf);
+		});
+		events.on('rapper', function () {
+			_this.rapper.play(this.conf);
 		});
 		events.on('landfx', function () {
 			_this.land.play(this.conf);

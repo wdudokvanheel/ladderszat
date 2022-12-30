@@ -428,7 +428,7 @@ export class UIOverlayScene extends Scene {
 			this.wasted.alpha = 0;
 		}
 
-		if (this.context.progress >= 1) {
+		if (this.context.drunk >= 1) {
 			this.drunkTextTimer--;
 
 			if (this.drunkTextTimer <= 0) {

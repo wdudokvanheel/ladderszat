@@ -19,7 +19,7 @@ export default class Level2 extends LevelLogic {
 	private collectedAllItems = false;
 	private collectibles = ['mic', 'rhodes', 'guitar-purple', 'drums', 'studio-desk'];
 	private noteEmitter: ParticleEmitter;
-	private winCountDown = 240;
+	private winCountDown = 460;
 	private startedNoteEmitter = false;
 
 	constructor() {
@@ -148,20 +148,24 @@ export default class Level2 extends LevelLogic {
 					context.player.setFlipX(false);
 
 					if (!this.startedNoteEmitter) {
+						context.gameplay.stopBGMusic();
 						this.startedNoteEmitter = true;
 						context.gameplay.time.delayedCall(500, function () {
-							var particles = this.factory.particles('note');
-							this.noteEmitter = particles.createEmitter({
-								x: context.player.x + 12,
-								y: context.player.y - 5,
-								angle: {min: 210, max: 310},
-								speed: 14,
-								gravityY: -40,
-								frequency: 750,
-								lifespan: 1500,
-								alpha: {start: 1, end: 0, ease: 'Bounce.easeIn'},
-								quantity: 1,
-							});
+							context.gameplay.events.emit('rapper');
+							context.gameplay.time.delayedCall(240, function() {
+								var particles = this.factory.particles('note');
+								this.noteEmitter = particles.createEmitter({
+									x: context.player.x + 12,
+									y: context.player.y - 5,
+									angle: {min: 210, max: 310},
+									speed: 14,
+									gravityY: -40,
+									frequency: 600,
+									lifespan: 1500,
+									alpha: {start: 1, end: 0, ease: 'Bounce.easeIn'},
+									quantity: 1,
+								});
+							}, null, this);
 						}, null, this);
 
 					} else if (--this.winCountDown <= 0) {
