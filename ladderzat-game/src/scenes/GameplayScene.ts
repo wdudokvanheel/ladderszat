@@ -100,7 +100,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.bgMusic = this.sound.add('lvl' + this.context.level + '-bg');
 		var conf = {
 			mute: false,
-			volume: 0.3,
+			volume: 0.8,
 			rate: 1,
 			detune: 0,
 			seek: 0,
@@ -108,6 +108,15 @@ export class GameplayScene extends Phaser.Scene {
 			delay: 0
 		}
 		this.bgMusic.play(conf);
+	}
+
+	private stopBGMusic() : void{
+	 this.sound.add(this.bgMusic.key);
+		this.tweens.add({
+			targets:  this.bgMusic,
+			volume:   0,
+			duration: 500
+		});
 	}
 
 	update(time: number, delta: number) {
@@ -187,6 +196,7 @@ export class GameplayScene extends Phaser.Scene {
 
 		this.cameras.main.shake(120, new Vector2(0, 0.010));
 		this.context.isAlive = false;
+		this.stopBGMusic();
 		this.events.emit('hitfx');
 		//Slow down time
 		this.targetTimeScale = 8;
@@ -253,6 +263,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.context.destroyPlayer();
 		this.context.isAlive = false;
 		this.playing = false;
+		this.stopBGMusic();
 		this.events.emit('win')
 		this.scene.launch('levelcomplete');
 	}

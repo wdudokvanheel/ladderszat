@@ -2,7 +2,7 @@ import EventEmitter = Phaser.Events.EventEmitter;
 
 export class SoundController {
 	private conf;
-	private confGo;
+	private confGamever;
 
 	private jump;
 	private land;
@@ -13,7 +13,6 @@ export class SoundController {
 	private win;
 	private selector;
 	private buzz;
-
 
 	constructor(private events: EventEmitter, sound) {
 		const _this = this;
@@ -27,7 +26,7 @@ export class SoundController {
 			delay: 0
 		};
 
-		this.confGo = {
+		this.confGamever = {
 			mute: false,
 			volume: 0.3,
 			rate: 1,
@@ -63,7 +62,7 @@ export class SoundController {
 		});
 		events.on('gameover', function () {
 			setTimeout(function(){
-				_this.gameover.play(this.confGo);
+				_this.gameover.play(this.confGamever);
 			}, 750);
 		});
 		events.on('win', function () {
