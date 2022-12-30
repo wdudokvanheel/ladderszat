@@ -55,10 +55,11 @@ export default class Level3 extends LevelLogic {
 		let x = context.player.x < 80 ? 113 : 50;
 		x += Math.random() * 20 - 10;
 		if (this.nextGoodDropTimer <= 0) {
-			let sprite = context.collectibles.create(x, Constants.world.height - 200, 'collect-drink-' + sample(Constants.object.drinks));
+			let sprite = context.collectibles.create(x, Constants.world.height - 182, 'collect-drink-' + sample(Constants.object.drinks));
 			sprite.setDataEnabled();
 			sprite.setData('collect', 'drink');
 			sprite.setMaxVelocity(this.maxSpeed, this.maxSpeed);
+			sprite.setOrigin(0, 1);
 			this.nextGoodDropTimer = this.nextGoodDropSleep;
 		}
 	}
@@ -75,7 +76,7 @@ export default class Level3 extends LevelLogic {
 			object.setDrag(10, 0);
 			object.body.setAllowGravity(true);
 			object.x = 80;
-			object.y = Constants.world.height - 135
+			object.y = Constants.world.height - 100
 			this.nextBadDropTimer += this.nextBadDropSleep;
 			(context.getObjectByName('koos') as SpriteWithDynamicBody).anims.play('koos-throw');
 		}
