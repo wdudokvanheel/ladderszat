@@ -2,7 +2,7 @@ import EventEmitter = Phaser.Events.EventEmitter;
 
 export class SoundController {
 	private conf;
-	private confGamever;
+	private confGameOver;
 
 	private jump;
 	private land;
@@ -26,7 +26,7 @@ export class SoundController {
 			delay: 0
 		};
 
-		this.confGamever = {
+		this.confGameOver = {
 			mute: false,
 			volume: 0.3,
 			rate: 1,
@@ -62,7 +62,7 @@ export class SoundController {
 		});
 		events.on('gameover', function () {
 			setTimeout(function(){
-				_this.gameover.play(this.confGamever);
+				_this.gameover.play(this.confGameOver);
 			}, 750);
 		});
 		events.on('win', function () {

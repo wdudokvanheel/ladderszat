@@ -20,7 +20,7 @@ export class InitScene extends Scene {
 			this.load.audio(fx, `../assets/audio/${fx}.wav`);
 
 		this.load.audio('lvl1-bg', ['../assets/audio/rarekwast.m4a', '../assets/audio/rarekwast.mp3']);
-		this.load.audio('lvl2-bg', ['../assets/audio/rarekwast.m4a', '../assets/audio/rarekwast.mp3']);
+		this.load.audio('lvl2-bg', ['../assets/audio/losseschroeven.m4a', '../assets/audio/rarekwast.mp3']);
 		this.load.audio('lvl3-bg', ['../assets/audio/ladderszat.m4a', '../assets/audio/ladderszat.mp3']);
 	}
 
