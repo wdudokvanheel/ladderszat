@@ -83,6 +83,7 @@ export class ImageLoader {
 		this.loader.image('selector', images['ui']['selector']);
 		this.loader.image('keyselector', images['ui']['keyselector']);
 		this.loader.image('keyspace', images['ui']['keyspace']);
+		this.loader.image('ladderzat-button', images['ui']['ladderzat-button']);
 		this.loader.image('submit', images['ui']['submit']);
 		this.loader.image('submit-disabled', images['ui']['submit-disabled']);
 		this.loader.image('bg-level-1', images['bg']['level-1'])
