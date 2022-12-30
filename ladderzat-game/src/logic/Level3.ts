@@ -76,7 +76,7 @@ export default class Level3 extends LevelLogic {
 			object.setDrag(10, 0);
 			object.body.setAllowGravity(true);
 			object.x = 80;
-			object.y = Constants.world.height - 100
+			object.y = Constants.world.height - 135
 			this.nextBadDropTimer += this.nextBadDropSleep;
 			(context.getObjectByName('koos') as SpriteWithDynamicBody).anims.play('koos-throw');
 		}
