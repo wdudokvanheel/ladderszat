@@ -46,7 +46,7 @@ export class GameOverScene extends Scene {
 			const y = 102;
 			const button = this.add.sprite(0, y, 'ladderzat-button').setOrigin(0, 0);
 			this.renderTextCenter("DOWNLOAD", y + 5, '#dedede', 8);
-			this.renderTextCenter("LADDERSZAT", y + 18, '#dedede', 8);
+			this.renderTextCenter("LADDERS ZAT", y + 18, '#dedede', 8);
 			button.setPosition((Constants.screen.width - button.width) / 2, button.y);
 			button.setInteractive();
 			button.on('pointerup', function (e, a, b) {
