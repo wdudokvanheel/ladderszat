@@ -19,7 +19,7 @@ export default class Level2 extends LevelLogic {
 	private collectedAllItems = false;
 	private collectibles = ['mic', 'rhodes', 'guitar-purple', 'drums', 'studio-desk'];
 	private noteEmitter: ParticleEmitter;
-	private winCountDown = 460;
+	private winCountDown = 500;
 	private startedNoteEmitter = false;
 
 	constructor() {

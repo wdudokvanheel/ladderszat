@@ -4,7 +4,7 @@ import HighscoreSubmission from '../model/HighscoreSubmission';
 export default class HighscoreController {
 	private scores: Highscore[];
 	private local = false;
-	private url = "https://sirkris.trampelon.com/api"
+	private url = "https://www.ladderszat.com/api"
 
 	constructor() {
 		this.scores = this.loadFromStorage();
