@@ -20,7 +20,7 @@ export class SoundController {
 		const _this = this;
 		this.conf = {
 			mute: false,
-			volume: 0.3,
+			volume: 0.2,
 			rate: 1,
 			detune: 0,
 			seek: 0,
@@ -30,22 +30,24 @@ export class SoundController {
 
 		this.confGameOver = {
 			mute: false,
-			volume: 0.3,
+			volume: 0.2,
 			rate: 1,
 			detune: 0,
 			seek: 0,
 			loop: false,
 		};
 
-		this.collectCoin = sound.add('collectCoin');
-		this.gameover = sound.add('gameover');
-		this.collectObj = sound.add('collectObj');
-		this.jump = sound.add('jump');
-		this.land = sound.add('land');
-		this.hit = sound.add('hit');
-		this.win = sound.add('win');
-		this.selector = sound.add('selectorfx');
-		this.buzz = sound.add('buzz');
+		let vol = {volume: 0.6};
+
+		this.collectCoin = sound.add('collectCoin', vol);
+		this.gameover = sound.add('gameover', {volume: 0.5});
+		this.collectObj = sound.add('collectObj', vol);
+		this.jump = sound.add('jump', vol);
+		this.land = sound.add('land', vol);
+		this.hit = sound.add('hit', vol);
+		this.win = sound.add('win', vol);
+		this.selector = sound.add('selectorfx', vol);
+		this.buzz = sound.add('buzz', vol);
 		this.chant = sound.add('chant');
 		this.rapper = sound.add('rapper');
 

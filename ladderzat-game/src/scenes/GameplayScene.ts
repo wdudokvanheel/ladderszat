@@ -100,7 +100,7 @@ export class GameplayScene extends Phaser.Scene {
 		this.bgMusic = this.sound.add('lvl' + this.context.level + '-bg');
 		var conf = {
 			mute: false,
-			volume: 0.8,
+			volume: 1.0,
 			rate: 1,
 			detune: 0,
 			seek: 0,
