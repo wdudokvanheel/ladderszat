@@ -50,7 +50,7 @@ export class GameOverScene extends Scene {
 			button.setPosition((Constants.screen.width - button.width) / 2, button.y);
 			button.setInteractive();
 			button.on('pointerup', function (e, a, b) {
-				window.open('https://www.sirkris.nl/');
+				window.open(Constants.download);
 			});
 		}
 
