@@ -8,8 +8,9 @@ export class GameOverScene extends Scene {
 	private readonly context: GameContext;
 	private optionTexts = [];
 	private gameOverLabelY = 48;
+	private gameScoreY = 29;
 	private menuY = 134;
-
+	private presaveY = 181;
 	constructor() {
 		super('gameover');
 	}
@@ -28,22 +29,27 @@ export class GameOverScene extends Scene {
 		}
 
 		if (this.context.level == 1) {
-			this.menuY = 154;
+			this.menuY = 158;
+			this.presaveY = 177
+			this.gameScoreY = 44
+
 		} else if (this.context.level == 2) {
 			this.menuY = 134;
+			this.gameScoreY = 32
+			this.presaveY = 177
 		} else {
-			this.gameOverLabelY = 28
-			this.menuY = 144;
+			this.gameOverLabelY = 22
+			this.gameScoreY = 16
+			this.menuY = 144 - 30;
 		}
-
 
 		this.add.sprite(0, 17, 'gameover').setOrigin(0, 0);
 		this.renderTextCenter('GAME OVER', this.gameOverLabelY, '#ad2537', 14);
-		this.renderTextCenter('Score', this.gameOverLabelY + 29, '#dedede', 8);
-		this.renderTextCenter('' + this.context.score, this.gameOverLabelY + 29 + 12, '#7b47eb', 14);
+		this.renderTextCenter('Score', this.gameOverLabelY + this.gameScoreY, '#dedede', 8);
+		this.renderTextCenter('' + this.context.score, this.gameOverLabelY + this.gameScoreY + 12, '#7b47eb', 14);
 
 		if (this.context.level == 3) {
-			const y = 102;
+			const y = 102 - 30;
 			const button = this.add.sprite(0, y, 'ladderzat-button').setOrigin(0, 0);
 			this.renderTextCenter("DOWNLOAD", y + 5, '#dedede', 8);
 			this.renderTextCenter("LADDERS ZAT", y + 18, '#dedede', 8);
@@ -53,6 +59,15 @@ export class GameOverScene extends Scene {
 				window.open(Constants.download);
 			});
 		}
+
+		const button = this.add.sprite(0, this.presaveY, 'presave-button').setOrigin(0, 0);
+		this.renderTextCenter(Constants.linktree.label, this.presaveY + 5, '#dedede', 8);
+		this.renderTextCenter("LADDERS ZAT", this.presaveY + 18, '#dedede', 8);
+		button.setPosition((Constants.screen.width - button.width) / 2, button.y);
+		button.setInteractive();
+		button.on('pointerup', function (e, a, b) {
+			window.open(Constants.linktree.link);
+		});
 
 		let y = this.menuY;
 		const _this = this;
